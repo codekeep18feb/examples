@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Book Management</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <script src="https://cdn.socket.io/4.1.2/socket.io.min.js"></script>
+
+    <script src="node_modules/my-js-package/dist/bundle.js"></script>
+
+    <script>
+
+        async function makeMeAPICall(token) {
+                const apiUrl = 'http://122.160.157.99:8000/api/me';
+
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': "Bearer " + token,
+                            'Accept': '*/*'
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+
+                    const data = await response.json();
+                    console.log('User me api data:', data.id);
+                    return data;
+                } catch (error) {
+                    console.error('There was a problem with the fetch operation:', error);
+                    throw error;
+                }
+            }
+            
+        // Wait for the document to be fully loaded
+        document.addEventListener("DOMContentLoaded", async function() {
+
+            var aaaa ='do you ve access to me??'
+            // Execute your function once the document is loaded
+            let socket = io('http://122.160.157.99:8001');
+
+            const token = localStorage.getItem('tezkit_token')
+
+            if (token){
+
+                var loggedInUser = await makeMeAPICall(token);
+
+                console.log("user on consumer joined", "global_for__" + loggedInUser.id);
+
+                socket.emit('join_room', { room: "global_for__" + loggedInUser.id });
+
+
+
+                window.randomColorPackage.initialize(socket, loggedInUser);
+
+            }
+            else{
+                window.randomColorPackage.initialize(socket, null);
+
+            }
+        });
+    </script>
+
+</head>
+<body>
+    <header>
+        <h1>Welcome to Our Library</h1>
+       
+    </header>
+
+    <main>
+        <section id="intro">
+            <img src="https://images.pexels.com/photos/5095897/pexels-photo-5095897.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Library Image" class="hero-image">
+            <h2>Explore the World of Books</h2>
+            <p>Welcome to our library where you can find a wide range of books on various subjects. Dive into our collection and discover something new every day.</p>
+        </section>
+
+        <section id="featured-books">
+            <h3>Featured Books</h3>
+            <div class="featured-books-grid">
+                <div class="book">
+                    <img src="https://images.pexels.com/photos/3747399/pexels-photo-3747399.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Featured Book">
+                    <h4>Book Title 1</h4>
+                    <p>A brief description of Book Title 1. Learn more about this captivating book in our collection.</p>
+                </div>
+                <div class="book">
+                    <img src="https://images.pexels.com/photos/3747399/pexels-photo-3747399.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Featured Book">
+                    <h4>Book Title 2</h4>
+                    <p>A brief description of Book Title 2. Learn more about this captivating book in our collection.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Library Book Management. All rights reserved.</p>
+    </footer>
+</body>
+</html>
