@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
+    <title>Profile</title>
+
+
+
+    <script src="{{ url_for('static', filename='js/bundle.js') }}"></script>
+
+    <script>
+
+        // async function makeMeAPICall(token) {
+        //         const apiUrl = 'http://122.160.157.99:8000/api/me';
+
+        //         try {
+        //             const response = await fetch(apiUrl, {
+        //                 method: 'GET',
+        //                 headers: {
+        //                     'Authorization': "Bearer " + token,
+        //                     'Accept': '*/*'
+        //                 }
+        //             });
+
+        //             if (!response.ok) {
+        //                 throw new Error('Network response was not ok');
+        //             }
+
+        //             const data = await response.json();
+        //             console.log('User me api data:', data.id);
+        //             return data;
+        //         } catch (error) {
+        //             console.error('There was a problem with the fetch operation:', error);
+        //             throw error;
+        //         }
+        //     }
+            
+        // Wait for the document to be fully loaded
+        document.addEventListener("DOMContentLoaded", async function() {
+
+            var aaaa ='do you ve access to me??'
+            // Execute your function once the document is loaded
+            let socket = io('http://122.160.157.99:8001');
+
+            // const token = localStorage.getItem('tezkit_token')
+
+            // const userData = JSON.parse('{{ user_data | tojson | safe }}');
+
+
+            var loggedInUser = userData
+
+            
+            socket.emit('join_room', { room: "global_for__" + loggedInUser.id });
+
+
+
+            window.randomColorPackage.initialize(socket, loggedInUser);
+
+
+        
+        });
+    </script>
+</head>
+<body>
+    <h1>Profile</h1>
+    <p>Username: {{ user_data.username }}</p>
+    <p>Email: {{ user_data.email }}</p>
+    <!-- Add more profile details here -->
+</body>
+<script type="text/javascript">
+    // Safely converting the Python dictionary to a JavaScript object
+    const userData = JSON.parse('{{ user_data | tojson | safe }}');
+    console.log('User Data:', userData);
+
+    // Make userData available globally
+    window.userData = userData;
+</script>
+
+<!-- <script src="{{ url_for('static', filename='js/myscript.js') }}"></script> -->
+</html>

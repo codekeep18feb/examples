@@ -58,14 +58,26 @@ def login():
             return 'Invalid credentials', 401
     return render_template('login.html')
 
-# Route for profile page
 @app.route('/profile')
 @jwt_required(locations=["cookies"])
 def profile():
     verify_jwt_in_request(locations=["cookies"])
     current_user = get_jwt_identity()
     user = User.query.filter_by(username=current_user).first()
-    return render_template('profile.html', username=user.username, email=user.email)
+    
+    # Create a dictionary with the user's data
+    user_data = {
+        'username': user.username,
+        'email': user.email,
+        'id':"justsome_rand_id"
+        # Add other fields as necessary
+    }
+    
+    # Pass the dictionary to the template
+    return render_template('profile.html', user_data=user_data)
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
