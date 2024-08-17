@@ -106,6 +106,10 @@ let proxy_socket;
 
 // Function to add a full-width header with a fixed height and red background color
 export function initialize(socket, loggedInUser) {
+
+console.log('did it happend')
+
+
   let global_bucket = { unread_msgs: [] };
   proxy_socket = socket;
 
@@ -358,6 +362,14 @@ export function initialize(socket, loggedInUser) {
   chat_modal_opener.addEventListener("click", function () {
     console.log("d v ve a click!")
     toggleChatModal();
+    var chatModal = document.getElementById('chatModal');
+
+    // Find the h3 element within the chat_header div
+    chatModal.querySelector('.chat_header h3').textContent=loggedInUser.id
+
+    // Log the header text to the console
+    // console.log(loggedInUser,"sdffhhheaderText",headerText); // This should print "Reetu"
+    // headerText = loggedInUser.id
     // console.log("here is global ubcket", global_bucket.unread_msgs)
     if (global_bucket && global_bucket.unread_msgs) {
       console.log("arew westill goin in htere?");

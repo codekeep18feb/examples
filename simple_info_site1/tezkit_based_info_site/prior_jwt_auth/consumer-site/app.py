@@ -1,3 +1,8 @@
+
+import requests
+import json
+
+
 from flask import Flask, render_template, redirect, url_for, request, make_response
 from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
@@ -26,20 +31,46 @@ def create_tables():
     db.create_all()
 
 # Route for signup page
-@app.route('/signup', methods=['GET', 'POST'])
+@app.route('/signup', methods=['POST'])
 def signup():
     if request.method == 'POST':
-        username = request.form.get('username')
+        username = request.form.get('username')  # uid
         email = request.form.get('email')
         password = request.form.get('password')
         hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
-        
+
         new_user = User(username=username, email=email, password=hashed_password)
         db.session.add(new_user)
-        db.session.commit()
-        
-        return redirect(url_for('login'))
+
+        reqUrl = "https://5ou19g5fv9.execute-api.ap-south-1.amazonaws.com/prod/onboarding"
+
+        headersList = {
+            "Accept": "*/*",
+            "User-Agent": "Thunder Client (https://www.thunderclient.com)",
+            "Content-Type": "application/json",
+            "X-API-Key": "dGVuYW50M19fU0VQUFJfX3RlbmFudDNAZ21haWwuY29t"  # This will come from credentials
+        }
+
+        payload = json.dumps({
+            "tenant": "tenant1",
+            "uid": username,
+            "app_name": "MYnewapp33"
+        })
+
+        response = requests.request("POST", reqUrl, data=payload, headers=headersList)
+
+        if response.status_code == 200:
+            print(response, "here is response!", response.text)
+            db.session.commit()
+            return redirect(url_for('login'))
+        else:
+            db.session.rollback()  # Rollback the session to prevent changes
+            print("Onboarding failed:", response.status_code, response.text)
+            # Optionally, you can flash an error message to the user
+            flash('Onboarding failed. Please try again.')
+
     return render_template('signup.html')
+
 
 # Route for login page
 @app.route('/login', methods=['GET', 'POST'])
@@ -53,6 +84,7 @@ def login():
             access_token = create_access_token(identity=user.username)
             response = make_response(redirect(url_for('profile')))
             response.set_cookie('access_token_cookie', access_token)
+            print("what is this response",response)
             return response
         else:
             return 'Invalid credentials', 401

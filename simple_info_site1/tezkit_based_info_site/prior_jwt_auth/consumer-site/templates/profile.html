@@ -40,6 +40,65 @@
         // Wait for the document to be fully loaded
         document.addEventListener("DOMContentLoaded", async function() {
 
+            function getCookie(name) {
+                // Construct the pattern to match the cookie name
+                const nameEQ = name + "=";
+                // Split the cookies string into individual cookies
+                const cookies = document.cookie.split(';');
+                
+                // Loop through all cookies
+                for (let i = 0; i < cookies.length; i++) {
+                    let cookie = cookies[i];
+                    // Trim any leading spaces
+                    while (cookie.charAt(0) === ' ') {
+                        cookie = cookie.substring(1, cookie.length);
+                    }
+                    // Check if the current cookie's name matches the one we're looking for
+                    if (cookie.indexOf(nameEQ) === 0) {
+                        // Return the cookie's value
+                        return cookie.substring(nameEQ.length, cookie.length);
+                    }
+                }
+                // If no cookie found, return null
+                return null;
+            }
+
+            // Usage: replace 'yourCookieName' with the actual cookie name
+            const myCookie = getCookie('access_token_cookie');
+            console.log('access_token_cookie',myCookie);  // Outputs the value of the cookie
+
+
+
+
+            function parseJwt(token) {
+            // Split the token into its parts
+            var base64Url = token.split('.');
+            
+            // Decode the Base64Url encoded header and payload
+            var base64Header = base64Url[0];
+            var base64Payload = base64Url[1];
+            
+            // Replace URL-safe characters to Base64 standard characters and decode
+            var header = JSON.parse(atob(base64Header.replace(/-/g, '+').replace(/_/g, '/')));
+            var payload = JSON.parse(atob(base64Payload.replace(/-/g, '+').replace(/_/g, '/')));
+            
+            // Return an object containing the decoded header and payload
+            return {
+                header: header,
+                payload: payload
+            };
+        }
+
+        // Usage
+        // const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcyMzg4ODc1OCwianRpIjoiMjc4NzI5YjUtM2IwYy00ZDhjLWIyYjQtYTE3NTIyZGFiZDExIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6ImRlZTIiLCJuYmYiOjE3MjM4ODg3NTgsImV4cCI6MTcyMzg4OTY1OH0.Pby2MWIcbB4JBh7f9J1iYgFAZWuAb-w9IMiT-m2QQJk';
+
+        const decodedToken = parseJwt(myCookie);
+
+        console.log('Header:', decodedToken.header);
+        console.log('sdafsadfsadfsdafsd',userData)
+
+
+
             var aaaa ='do you ve access to me??'
             // Execute your function once the document is loaded
             let socket = io('http://122.160.157.99:8001');
@@ -49,10 +108,20 @@
             // const userData = JSON.parse('{{ user_data | tojson | safe }}');
 
 
-            var loggedInUser = userData
+            var loggedInUser = {id:decodedToken.payload.sub}
 
             
             socket.emit('join_room', { room: "global_for__" + loggedInUser.id });
+            console.log('joined room here', "global_for__" + loggedInUser.id);
+
+
+            // var chatModal = document.getElementById('chatModal');
+
+            // // Find the h3 element within the chat_header div
+            // var headerText = chatModal.querySelector('.chat_header h3').textContent;
+
+            // // Log the header text to the console
+            // console.log("headerText",headerText); // This should print "Reetu"
 
 
 
