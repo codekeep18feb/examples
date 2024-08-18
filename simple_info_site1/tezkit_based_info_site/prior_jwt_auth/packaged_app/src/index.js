@@ -135,6 +135,8 @@ console.log('did it happend')
 
     proxy_socket.on("ON_MESSAGE_ARRIVAL_BOT", function (data) {
       const p_data = JSON.parse(data);
+
+      console.log("what may be missing in arrived data?",p_data)
       // socket.emit('ON_MESSAGE_STATUS_CHANGED', {
       //     'msg_id':p_data.message.assigned_msg_id, // THIS WILL BE DYNAMIC IN NATURE upda
       //     'room': "global_for__1",
@@ -143,9 +145,9 @@ console.log('did it happend')
 
       // });
 
-      const notification_num_div = document.getElementById("notification_num");
-      notification_num_div.textContent =
-        Number(notification_num_div.textContent) + 1;
+      // const notification_num_div = document.getElementById("notification_num");
+      // notification_num_div.textContent =
+      //   Number(notification_num_div.textContent) + 1;
 
       // const sd = JSON.parse(data)
       const msg = p_data["message"]["message"];
@@ -349,7 +351,7 @@ console.log('did it happend')
   chat_modal_opener.style.fontSize = "24px";
   chat_modal_opener.style.padding = "10px";
   
-  chat_modal_opener.style.border = "24px solid red";
+  chat_modal_opener.style.border = "24px solid blue";
 
   // const chat_modal_opener = document.createElement('img');
   // chat_modal_opener.setAttribute('id', 'chat_modal_opener')
@@ -393,7 +395,7 @@ console.log('did it happend')
   document.body.appendChild(chat_modal_container);
 
   // document.body.appendChild(chat_modal_opener);
-
+     
   const chatBody = document.getElementById("chatBody");
   const chatInput = document.getElementById("chatInput");
   const sendButton = document.getElementById("sendButton");
