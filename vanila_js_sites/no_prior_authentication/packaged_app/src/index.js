@@ -392,6 +392,15 @@ export function initialize(socket, loggedInUser) {
       chat_modal.style.display === ""
     ) {
       chat_modal.style.display = "block";
+      if (loggedInUser.full_name){
+        console.log("Now we can just updae the title")
+
+
+        // Then find the chat_header and the h3 element inside it
+        const chatHeader = chat_modal.querySelector('.chat_header');
+        const loginMessage = chatHeader.querySelector('h3');
+        loginMessage.textContent = loggedInUser.full_name
+      }
     } else {
       chat_modal.style.display = "none";
     }
@@ -399,7 +408,7 @@ export function initialize(socket, loggedInUser) {
 
   chat_modal.innerHTML = `
             <div class="chat_header">
-                <h3>Reetu</h3>
+                <h3>Please Login to Chat</h3>
                 <button id="close-btn" style="background-color: white; outline: none; border: none; border-radius: 8px; padding: 5px; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; ">Close</button>
             </div>
             <div class="chat_body" id="chatBody">
@@ -410,6 +419,9 @@ export function initialize(socket, loggedInUser) {
                 <button id="sendButton">Send</button>
             </div>
         `;
+
+  console.log('and if modal is open if logged into chat lets update the username on the chat header??',loggedInUser.full_name)
+  
 
   const closebtn = document.getElementById("close-btn");
   closebtn.addEventListener("click", function () {
@@ -739,7 +751,7 @@ function createSignupForm() {
 
     try {
       const response = await fetch(
-        "https://37vkvbbs6h.execute-api.ap-south-1.amazonaws.com/prod/signup",
+        "https://js0spkks6a.execute-api.ap-south-1.amazonaws.com/prod/signup",
         {
           method: "POST",
           headers: {
@@ -834,7 +846,7 @@ async function handleLogin(event) {
     type: "user_type",
     email: formData.get("email"),
     password: formData.get("password"),
-    app_name: "mynewapp2",
+    app_name: "MYnewapp33",
   };
 
   const headersList = {
@@ -845,7 +857,7 @@ async function handleLogin(event) {
 
   try {
     const response = await fetch(
-      "https://37vkvbbs6h.execute-api.ap-south-1.amazonaws.com/prod/login",
+      "https://js0spkks6a.execute-api.ap-south-1.amazonaws.com/prod/login",
       {
         method: "POST",
         body: JSON.stringify(data),
@@ -856,10 +868,11 @@ async function handleLogin(event) {
     if (response.ok) {
       //Save the token
       const responseData = await response.json();
+      console.log("wahte is ti",responseData)
       console.log("Token:", responseData.token); // Assuming token is in the response data
       localStorage.setItem("tezkit_token", responseData.token);
       // Navigate to / root on successful login
-      routeToRoot();
+      routeToRoot('/package-consumer/index.html');
     } else {
       console.error("Login failed");
     }
@@ -869,7 +882,7 @@ async function handleLogin(event) {
 }
 
 // Function to handle routing to / root and render a welcome message
-function routeToRoot() {
+function routeToRoot(path=null) {
   // Clear the body content
   // document.body.innerHTML = '';
 
@@ -887,7 +900,7 @@ function routeToRoot() {
   // document.body.appendChild(welcomeMessage);
 
   // // Optionally, update the URL to reflect the new route
-  history.pushState(null, "", "/");
+  history.pushState(null, "", path);
   window.location.reload();
 }
 
