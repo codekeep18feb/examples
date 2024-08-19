@@ -244,11 +244,21 @@ export function initialize(socket, loggedInUser) {
             // First, grab the parent element with id 'chatBody'
             const chatBody = document.getElementById('chatBody');
 
-            // Then, navigate to the child elements and find the <p> tag
-            const messageElement = chatBody.querySelector('.message.admin p');
+            // Get all <p> elements within .message.admin divs
+            const messageElements = chatBody.querySelectorAll('.message.admin p');
+
+            // Now, access the nth message (where n is the index, starting from 0)
+            // const msg_calc_ind = 2; // For example, this will give you the 3rd message (index 2)
+            if (msg_calc_ind-1< messageElements.length) {
+                const nthMessage = messageElements[msg_calc_ind-1];
+                console.log("nthMessageText",nthMessage);
+                nthMessage.textContent= msg;
+            } else {
+                console.error('No message found at this index. to be updated');
+            }
 
             // Finally, get the text content of the <p> tag
-            messageElement.textContent= msg;
+            
 
             // console.log(messageText); // Output: "the message"
 
