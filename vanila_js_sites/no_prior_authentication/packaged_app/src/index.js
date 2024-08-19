@@ -104,6 +104,35 @@ export function renderCustomizeComponent() {
 
 let proxy_socket;
 
+
+function updateMsg(msg_id, newMsg) {
+  console.log("what is newstatus now",msg_id, newMsg)
+  let messageContentDiv = document.getElementById(msg_id);
+  console.log("here is messageContentDiv to be updated.",messageContentDiv)
+  // console.log("let's grab it's first child",messageContentDiv)
+  // if (messageContentDiv) {
+  //     var tickIcon = newStatus == 'DELIVERED' ? `<span style="color: white;">&#10003;&#10003;</span>` :
+  //         newStatus == 'READ' ? `<span style="color: green;">&#10003;&#10003;&#10003;</span>` :
+  //             `<span style="color: white;">&#10003;</span>`;
+
+  //     // just replace tick icon
+
+      
+
+  //     const tickDiv = messageContentDiv.lastChild.lastChild            
+  //     if (tickDiv){
+  //         tickDiv.innerHTML = `<div>${tickIcon}</div>`
+
+  //     }
+
+  //     else{
+  //         console.error("tick icon not found! Kindly Contact Admin!")
+  //     }
+  
+  // } else {
+  //     console.log("Message with id " + messageObj.msg_id + " not found.");
+  // }
+}
 // Function to add a full-width header with a fixed height and red background color
 export function initialize(socket, loggedInUser) {
   let global_bucket = { unread_msgs: [] };
@@ -183,12 +212,66 @@ export function initialize(socket, loggedInUser) {
       }
     });
 
-    proxy_socket.on("ON_MESSAGE_STATUS_CHANGED", function (data) {
-      console.log("do we reactions!", data);
+    proxy_socket.on('ON_MESSAGE_STATUS_CHANGED', function (data) {
 
-      //find the right one
-      // add a reaction
-    });
+      const p_data = JSON.parse(data)
+      console.log("arew we getting this now?",p_data)
+      
+      if (!p_data.message.action){
+
+          console.error("No action provided!")
+      }
+      else{
+        console.log("hwere i am  let's go champ!!!!!")
+          if (p_data.message.action=="MSG_UPDATED_EVENT"){
+
+              console.log("do we get it the when message is seen???",p_data)
+            console.log(p_data.message.message,'FIND status in message? IT SEEMS WE GOT SOME STATUS UPDATE ON MSGS.  @Admin.. lets get msg_id', data, typeof data)
+
+            // message = 
+            const msg = p_data.message.message
+            const msg_id = p_data.message.msg_id
+            console.log( msg_id, "what is this msg",msg)
+
+            // a = "msg_id__1"
+            // 'msg_id__1'
+            const msg_calc_ind = msg_id.split('msg_id__')[1]
+            
+            // ind = a.split('msg_id__')[1]
+            // '1'
+            // document.getElementById('chat_modal')
+
+            // First, grab the parent element with id 'chatBody'
+            const chatBody = document.getElementById('chatBody');
+
+            // Then, navigate to the child elements and find the <p> tag
+            const messageElement = chatBody.querySelector('.message.admin p');
+
+            // Finally, get the text content of the <p> tag
+            messageElement.textContent= msg;
+
+            // console.log(messageText); // Output: "the message"
+
+            
+
+
+            // updateMsg(p_data.message.msg_id, msg);
+            }
+          else{
+          console.error("Action Not Yet Handled!")
+
+          }
+
+
+
+      }
+
+      // Let's make the msgs all READ
+
+
+
+  });
+
   }
 
   const header = document.createElement("header");
