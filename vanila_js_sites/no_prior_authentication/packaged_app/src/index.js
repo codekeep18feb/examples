@@ -132,7 +132,24 @@ function updateMsg(msg_id, newMsg) {
   // } else {
   //     console.log("Message with id " + messageObj.msg_id + " not found.");
   // }
+
+
 }
+
+function addNewElementToChatBody(obj) {
+  const new_messageElement = document.createElement("div");
+  new_messageElement.classList.add("message");
+  new_messageElement.classList.add("admin");
+  new_messageElement.innerHTML = `
+        <div>
+        <p>${obj.msg}</p>
+        <span class="time">${obj.timestamp}</span>
+        </div>
+    `;
+  chatBody.appendChild(new_messageElement);
+}
+
+
 // Function to add a full-width header with a fixed height and red background color
 export function initialize(socket, loggedInUser) {
   let global_bucket = { unread_msgs: [] };
@@ -145,18 +162,7 @@ export function initialize(socket, loggedInUser) {
     // console.log('joined room :: ',"global_for__" + loggedInUser.id)
     proxy_socket.emit("join_room", { room: "global_for__" + loggedInUser.id });
 
-    function addNewElementToChatBody(obj) {
-      const new_messageElement = document.createElement("div");
-      new_messageElement.classList.add("message");
-      new_messageElement.classList.add("admin");
-      new_messageElement.innerHTML = `
-            <div>
-            <p>${obj.msg}</p>
-            <span class="time">${obj.timestamp}</span>
-            </div>
-        `;
-      chatBody.appendChild(new_messageElement);
-    }
+
 
     proxy_socket.on("ON_MESSAGE_ARRIVAL_BOT", function (data) {
       const p_data = JSON.parse(data);
@@ -392,7 +398,7 @@ export function initialize(socket, loggedInUser) {
       chat_modal.style.display === ""
     ) {
       chat_modal.style.display = "block";
-      if (loggedInUser.full_name){
+      if (loggedInUser && loggedInUser.full_name){
         console.log("Now we can just updae the title")
 
 
@@ -420,7 +426,7 @@ export function initialize(socket, loggedInUser) {
             </div>
         `;
 
-  console.log('and if modal is open if logged into chat lets update the username on the chat header??',loggedInUser.full_name)
+  console.log('and if modal is open if logged into chat lets update the username on the chat header??')
   
 
   const closebtn = document.getElementById("close-btn");
