@@ -102,39 +102,7 @@ export function renderCustomizeComponent() {
   rightPart.appendChild(initialForm);
 }
 
-let proxy_socket;
-
-
-function updateMsg(msg_id, newMsg) {
-  console.log("what is newstatus now",msg_id, newMsg)
-  let messageContentDiv = document.getElementById(msg_id);
-  console.log("here is messageContentDiv to be updated.",messageContentDiv)
-  // console.log("let's grab it's first child",messageContentDiv)
-  // if (messageContentDiv) {
-  //     var tickIcon = newStatus == 'DELIVERED' ? `<span style="color: white;">&#10003;&#10003;</span>` :
-  //         newStatus == 'READ' ? `<span style="color: green;">&#10003;&#10003;&#10003;</span>` :
-  //             `<span style="color: white;">&#10003;</span>`;
-
-  //     // just replace tick icon
-
-      
-
-  //     const tickDiv = messageContentDiv.lastChild.lastChild            
-  //     if (tickDiv){
-  //         tickDiv.innerHTML = `<div>${tickIcon}</div>`
-
-  //     }
-
-  //     else{
-  //         console.error("tick icon not found! Kindly Contact Admin!")
-  //     }
-  
-  // } else {
-  //     console.log("Message with id " + messageObj.msg_id + " not found.");
-  // }
-
-
-}
+let socket;
 
 function addNewElementToChatBody(obj) {
   const new_messageElement = document.createElement("div");
@@ -151,20 +119,28 @@ function addNewElementToChatBody(obj) {
 
 
 // Function to add a full-width header with a fixed height and red background color
-export function initialize(socket, loggedInUser) {
-  let global_bucket = { unread_msgs: [] };
-  proxy_socket = socket;
+export function initialize(loggedInUser) {
+  
+  // socket = socket;
 
   if (loggedInUser) {
-    // proxy_socket.emit('ON_MESSAGE_STATUS_CHANGED', );
+    socket = io('http://122.160.157.99:8022');
+    console.log("loggedInUser in initialze??")
+    let global_bucket = { unread_msgs: [] };
+
+    console.log("user on consumer joined", "global_for__" + loggedInUser.id);
+
+    socket.emit('join_room', { room: "global_for__" + loggedInUser.id });
+    
+    // socket.emit('ON_MESSAGE_STATUS_CHANGED', );
     // console.log("waterw .id",loggedInUser)
 
     // console.log('joined room :: ',"global_for__" + loggedInUser.id)
-    proxy_socket.emit("join_room", { room: "global_for__" + loggedInUser.id });
+    socket.emit("join_room", { room: "global_for__" + loggedInUser.id });
 
 
 
-    proxy_socket.on("ON_MESSAGE_ARRIVAL_BOT", function (data) {
+    socket.on("ON_MESSAGE_ARRIVAL_BOT", function (data) {
       const p_data = JSON.parse(data);
       // socket.emit('ON_MESSAGE_STATUS_CHANGED', {
       //     'msg_id':p_data.message.assigned_msg_id, // THIS WILL BE DYNAMIC IN NATURE upda
@@ -218,7 +194,7 @@ export function initialize(socket, loggedInUser) {
       }
     });
 
-    proxy_socket.on('ON_MESSAGE_STATUS_CHANGED', function (data) {
+    socket.on('ON_MESSAGE_STATUS_CHANGED', function (data) {
 
       const p_data = JSON.parse(data)
       console.log("arew we getting this now?",p_data)
@@ -337,18 +313,22 @@ export function initialize(socket, loggedInUser) {
   rightPart.appendChild(notificationWrapperDiv);
 
   const token = localStorage.getItem("tezkit_token");
+
+  header.appendChild(rightPart);
+
+  document.body.prepend(header);
   if (!token) {
-    const loginButton = createHeaderButton("Login", () => {
+    const loginButton = createButtonComp("Login", () => {
       routeToLogin();
     });
     rightPart.appendChild(loginButton);
 
-    const signupButton = createHeaderButton("Signup", () => {
+    const signupButton = createButtonComp("Signup", () => {
       toggleSignup();
     });
     rightPart.appendChild(signupButton);
   } else {
-    const logoutButton = createHeaderButton("Logout", () => {
+    const logoutButton = createButtonComp("Logout", () => {
       // Logout here
       localStorage.removeItem("tezkit_token");
       // Reload the page
@@ -363,15 +343,13 @@ export function initialize(socket, loggedInUser) {
     // rightPart.appendChild(chatIcon);
 
     // Add the new make_comp button
-    const makeCompButton = createHeaderButton("Make Comp", () => {
+    const makeCompButton = createButtonComp("Make Comp", () => {
       renderCustomizeComponent();
     });
     // rightPart.appendChild(makeCompButton);
   }
 
-  header.appendChild(rightPart);
-
-  document.body.prepend(header);
+  console.log("are we here yet!")
 
   // // Create the full-screen div
   // const fullScreenDiv = document.createElement('div');
@@ -430,7 +408,7 @@ export function initialize(socket, loggedInUser) {
   
 
   const closebtn = document.getElementById("close-btn");
-  closebtn.addEventListener("click", function () {
+  closebtn.addEventListener("clickwheredoyouseethis", function () {
     toggleChatModal();
     chat_modal_opener.style.display = "block";
   });
@@ -464,23 +442,22 @@ export function initialize(socket, loggedInUser) {
 
   chat_modal_opener.addEventListener("click", function () {
     toggleChatModal();
-    // console.log("here is global ubcket", global_bucket.unread_msgs)
-    if (global_bucket && global_bucket.unread_msgs) {
-      console.log("arew westill goin in htere?");
-      global_bucket.unread_msgs.forEach(function (obj, index) {
-        addNewElementToChatBody({ msg: obj.msg, timestamp: obj.timestamp });
-        socket.emit("ON_MESSAGE_STATUS_CHANGED", {
-          action: "MSG_STATUS_CHANGE_EVENT",
-          msg_id: obj.assigned_msg_id, // THIS WILL BE DYNAMIC IN NATURE upda
-          room: "global_for__1",
-          message: "READ",
-          timestamp: new Date().toLocaleTimeString(),
-        });
-      });
-      global_bucket.unread_msgs = [];
-    }
+    // DONOT DELETE ......WILL USE BELOW CODE LATER
+    // if (global_bucket && global_bucket.unread_msgs) {
+    //   console.log("arew westill goin in htere?");
+    //   global_bucket.unread_msgs.forEach(function (obj, index) {
+    //     addNewElementToChatBody({ msg: obj.msg, timestamp: obj.timestamp });
+    //     socket.emit("ON_MESSAGE_STATUS_CHANGED", {
+    //       action: "MSG_STATUS_CHANGE_EVENT",
+    //       msg_id: obj.assigned_msg_id, // THIS WILL BE DYNAMIC IN NATURE upda
+    //       room: "global_for__1",
+    //       message: "READ",
+    //       timestamp: new Date().toLocaleTimeString(),
+    //     });
+    //   });
+    //   global_bucket.unread_msgs = [];
+    // }
 
-    // chat_modal_opener.style.display = 'none'
   });
 
   chat_modal_container.appendChild(chat_modal_opener);
@@ -535,38 +512,47 @@ export function initialize(socket, loggedInUser) {
   }
 
   sendButton.addEventListener("click", () => {
-    const messageText = chatInput.value;
-    if (messageText.trim() !== "") {
-      const newMessage = {
-        text: messageText,
-        sender: "user",
-        time: new Date().toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
-      };
+   
 
-      let new_rply_msg_obj = {
-        // "type": "reply",
-        room: "global_for__1",
-        message: chatInput.value,
-        timestamp: new Date().toLocaleTimeString(),
-        frm_user: {
-          id: loggedInUser.id,
-          user: loggedInUser.full_name,
-        },
-        to_user: {
-          id: 1,
-          user: "Admin",
-        },
-      };
+      if (loggedInUser){
 
-      socket.emit("ON_MESSAGE_ARRIVAL_BOT", new_rply_msg_obj);
+        const messageText = chatInput.value;
+        if (messageText.trim() !== "") {
+          const newMessage = {
+            text: messageText,
+            sender: "user",
+            time: new Date().toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            }),
+          };
+    
+          let new_rply_msg_obj = {
+            // "type": "reply",
+            room: "global_for__1",
+            message: chatInput.value,
+            timestamp: new Date().toLocaleTimeString(),
+            frm_user: {
+              id: loggedInUser.id,
+              user: loggedInUser.full_name,
+            },
+            to_user: {
+              id: 1,
+              user: "Admin",
+            },
+          };
+        console.log("w atis thsi", loggedInUser)
+        socket.emit("ON_MESSAGE_ARRIVAL_BOT", new_rply_msg_obj);
 
       messages.push(newMessage);
       renderMessages();
       chatInput.value = "";
       chatBody.scrollTop = chatBody.scrollHeight;
+      }
+    
+    }
+    else{
+      alert("kindly login first!")
     }
   });
 
@@ -576,7 +562,7 @@ export function initialize(socket, loggedInUser) {
   document.body.appendChild(chat_modal);
 }
 
-function createHeaderButton(text, onClick) {
+function createButtonComp(text, onClick) {
   const button = document.createElement("button");
   button.textContent = text;
   button.addEventListener("click", onClick);

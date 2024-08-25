@@ -15,7 +15,7 @@
     <script>
 0
         async function makeMeAPICall(token) {
-                const apiUrl = 'http://122.160.157.99:8000/api/me';
+                const apiUrl = 'http://122.160.157.99:8021/api/me';
 
                 try {
                     const response = await fetch(apiUrl, {
@@ -42,28 +42,13 @@
         // Wait for the document to be fully loaded
         document.addEventListener("DOMContentLoaded", async function() {
 
-            var aaaa ='do you ve access to me??'
-            // Execute your function once the document is loaded
-            let socket = io('http://122.160.157.99:8001');
-
             const token = localStorage.getItem('tezkit_token')
-
             if (token){
-
                 var loggedInUser = await makeMeAPICall(token);
-
-                console.log("user on consumer joined", "global_for__" + loggedInUser.id);
-
-                socket.emit('join_room', { room: "global_for__" + loggedInUser.id });
-
-
-
-                window.randomColorPackage.initialize(socket, loggedInUser);
-
+                window.randomColorPackage.initialize(loggedInUser);
             }
             else{
-                window.randomColorPackage.initialize(socket, null);
-
+                window.randomColorPackage.initialize();
             }
         });
     </script>
