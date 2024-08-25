@@ -117,7 +117,94 @@ function addNewElementToChatBody(obj) {
   chatBody.appendChild(new_messageElement);
 }
 
+export function renderAuthHeader(token){
+  const header = document.createElement("header");
+  header.classList.add("header");
 
+  const leftPart = document.createElement("div");
+  leftPart.classList.add("left");
+
+  // Create an img element for the logo
+  const logo = document.createElement("img");
+  logo.src = myImage;
+  logo.alt = "Tezkit Logo";
+  logo.style.height = "50px"; // Adjust the height as needed
+  logo.style.marginRight = "10px"; // Optional: Add some space between the logo and text
+  leftPart.appendChild(logo);
+
+  const logoText = document.createElement("div");
+  logoText.textContent = "Tezkit";
+  logoText.style.display = "inline-block"; // To align it horizontally with the image
+  logoText.style.verticalAlign = "middle"; // To align it vertically with the image
+  leftPart.appendChild(logoText);
+
+  header.appendChild(leftPart);
+
+  const rightPart = document.createElement("div");
+  rightPart.classList.add("right");
+
+  const notificationIcon = document.createElement("span");
+  notificationIcon.textContent = "🔔";
+  notificationIcon.style.cursor = "pointer";
+  notificationIcon.addEventListener("click", toggleNotificationModal);
+
+  const notificationNum = document.createElement("span");
+  notificationNum.setAttribute("id", "notification_num");
+  notificationNum.textContent = 0;
+  notificationNum.style.cursor = "pointer";
+  // notificationNum.addEventListener('click', toggleNotificationModal);
+
+  const notificationWrapperDiv = document.createElement("div");
+  // notificationNum.textContent = 0;
+  // notificationNum.style.cursor = 'pointer';
+  // notificationNum.addEventListener('click', toggleNotificationModal);
+
+  notificationWrapperDiv.appendChild(notificationIcon);
+  notificationWrapperDiv.appendChild(notificationNum);
+
+  rightPart.appendChild(notificationWrapperDiv);
+
+  // const token = localStorage.getItem("tezkit_token");
+
+  header.appendChild(rightPart);
+
+  document.body.prepend(header);
+
+  if (token){
+
+    const logoutButton = createButtonComp("Logout", () => {
+      // Logout here
+      localStorage.removeItem("tezkit_token");
+      // Reload the page
+      window.location.reload();
+    });
+    
+    rightPart.appendChild(logoutButton);
+
+    const chatIcon = document.createElement("span");
+    chatIcon.textContent = "💬";
+    chatIcon.style.cursor = "pointer";
+    // chatIcon.addEventListener('click', toggleChatModal);
+    // rightPart.appendChild(chatIcon);
+
+    // Add the new make_comp button
+    const makeCompButton = createButtonComp("Make Comp", () => {
+      renderCustomizeComponent();
+    });
+  }
+  else{
+    const loginButton = createButtonComp("Login", () => {
+      routeToLogin();
+    });
+    rightPart.appendChild(loginButton);
+
+    const signupButton = createButtonComp("Signup", () => {
+      toggleSignup();
+    });
+    rightPart.appendChild(signupButton);
+  }
+
+}
 // Function to add a full-width header with a fixed height and red background color
 export function initialize(loggedInUser) {
   
@@ -266,86 +353,17 @@ export function initialize(loggedInUser) {
 
   }
 
-  const header = document.createElement("header");
-  header.classList.add("header");
-
-  const leftPart = document.createElement("div");
-  leftPart.classList.add("left");
-
-  // Create an img element for the logo
-  const logo = document.createElement("img");
-  logo.src = myImage;
-  logo.alt = "Tezkit Logo";
-  logo.style.height = "50px"; // Adjust the height as needed
-  logo.style.marginRight = "10px"; // Optional: Add some space between the logo and text
-  leftPart.appendChild(logo);
-
-  const logoText = document.createElement("div");
-  logoText.textContent = "Tezkit";
-  logoText.style.display = "inline-block"; // To align it horizontally with the image
-  logoText.style.verticalAlign = "middle"; // To align it vertically with the image
-  leftPart.appendChild(logoText);
-
-  header.appendChild(leftPart);
-
-  const rightPart = document.createElement("div");
-  rightPart.classList.add("right");
-
-  const notificationIcon = document.createElement("span");
-  notificationIcon.textContent = "🔔";
-  notificationIcon.style.cursor = "pointer";
-  notificationIcon.addEventListener("click", toggleNotificationModal);
-
-  const notificationNum = document.createElement("span");
-  notificationNum.setAttribute("id", "notification_num");
-  notificationNum.textContent = 0;
-  notificationNum.style.cursor = "pointer";
-  // notificationNum.addEventListener('click', toggleNotificationModal);
-
-  const notificationWrapperDiv = document.createElement("div");
-  // notificationNum.textContent = 0;
-  // notificationNum.style.cursor = 'pointer';
-  // notificationNum.addEventListener('click', toggleNotificationModal);
-
-  notificationWrapperDiv.appendChild(notificationIcon);
-  notificationWrapperDiv.appendChild(notificationNum);
-
-  rightPart.appendChild(notificationWrapperDiv);
-
   const token = localStorage.getItem("tezkit_token");
-
-  header.appendChild(rightPart);
-
-  document.body.prepend(header);
+  
   if (!token) {
-    const loginButton = createButtonComp("Login", () => {
-      routeToLogin();
-    });
-    rightPart.appendChild(loginButton);
-
-    const signupButton = createButtonComp("Signup", () => {
-      toggleSignup();
-    });
-    rightPart.appendChild(signupButton);
+    renderAuthHeader()
   } else {
-    const logoutButton = createButtonComp("Logout", () => {
-      // Logout here
-      localStorage.removeItem("tezkit_token");
-      // Reload the page
-      window.location.reload();
-    });
-    rightPart.appendChild(logoutButton);
 
-    const chatIcon = document.createElement("span");
-    chatIcon.textContent = "💬";
-    chatIcon.style.cursor = "pointer";
-    // chatIcon.addEventListener('click', toggleChatModal);
-    // rightPart.appendChild(chatIcon);
+   
+   
 
-    // Add the new make_comp button
-    const makeCompButton = createButtonComp("Make Comp", () => {
-      renderCustomizeComponent();
-    });
+  renderAuthHeader(token)
+
     // rightPart.appendChild(makeCompButton);
   }
 
