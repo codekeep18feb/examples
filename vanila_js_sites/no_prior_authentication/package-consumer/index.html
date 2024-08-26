@@ -9,11 +9,9 @@
 
 
     <script src="https://cdn.socket.io/4.1.2/socket.io.min.js"></script>
-
-    <script src="node_modules/my-js-package/dist/bundle.js"></script>
-
+    <script src="node_modules/chathead-consumer-client/dist/bundle.js"></script>
     <script>
-0
+
         async function makeMeAPICall(token) {
                 const apiUrl = 'https://js0spkks6a.execute-api.ap-south-1.amazonaws.com/prod/me';
 
@@ -45,10 +43,10 @@
             const token = localStorage.getItem('tezkit_token')
             if (token){
                 var loggedInUser = await makeMeAPICall(token);
-                window.randomColorPackage.initialize(loggedInUser);
+                window.chathead.initialize(loggedInUser);
             }
             else{
-                window.randomColorPackage.initialize();
+                window.chathead.initialize();
             }
         });
     </script>
