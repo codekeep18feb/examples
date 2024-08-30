@@ -328,6 +328,7 @@ export function initialize(loggedInUser) {
           // updateMsg(p_data.message.msg_id, msg);
         }
 
+
         if (p_data.message.action == "MSG_REACTION_EVENT") {
           console.log("reaction received!!!",p_data);
         } else {
@@ -337,6 +338,33 @@ export function initialize(loggedInUser) {
 
       // Let's make the msgs all READ
     });
+
+
+    socket.on("ON_USER_LIVE_STATUS", function (data) {
+      const p_data = JSON.parse(data);
+      console.log("ais user going offline?", p_data);
+
+      if (!p_data.message.action) {
+        console.error("No action provided!");
+      } else {
+        console.log("hwere i am  let's go champ!!!!!");
+        if (p_data.message.action == "OFFLINE_EVENT") {
+         
+          console.log("here is the onlinestatus")
+
+        }
+
+
+        else {
+          console.error("Action Not Yet Handled!");
+        }
+      }
+
+      // Let's make the msgs all READ
+    });
+
+
+
   }
 
   const token = localStorage.getItem("tezkit_token");
