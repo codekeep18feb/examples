@@ -117,7 +117,7 @@ function addNewElementToChatBody(obj) {
   chatBody.appendChild(new_messageElement);
 }
 
-export function renderAuthHeader(token){
+export function renderAuthHeader(token) {
   const header = document.createElement("header");
   header.classList.add("header");
 
@@ -170,15 +170,14 @@ export function renderAuthHeader(token){
 
   document.body.prepend(header);
 
-  if (token){
-
+  if (token) {
     const logoutButton = createButtonComp("Logout", () => {
       // Logout here
       localStorage.removeItem("tezkit_token");
       // Reload the page
       window.location.reload();
     });
-    
+
     rightPart.appendChild(logoutButton);
 
     const chatIcon = document.createElement("span");
@@ -191,8 +190,7 @@ export function renderAuthHeader(token){
     const makeCompButton = createButtonComp("Make Comp", () => {
       renderCustomizeComponent();
     });
-  }
-  else{
+  } else {
     const loginButton = createButtonComp("Login", () => {
       routeToLogin();
     });
@@ -203,39 +201,34 @@ export function renderAuthHeader(token){
     });
     rightPart.appendChild(signupButton);
   }
-
 }
 // Function to add a full-width header with a fixed height and red background color
 export function initialize(loggedInUser) {
-  
   // socket = socket;
 
   if (loggedInUser) {
-    socket = io('http://122.160.157.99:8022');
-    console.log("loggedInUser in initialze??")
+    socket = io("http://122.160.157.99:8022");
+    console.log("loggedInUser in initialze??");
     let global_bucket = { unread_msgs: [] };
 
     console.log("user on consumer joined", "global_for__" + loggedInUser.id);
 
-    socket.emit('join_room', { room: "global_for__" + loggedInUser.id });
-    
+    socket.emit("join_room", { room: "global_for__" + loggedInUser.id });
+
     // socket.emit('ON_MESSAGE_STATUS_CHANGED', );
     // console.log("waterw .id",loggedInUser)
 
     // console.log('joined room :: ',"global_for__" + loggedInUser.id)
     socket.emit("join_room", { room: "global_for__" + loggedInUser.id });
 
-
-
     socket.on("ON_MESSAGE_ARRIVAL_BOT", function (data) {
       const p_data = JSON.parse(data);
-      console.log("are we getting data just fine!",p_data)
-      socket.emit('ON_MESSAGE_STATUS_CHANGED', {
-          'msg_id':p_data.message.assigned_msg_id, // THIS WILL BE DYNAMIC IN NATURE upda
-          'room': "global_for__"+p_data.message.frm_id,
-          "message": "DELIVERED",
-          "timestamp": new Date().toLocaleTimeString(),
-
+      console.log("are we getting data just fine!", p_data);
+      socket.emit("ON_MESSAGE_STATUS_CHANGED", {
+        msg_id: p_data.message.assigned_msg_id, // THIS WILL BE DYNAMIC IN NATURE upda
+        room: "global_for__" + p_data.message.frm_id,
+        message: "DELIVERED",
+        timestamp: new Date().toLocaleTimeString(),
       });
 
       const notification_num_div = document.getElementById("notification_num");
@@ -282,93 +275,81 @@ export function initialize(loggedInUser) {
       }
     });
 
-    socket.on('ON_MESSAGE_STATUS_CHANGED', function (data) {
+    socket.on("ON_MESSAGE_STATUS_CHANGED", function (data) {
+      const p_data = JSON.parse(data);
+      console.log("arew we getting this now?", p_data);
 
-      const p_data = JSON.parse(data)
-      console.log("arew we getting this now?",p_data)
-      
-      if (!p_data.message.action){
+      if (!p_data.message.action) {
+        console.error("No action provided!");
+      } else {
+        console.log("hwere i am  let's go champ!!!!!");
+        if (p_data.message.action == "MSG_UPDATED_EVENT") {
+          console.log("do we get it the when message is seen???", p_data);
+          console.log(
+            p_data.message.message,
+            "FIND status in message? IT SEEMS WE GOT SOME STATUS UPDATE ON MSGS.  @Admin.. lets get msg_id",
+            data,
+            typeof data
+          );
 
-          console.error("No action provided!")
-      }
-      else{
-        console.log("hwere i am  let's go champ!!!!!")
-          if (p_data.message.action=="MSG_UPDATED_EVENT"){
+          // message =
+          const msg = p_data.message.message;
+          const msg_id = p_data.message.msg_id;
+          console.log(msg_id, "what is this msg", msg);
 
-              console.log("do we get it the when message is seen???",p_data)
-            console.log(p_data.message.message,'FIND status in message? IT SEEMS WE GOT SOME STATUS UPDATE ON MSGS.  @Admin.. lets get msg_id', data, typeof data)
+          // a = "msg_id__1"
+          // 'msg_id__1'
+          const msg_calc_ind = msg_id.split("msg_id__")[1];
 
-            // message = 
-            const msg = p_data.message.message
-            const msg_id = p_data.message.msg_id
-            console.log( msg_id, "what is this msg",msg)
+          // ind = a.split('msg_id__')[1]
+          // '1'
+          // document.getElementById('chat_modal')
 
-            // a = "msg_id__1"
-            // 'msg_id__1'
-            const msg_calc_ind = msg_id.split('msg_id__')[1]
-            
-            // ind = a.split('msg_id__')[1]
-            // '1'
-            // document.getElementById('chat_modal')
+          // First, grab the parent element with id 'chatBody'
+          const chatBody = document.getElementById("chatBody");
 
-            // First, grab the parent element with id 'chatBody'
-            const chatBody = document.getElementById('chatBody');
+          // Get all <p> elements within .message.admin divs
+          const messageElements = chatBody.querySelectorAll(".message.admin p");
 
-            // Get all <p> elements within .message.admin divs
-            const messageElements = chatBody.querySelectorAll('.message.admin p');
-
-            // Now, access the nth message (where n is the index, starting from 0)
-            // const msg_calc_ind = 2; // For example, this will give you the 3rd message (index 2)
-            if (msg_calc_ind-1< messageElements.length) {
-                const nthMessage = messageElements[msg_calc_ind-1];
-                console.log("nthMessageText",nthMessage);
-                nthMessage.textContent= msg;
-            } else {
-                console.error('No message found at this index. to be updated');
-            }
-
-            // Finally, get the text content of the <p> tag
-            
-
-            // console.log(messageText); // Output: "the message"
-
-            
-
-
-            // updateMsg(p_data.message.msg_id, msg);
-            }
-          else{
-          console.error("Action Not Yet Handled!")
-
+          // Now, access the nth message (where n is the index, starting from 0)
+          // const msg_calc_ind = 2; // For example, this will give you the 3rd message (index 2)
+          if (msg_calc_ind - 1 < messageElements.length) {
+            const nthMessage = messageElements[msg_calc_ind - 1];
+            console.log("nthMessageText", nthMessage);
+            nthMessage.textContent = msg;
+          } else {
+            console.error("No message found at this index. to be updated");
           }
 
+          // Finally, get the text content of the <p> tag
 
+          // console.log(messageText); // Output: "the message"
 
+          // updateMsg(p_data.message.msg_id, msg);
+        }
+
+        if (p_data.message.action == "MSG_REACTION_EVENT") {
+          console.log("reaction received!!!",p_data);
+        } else {
+          console.error("Action Not Yet Handled!");
+        }
       }
 
       // Let's make the msgs all READ
-
-
-
-  });
-
+    });
   }
 
   const token = localStorage.getItem("tezkit_token");
-  
+
   if (!token) {
-    renderAuthHeader()
+    renderAuthHeader();
   } else {
-
-   
-   
-
-  renderAuthHeader(token)
+    renderAuthHeader(token);
 
     // rightPart.appendChild(makeCompButton);
   }
 
-  console.log("are we here yet!")
+  console.log("are we here yet!");
 
   // // Create the full-screen div
   // const fullScreenDiv = document.createElement('div');
@@ -395,14 +376,13 @@ export function initialize(loggedInUser) {
       chat_modal.style.display === ""
     ) {
       chat_modal.style.display = "block";
-      if (loggedInUser && loggedInUser.full_name){
-        console.log("Now we can just updae the title")
-
+      if (loggedInUser && loggedInUser.full_name) {
+        console.log("Now we can just updae the title");
 
         // Then find the chat_header and the h3 element inside it
-        const chatHeader = chat_modal.querySelector('.chat_header');
-        const loginMessage = chatHeader.querySelector('h3');
-        loginMessage.textContent = loggedInUser.full_name
+        const chatHeader = chat_modal.querySelector(".chat_header");
+        const loginMessage = chatHeader.querySelector("h3");
+        loginMessage.textContent = loggedInUser.full_name;
       }
     } else {
       chat_modal.style.display = "none";
@@ -423,8 +403,9 @@ export function initialize(loggedInUser) {
             </div>
         `;
 
-  console.log('and if modal is open if logged into chat lets update the username on the chat header??')
-  
+  console.log(
+    "and if modal is open if logged into chat lets update the username on the chat header??"
+  );
 
   const closebtn = document.getElementById("close-btn");
   closebtn.addEventListener("clickwheredoyouseethis", function () {
@@ -476,7 +457,6 @@ export function initialize(loggedInUser) {
     //   });
     //   global_bucket.unread_msgs = [];
     // }
-
   });
 
   chat_modal_container.appendChild(chat_modal_opener);
@@ -531,47 +511,42 @@ export function initialize(loggedInUser) {
   }
 
   sendButton.addEventListener("click", () => {
-   
+    if (loggedInUser) {
+      const messageText = chatInput.value;
+      if (messageText.trim() !== "") {
+        const newMessage = {
+          text: messageText,
+          sender: "user",
+          time: new Date().toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+        };
 
-      if (loggedInUser){
-
-        const messageText = chatInput.value;
-        if (messageText.trim() !== "") {
-          const newMessage = {
-            text: messageText,
-            sender: "user",
-            time: new Date().toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-            }),
-          };
-    
-          let new_rply_msg_obj = {
-            // "type": "reply",
-            room: "global_for__1",
-            message: chatInput.value,
-            timestamp: new Date().toLocaleTimeString(),
-            frm_user: {
-              id: loggedInUser.id,
-              user: loggedInUser.full_name,
-            },
-            to_user: {
-              id: 1,
-              user: "Admin",
-            },
-          };
-        console.log("w atis thsi", loggedInUser)
+        let new_rply_msg_obj = {
+          // "type": "reply",
+          room: "global_for__1",
+          message: chatInput.value,
+          timestamp: new Date().toLocaleTimeString(),
+          frm_user: {
+            id: loggedInUser.id,
+            user: loggedInUser.full_name,
+          },
+          to_user: {
+            id: 1,
+            user: "Admin",
+          },
+        };
+        console.log("w atis thsi", loggedInUser);
         socket.emit("ON_MESSAGE_ARRIVAL_BOT", new_rply_msg_obj);
 
-      messages.push(newMessage);
-      renderMessages();
-      chatInput.value = "";
-      chatBody.scrollTop = chatBody.scrollHeight;
+        messages.push(newMessage);
+        renderMessages();
+        chatInput.value = "";
+        chatBody.scrollTop = chatBody.scrollHeight;
       }
-    
-    }
-    else{
-      alert("kindly login first!")
+    } else {
+      alert("kindly login first!");
     }
   });
 
@@ -879,11 +854,11 @@ async function handleLogin(event) {
     if (response.ok) {
       //Save the token
       const responseData = await response.json();
-      console.log("wahte is ti",responseData)
+      console.log("wahte is ti", responseData);
       console.log("Token:", responseData.token); // Assuming token is in the response data
       localStorage.setItem("tezkit_token", responseData.token);
       // Navigate to / root on successful login
-      routeToRoot('/package-consumer/index.html');
+      routeToRoot("/package-consumer/index.html");
     } else {
       console.error("Login failed");
     }
@@ -893,7 +868,7 @@ async function handleLogin(event) {
 }
 
 // Function to handle routing to / root and render a welcome message
-function routeToRoot(path=null) {
+function routeToRoot(path = null) {
   // Clear the body content
   // document.body.innerHTML = '';
 
