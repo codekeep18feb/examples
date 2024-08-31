@@ -344,20 +344,23 @@ export function initialize(loggedInUser) {
       const p_data = JSON.parse(data);
       console.log("ais user going offline?", p_data);
 
-      if (!p_data.message.action) {
-        console.error("No action provided!");
+      if (!p_data.hasOwnProperty('status')) {
+        console.error("No status provided!");
       } else {
         console.log("hwere i am  let's go champ!!!!!");
-        if (p_data.message.action == "OFFLINE_EVENT") {
+        if (p_data.status === true) {
          
-          console.log("here is the onlinestatus")
+          console.log("Admin is Online")
+
+        }
+        else if (p_data.status === false) {
+         
+          console.log("Admin is Offline")
 
         }
 
 
-        else {
-          console.error("Action Not Yet Handled!");
-        }
+        
       }
 
       // Let's make the msgs all READ
