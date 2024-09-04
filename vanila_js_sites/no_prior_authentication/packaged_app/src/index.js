@@ -342,28 +342,23 @@ export function initialize(loggedInUser) {
 
     socket.on("ON_USER_LIVE_STATUS", function (data) {
       const p_data = JSON.parse(data);
-      console.log("ais user going offline?", p_data);
+      console.log("is user going offline?", p_data);
 
       if (!p_data.hasOwnProperty('status')) {
         console.error("No status provided!");
       } else {
-        console.log("hwere i am  let's go champ!!!!!");
+        const statusElement = document.getElementById("statusElement");
+
         if (p_data.status === true) {
-         
-          console.log("Admin is Online")
-
+          console.log("Admin is Online");
+          statusElement.textContent = "";
+          statusElement.style.background = "#9acd32";
+        } else if (p_data.status === false) {
+          console.log("Admin is Offline");
+          statusElement.textContent = "";
+          statusElement.style.background = "#a99bbe";
         }
-        else if (p_data.status === false) {
-         
-          console.log("Admin is Offline")
-
-        }
-
-
-        
       }
-
-      // Let's make the msgs all READ
     });
 
 
@@ -413,7 +408,15 @@ export function initialize(loggedInUser) {
         // Then find the chat_header and the h3 element inside it
         const chatHeader = chat_modal.querySelector(".chat_header");
         const loginMessage = chatHeader.querySelector("h3");
+      
+        const statusElement = chatHeader.querySelector("#statusElement");
+
         loginMessage.textContent = loggedInUser.full_name;
+
+        statusElement.textContent = "";
+        statusElement.style.background = "#a99bbe";
+
+      
       }
     } else {
       chat_modal.style.display = "none";
