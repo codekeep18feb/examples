@@ -344,7 +344,7 @@ export function initialize(loggedInUser) {
 
 
     // Function to extract message index from msg_id
-    
+
     function getMessageIndex(msg_id) {
       const msg_calc_ind = msg_id.split("msg_id__")[1];
       return parseInt(msg_calc_ind, 10) - 1;
@@ -361,7 +361,7 @@ export function initialize(loggedInUser) {
       }
     }
 
-  
+
     function updateMessageText(messageElement, newText) {
       const messageText = messageElement.querySelector("p");
       if (messageText) {
@@ -397,7 +397,7 @@ export function initialize(loggedInUser) {
       }
     }
 
- 
+
     function handleMsgReactionEvent(p_data) {
       const { msg_id, message } = p_data.message;
       const reaction = message;
@@ -415,12 +415,12 @@ export function initialize(loggedInUser) {
     socket.on("ON_MESSAGE_STATUS_CHANGED", function (data) {
       const p_data = JSON.parse(data);
       console.log("Received status change:", p_data);
-    
+
       if (!p_data.message.action) {
         console.error("No action provided!");
         return;
       }
-    
+
       if (p_data.message.action === "MSG_UPDATED_EVENT") {
         handleMsgUpdatedEvent(p_data);
       } else if (p_data.message.action === "MSG_REACTION_EVENT") {
@@ -429,8 +429,11 @@ export function initialize(loggedInUser) {
         console.error("Action Not Yet Handled:", p_data.message.action);
       }
     });
-    
 
+
+
+
+    // Usage in toggleChatModal or socket.on
 
 
     socket.on("ON_USER_LIVE_STATUS", function (data) {
@@ -445,16 +448,18 @@ export function initialize(loggedInUser) {
         if (statusElement) {
           if (p_data.status === true) {
             console.log("Admin is Online");
-            statusElement.textContent = "On";
+            statusElement.textContent = "";
             statusElement.style.background = "#9acd32";
           } else if (p_data.status === false) {
             console.log("Admin is Offline");
-            statusElement.textContent = "Off";
+            statusElement.textContent = "";
             statusElement.style.background = "#a99bbe";
           }
         }
+
       }
     });
+
 
 
 
@@ -503,36 +508,38 @@ export function initialize(loggedInUser) {
         // Then find the chat_header and the h3 element inside it
         const chatHeader = chat_modal.querySelector(".chat_header");
         const loginMessage = chatHeader.querySelector("h3");
-
         const statusElement = chatHeader.querySelector("#statusElement");
 
         loginMessage.textContent = loggedInUser.full_name;
 
-        if (statusElement) {
-          statusElement.textContent = "";
-          statusElement.style.background = "#a99bbe";
-        }
-
-
+        statusElement.textContent = "";
+        statusElement.style.background = "#a99bbe";
       }
     } else {
       chat_modal.style.display = "none";
     }
   }
 
+
+
+
   chat_modal.innerHTML = `
-            <div class="chat_header">
-                <h3>Please Login to Chat</h3>
-                <button id="close-btn" style="background-color: white; outline: none; border: none; border-radius: 8px; padding: 5px; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; ">Close</button>
-            </div>
-            <div class="chat_body" id="chatBody">
-                <!-- Messages will be dynamically added here -->
-            </div>
-            <div class="chat_footer">
-                <input type="text" id="chatInput" placeholder="Type here...">
-                <button id="sendButton">Send</button>
-            </div>
-        `;
+  <div class="chat_header">
+      <div style="display: flex; align-items: center;">
+      <h3 id="loginMessage">Please Login to Chat</h3>
+      <span id="statusElement" style="margin-left: 10px;"></span>
+      </div>
+      <button id="close-btn" style="background-color: white; outline: none; border: none; border-radius: 8px; padding: 5px; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; ">Close</button>
+  </div>
+  <div class="chat_body" id="chatBody">
+      <!-- Messages will be dynamically added here -->
+  </div>
+  <div class="chat_footer">
+      <input type="text" id="chatInput" placeholder="Type here...">
+      <button id="sendButton">Send</button>
+  </div>
+`;
+
 
   console.log(
     "and if modal is open if logged into chat lets update the username on the chat header??"

@@ -91,13 +91,18 @@ html {
 .chat_body::-webkit-scrollbar {
   display: none;
 }
+#statusElement{
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+}
 /* .message {
   max-width: 80%;
   margin-bottom: 20px;
 } */
 .reaction {
   position: absolute; 
-  bottom: -22px;
+  bottom: -20px;
   right: 10px; 
   transform: translateX(0); 
   font-size: 20px; 
