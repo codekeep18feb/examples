@@ -468,6 +468,7 @@ export function initialize(loggedInUser) {
       delete data.result.message;
 
       renderMessage(data,'FILE_MIXED');
+      
 
 
       //HERE WILL ADD A MSG BOX TO THE MAIN MSG WRAPPER
