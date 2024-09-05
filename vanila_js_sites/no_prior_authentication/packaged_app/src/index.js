@@ -207,7 +207,7 @@ export function initialize(loggedInUser) {
   // socket = socket;
 
   if (loggedInUser) {
-    socket = io("http://122.160.157.99:8001");
+    socket = io("http://122.160.157.99:8022");
     console.log("loggedInUser in initialze??");
     let global_bucket = { unread_msgs: [] };
 
@@ -462,6 +462,29 @@ export function initialize(loggedInUser) {
 
 
 
+    socket.on("ON_FILE_UPLOAD", function (data) {
+      // const p_data = JSON.parse(data);
+      console.log("some file it seeems was uploaded?", data,type(data));
+
+      //HERE WILL ADD A MSG BOX TO THE MAIN MSG WRAPPER
+    //   {
+    //     "result": {
+    //         "message": "Files and fields processed successfully",
+    //         "files": [
+    //             "https://muti-media-bckt.s3.amazonaws.com/p2p/1__to__2/pexels-daan-rink-7047366.jpg",
+    //             "https://muti-media-bckt.s3.amazonaws.com/p2p/1__to__2/pickme.png"
+    //         ],
+    //         "sometext_data": [
+    //             "Editable content here"
+    //         ]
+    //     },
+    //     "to_user": {
+    //         "id": "2"
+    //     }
+    // }
+
+    });
+
 
   }
 
@@ -646,7 +669,7 @@ export function initialize(loggedInUser) {
   }
 
   function renderMessages() {
-    chatBody.innerHTML = "";
+    `chatBody`.innerHTML = "";
     messages.forEach((message) => {
       const messageWrapper = document.createElement("div");
       messageWrapper.classList.add("message-container");
