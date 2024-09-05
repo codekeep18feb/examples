@@ -464,7 +464,11 @@ export function initialize(loggedInUser) {
 
     socket.on("ON_FILE_UPLOAD", function (data) {
       // const p_data = JSON.parse(data);
-      console.log("some file it seeems was uploaded?", data,type(data));
+      console.log("some file it seeems was uploaded?", data,typeof(data));
+      delete data.result.message;
+
+      renderMessage(data,'FILE_MIXED');
+
 
       //HERE WILL ADD A MSG BOX TO THE MAIN MSG WRAPPER
     //   {
@@ -668,32 +672,75 @@ export function initialize(loggedInUser) {
     return `<div class="reaction">${reaction}</div>`;
   }
 
-  function renderMessage(newMessage) {
-    if (newMessage){
-      const messageWrapper = document.createElement("div");
-      messageWrapper.classList.add("message-container");
-    
-      const messageElement = document.createElement("div");
-      messageElement.classList.add("message");
-      messageElement.classList.add(newMessage.sender || "de");
-    
-      const reactionHtml = renderReaction(newMessage.reaction);
-    
-      messageElement.innerHTML = `
-        <p>${newMessage.text}</p>
-        <span class="time">${newMessage.time}</span>
-        ${reactionHtml}
-      `;
-    
-      console.log("Rendering new message:", messageElement);
-    
-      // Append the new message at the bottom of chatBody
-      chatBody.appendChild(messageWrapper);
-      messageWrapper.appendChild(messageElement);
   
-
+  function renderMessage(newMessage, type = 'REGULAR') {
+    if (newMessage) {
+      if (type === 'REGULAR') {
+        const messageWrapper = document.createElement("div");
+        messageWrapper.classList.add("message-container");
+  
+        const messageElement = document.createElement("div");
+        messageElement.classList.add("message");
+        messageElement.classList.add(newMessage.sender || "de");
+  
+        const reactionHtml = renderReaction(newMessage.reaction);
+  
+        messageElement.innerHTML = `
+          <p>${newMessage.text}</p>
+          <span class="time">${newMessage.time}</span>
+          ${reactionHtml}
+        `;
+  
+        console.log("Rendering new message:", messageElement);
+  
+        // Append the new message at the bottom of chatBody
+        chatBody.appendChild(messageWrapper);
+        messageWrapper.appendChild(messageElement);
+  
+      } else if (type === 'FILE_MIXED') {
+        const messageWrapper = document.createElement("div");
+        messageWrapper.classList.add("message-container");
+  
+        const messageElement = document.createElement("div");
+        messageElement.classList.add("message");
+        messageElement.classList.add(newMessage.to_user.id || "de");
+  
+        // Handling files, showing them directly as images
+        let filesHtml = '';
+        if (newMessage.result.files && newMessage.result.files.length > 0) {
+          filesHtml = newMessage.result.files.map(fileUrl => {
+            return `<img src="${fileUrl}" alt="file" class="file-preview" />`;
+          }).join("");
+        }
+  
+        // Handling text content
+        let textHtml = '';
+        if (newMessage.result.sometext_data && newMessage.result.sometext_data.length > 0) {
+          textHtml = newMessage.result.sometext_data.map(text => {
+            return `<p>${text}</p>`;
+          }).join("");
+        }
+  
+        // Construct the message inner HTML
+        messageElement.innerHTML = `
+          <div class="file-mixed-content">
+            ${filesHtml}
+            ${textHtml}
+          </div>
+          <span class="time">${new Date().toLocaleTimeString()}</span>
+        `;
+  
+        console.log("Rendering FILE_MIXED message:", messageElement);
+  
+        // Append the new message at the bottom of chatBody
+        chatBody.appendChild(messageWrapper);
+        messageWrapper.appendChild(messageElement);
+      }
     }
   }
+  
+  
+  
   
   sendButton.addEventListener("click", () => {
     if (loggedInUser) {
