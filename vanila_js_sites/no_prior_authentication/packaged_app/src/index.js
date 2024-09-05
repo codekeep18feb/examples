@@ -668,33 +668,52 @@ export function initialize(loggedInUser) {
     return `<div class="reaction">${reaction}</div>`;
   }
 
-  function renderMessages() {
-    `chatBody`.innerHTML = "";
-    messages.forEach((message) => {
+  function renderMessage(newMessage) {
+    if (newMessage){
       const messageWrapper = document.createElement("div");
       messageWrapper.classList.add("message-container");
+    
       const messageElement = document.createElement("div");
       messageElement.classList.add("message");
-      // messageElement.classList.add(message.sender);
-      messageElement.classList.add(message.sender || "de");
-
-      const reactionHtml = renderReaction(message.reaction);
-
+      messageElement.classList.add(newMessage.sender || "de");
+    
+      const reactionHtml = renderReaction(newMessage.reaction);
+    
       messageElement.innerHTML = `
-      <p>${message.text}</p>
-      <span class="time">${message.time}</span>
-      ${reactionHtml}
-    `;
-
-
-      console.log("Rendering message:", messageElement);
+        <p>${newMessage.text}</p>
+        <span class="time">${newMessage.time}</span>
+        ${reactionHtml}
+      `;
+    
+      console.log("Rendering new message:", messageElement);
+    
+      // Append the new message at the bottom of chatBody
       chatBody.appendChild(messageWrapper);
       messageWrapper.appendChild(messageElement);
-    });
-  }
+  
 
+    }
+  }
+  
   sendButton.addEventListener("click", () => {
     if (loggedInUser) {
+
+      let new_rply_msg_obj = {
+        // "type": "reply",
+        room: "global_for__1",
+        message: chatInput.value,
+        timestamp: new Date().toLocaleTimeString(),
+        frm_user: {
+          id: loggedInUser.id,
+          user: loggedInUser.full_name,
+        },
+        to_user: {
+          id: 1,
+          user: "Admin",
+        },
+      };
+
+
       const messageText = chatInput.value;
       if (messageText.trim() !== "") {
         const newMessage = {
@@ -706,25 +725,12 @@ export function initialize(loggedInUser) {
           }),
         };
 
-        let new_rply_msg_obj = {
-          // "type": "reply",
-          room: "global_for__1",
-          message: chatInput.value,
-          timestamp: new Date().toLocaleTimeString(),
-          frm_user: {
-            id: loggedInUser.id,
-            user: loggedInUser.full_name,
-          },
-          to_user: {
-            id: 1,
-            user: "Admin",
-          },
-        };
+      
         console.log("w atis thsi", loggedInUser);
         socket.emit("ON_MESSAGE_ARRIVAL_BOT", new_rply_msg_obj);
 
         messages.push(newMessage);
-        renderMessages();
+        renderMessage(newMessage);
         chatInput.value = "";
         chatBody.scrollTop = chatBody.scrollHeight;
       }
@@ -734,7 +740,7 @@ export function initialize(loggedInUser) {
   });
 
   // Initial rendering of messages
-  renderMessages();
+  // renderMessage(null);
 
   document.body.appendChild(chat_modal);
 }
