@@ -207,7 +207,7 @@ export function initialize(loggedInUser) {
   // socket = socket;
 
   if (loggedInUser) {
-    socket = io("http://122.160.157.99:8022");
+    socket = io("http://122.160.157.99:8001");
     console.log("loggedInUser in initialze??");
     let global_bucket = { unread_msgs: [] };
 
@@ -224,6 +224,7 @@ export function initialize(loggedInUser) {
     socket.on("ON_MESSAGE_ARRIVAL_BOT", function (data) {
       const p_data = JSON.parse(data);
       console.log("are we getting data just fine!", p_data);
+
       socket.emit("ON_MESSAGE_STATUS_CHANGED", {
         msg_id: p_data.message.assigned_msg_id, // THIS WILL BE DYNAMIC IN NATURE upda
         room: "global_for__" + p_data.message.frm_id,
@@ -275,69 +276,164 @@ export function initialize(loggedInUser) {
       }
     });
 
+    // socket.on("ON_MESSAGE_STATUS_CHANGED", function (data) {
+    //   const p_data = JSON.parse(data);
+    //   console.log("arew we getting this now?", p_data);
+
+    //   if (!p_data.message.action) {
+    //     console.error("No action provided!");
+    //   } else {
+    //     console.log("hwere i am  let's go champ!!!!!");
+    //     if (p_data.message.action == "MSG_UPDATED_EVENT") {
+    //       console.log("do we get it the when message is seen???", p_data);
+    //       console.log(
+    //         p_data.message.message,
+    //         "FIND status in message? IT SEEMS WE GOT SOME STATUS UPDATE ON MSGS.  @Admin.. lets get msg_id",
+    //         data,
+    //         typeof data
+    //       );
+
+    //       // message =
+    //       const msg = p_data.message.message;
+    //       const msg_id = p_data.message.msg_id;
+    //       console.log(msg_id, "what is this msg", msg);
+
+    //       console.log("my messg id",msg_id );
+
+    //       // a = "msg_id__1"
+    //       // 'msg_id__1'
+    //       const msg_calc_ind = msg_id.split("msg_id__")[1];
+
+    //       // ind = a.split('msg_id__')[1]
+    //       // '1'
+    //       // document.getElementById('chat_modal')
+
+    //       // First, grab the parent element with id 'chatBody'
+    //       const chatBody = document.getElementById("chatBody");
+
+    //       // Get all <p> elements within .message.admin divs
+    //       const messageElements = chatBody.querySelectorAll(".message.admin p");
+
+    //       // Now, access the nth message (where n is the index, starting from 0)
+    //       // const msg_calc_ind = 2; // For example, this will give you the 3rd message (index 2)
+    //       if (msg_calc_ind - 1 < messageElements.length) {
+    //         const nthMessage = messageElements[msg_calc_ind - 1];
+    //         console.log("nthMessageText", nthMessage);
+    //         nthMessage.textContent = msg;
+    //       } else {
+    //         console.error("No message found at this index. to be updated");
+    //       }
+
+    //       // Finally, get the text content of the <p> tag
+
+    //       // console.log(messageText); // Output: "the message"
+
+    //       // updateMsg(p_data.message.msg_id, msg);
+    //     }
+
+
+    //     if (p_data.message.action == "MSG_REACTION_EVENT") {
+    //       console.log("reaction received!!!",p_data);
+    //     } else {
+    //       console.error("Action Not Yet Handled!");
+    //     }
+    //   }
+
+    //   // Let's make the msgs all READ
+    // });  
+
+
+    // Function to extract message index from msg_id
+
+    function getMessageIndex(msg_id) {
+      const msg_calc_ind = msg_id.split("msg_id__")[1];
+      return parseInt(msg_calc_ind, 10) - 1;
+    }
+
+    // Function to get a specific message element by index
+    function getMessageElement(index, chatBody) {
+      const messageElements = chatBody.querySelectorAll(".message");
+      if (index < messageElements.length) {
+        return messageElements[index];
+      } else {
+        console.error("No message found at this index:", index);
+        return null;
+      }
+    }
+
+
+    function updateMessageText(messageElement, newText) {
+      const messageText = messageElement.querySelector("p");
+      if (messageText) {
+        messageText.textContent = newText;
+        console.log("Message updated to:", newText);
+      } else {
+        console.error("Message text element not found.");
+      }
+    }
+
+    // Function to update the reaction
+    function updateMessageReaction(messageElement, reaction) {
+      let reactionElement = messageElement.querySelector(".reaction");
+      if (!reactionElement) {
+        reactionElement = document.createElement("div");
+        reactionElement.classList.add("reaction");
+        messageElement.appendChild(reactionElement);
+      }
+      reactionElement.textContent = reaction;
+      console.log("Reaction updated to:", reaction);
+    }
+
+    function handleMsgUpdatedEvent(p_data) {
+      const { msg_id, message } = p_data.message;
+      const msg = message;
+      const chatBody = document.getElementById("chatBody");
+
+      const msgIndex = getMessageIndex(msg_id);
+      const messageElement = getMessageElement(msgIndex, chatBody);
+
+      if (messageElement) {
+        updateMessageText(messageElement, msg);
+      }
+    }
+
+
+    function handleMsgReactionEvent(p_data) {
+      const { msg_id, message } = p_data.message;
+      const reaction = message;
+      const chatBody = document.getElementById("chatBody");
+
+      const msgIndex = getMessageIndex(msg_id);
+      const messageElement = getMessageElement(msgIndex, chatBody);
+
+      if (messageElement) {
+        updateMessageReaction(messageElement, reaction);
+      }
+    }
+
+    // Main socket event handler
     socket.on("ON_MESSAGE_STATUS_CHANGED", function (data) {
       const p_data = JSON.parse(data);
-      console.log("arew we getting this now?", p_data);
+      console.log("Received status change:", p_data);
 
       if (!p_data.message.action) {
         console.error("No action provided!");
-      } else {
-        console.log("hwere i am  let's go champ!!!!!");
-        if (p_data.message.action == "MSG_UPDATED_EVENT") {
-          console.log("do we get it the when message is seen???", p_data);
-          console.log(
-            p_data.message.message,
-            "FIND status in message? IT SEEMS WE GOT SOME STATUS UPDATE ON MSGS.  @Admin.. lets get msg_id",
-            data,
-            typeof data
-          );
-
-          // message =
-          const msg = p_data.message.message;
-          const msg_id = p_data.message.msg_id;
-          console.log(msg_id, "what is this msg", msg);
-
-          // a = "msg_id__1"
-          // 'msg_id__1'
-          const msg_calc_ind = msg_id.split("msg_id__")[1];
-
-          // ind = a.split('msg_id__')[1]
-          // '1'
-          // document.getElementById('chat_modal')
-
-          // First, grab the parent element with id 'chatBody'
-          const chatBody = document.getElementById("chatBody");
-
-          // Get all <p> elements within .message.admin divs
-          const messageElements = chatBody.querySelectorAll(".message.admin p");
-
-          // Now, access the nth message (where n is the index, starting from 0)
-          // const msg_calc_ind = 2; // For example, this will give you the 3rd message (index 2)
-          if (msg_calc_ind - 1 < messageElements.length) {
-            const nthMessage = messageElements[msg_calc_ind - 1];
-            console.log("nthMessageText", nthMessage);
-            nthMessage.textContent = msg;
-          } else {
-            console.error("No message found at this index. to be updated");
-          }
-
-          // Finally, get the text content of the <p> tag
-
-          // console.log(messageText); // Output: "the message"
-
-          // updateMsg(p_data.message.msg_id, msg);
-        }
-
-
-        if (p_data.message.action == "MSG_REACTION_EVENT") {
-          console.log("reaction received!!!",p_data);
-        } else {
-          console.error("Action Not Yet Handled!");
-        }
+        return;
       }
 
-      // Let's make the msgs all READ
+      if (p_data.message.action === "MSG_UPDATED_EVENT") {
+        handleMsgUpdatedEvent(p_data);
+      } else if (p_data.message.action === "MSG_REACTION_EVENT") {
+        handleMsgReactionEvent(p_data);
+      } else {
+        console.error("Action Not Yet Handled:", p_data.message.action);
+      }
     });
+
+
+
+
+    // Usage in toggleChatModal or socket.on
 
 
     socket.on("ON_USER_LIVE_STATUS", function (data) {
@@ -349,17 +445,21 @@ export function initialize(loggedInUser) {
       } else {
         const statusElement = document.getElementById("statusElement");
 
-        if (p_data.status === true) {
-          console.log("Admin is Online");
-          statusElement.textContent = "";
-          statusElement.style.background = "#9acd32";
-        } else if (p_data.status === false) {
-          console.log("Admin is Offline");
-          statusElement.textContent = "";
-          statusElement.style.background = "#a99bbe";
+        if (statusElement) {
+          if (p_data.status === true) {
+            console.log("Admin is Online");
+            statusElement.textContent = "";
+            statusElement.style.background = "#9acd32";
+          } else if (p_data.status === false) {
+            console.log("Admin is Offline");
+            statusElement.textContent = "";
+            statusElement.style.background = "#a99bbe";
+          }
         }
+
       }
     });
+
 
 
 
@@ -408,34 +508,38 @@ export function initialize(loggedInUser) {
         // Then find the chat_header and the h3 element inside it
         const chatHeader = chat_modal.querySelector(".chat_header");
         const loginMessage = chatHeader.querySelector("h3");
-      
         const statusElement = chatHeader.querySelector("#statusElement");
 
         loginMessage.textContent = loggedInUser.full_name;
 
         statusElement.textContent = "";
         statusElement.style.background = "#a99bbe";
-
-      
       }
     } else {
       chat_modal.style.display = "none";
     }
   }
 
+
+
+
   chat_modal.innerHTML = `
-            <div class="chat_header">
-                <h3>Please Login to Chat</h3>
-                <button id="close-btn" style="background-color: white; outline: none; border: none; border-radius: 8px; padding: 5px; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; ">Close</button>
-            </div>
-            <div class="chat_body" id="chatBody">
-                <!-- Messages will be dynamically added here -->
-            </div>
-            <div class="chat_footer">
-                <input type="text" id="chatInput" placeholder="Type here...">
-                <button id="sendButton">Send</button>
-            </div>
-        `;
+  <div class="chat_header">
+      <div style="display: flex; align-items: center;">
+      <h3 id="loginMessage">Please Login to Chat</h3>
+      <span id="statusElement" style="margin-left: 10px;"></span>
+      </div>
+      <button id="close-btn" style="background-color: white; outline: none; border: none; border-radius: 8px; padding: 5px; box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px; ">Close</button>
+  </div>
+  <div class="chat_body" id="chatBody">
+      <!-- Messages will be dynamically added here -->
+  </div>
+  <div class="chat_footer">
+      <input type="text" id="chatInput" placeholder="Type here...">
+      <button id="sendButton">Send</button>
+  </div>
+`;
+
 
   console.log(
     "and if modal is open if logged into chat lets update the username on the chat header??"
@@ -530,17 +634,39 @@ export function initialize(loggedInUser) {
     // { text: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry', sender: 'user', time: '11:15 AM' }
   ];
 
+  // const messages = [
+  //   { id: 'msg_id__1', text: 'Hello', time: '15:48:54', reaction: '' },
+  //   // other messages
+  // ];
+
+  function renderReaction(reaction) {
+    if (!reaction) return "";
+
+    return `<div class="reaction">${reaction}</div>`;
+  }
+
   function renderMessages() {
     chatBody.innerHTML = "";
     messages.forEach((message) => {
+      const messageWrapper = document.createElement("div");
+      messageWrapper.classList.add("message-container");
       const messageElement = document.createElement("div");
       messageElement.classList.add("message");
-      messageElement.classList.add(message.sender);
+      // messageElement.classList.add(message.sender);
+      messageElement.classList.add(message.sender || "de");
+
+      const reactionHtml = renderReaction(message.reaction);
+
       messageElement.innerHTML = `
-                    <p>${message.text}</p>
-                    <span class="time">${message.time}</span>
-                `;
-      chatBody.appendChild(messageElement);
+      <p>${message.text}</p>
+      <span class="time">${message.time}</span>
+      ${reactionHtml}
+    `;
+
+
+      console.log("Rendering message:", messageElement);
+      chatBody.appendChild(messageWrapper);
+      messageWrapper.appendChild(messageElement);
     });
   }
 
