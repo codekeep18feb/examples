@@ -207,7 +207,7 @@ export function initialize(loggedInUser) {
   // socket = socket;
 
   if (loggedInUser) {
-    socket = io("http://122.160.157.99:8022");
+    socket = io("http://122.160.157.99:8001");
     console.log("loggedInUser in initialze??");
     let global_bucket = { unread_msgs: [] };
 
@@ -251,7 +251,7 @@ export function initialize(loggedInUser) {
       );
 
       const chat_modal = document.getElementById("chatModal");
-      if (chat_modal.style.display === "block") {
+      if (chat_modal.style.display === "block" || chat_modal.style.display === "flex") {
         addNewElementToChatBody({ msg, timestamp });
         socket.emit("ON_MESSAGE_STATUS_CHANGED", {
           action: "MSG_STATUS_CHANGE_EVENT",
@@ -525,11 +525,27 @@ export function initialize(loggedInUser) {
   // Function to toggle the modal visibility
   function toggleChatModal() {
     const chat_modal = document.getElementById("chatModal");
-    if (
-      chat_modal.style.display === "none" ||
-      chat_modal.style.display === ""
-    ) {
-      chat_modal.style.display = "block";
+
+    if (chat_modal.style.display === "none" || chat_modal.style.display === "") {
+
+            // Get the width and height of the window
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+
+      // Log the dimensions to the console
+      console.log(`Widtsdfsdh: ${width}px, Height: ${height}px`);
+
+      if (width < 800){
+        console.log("areraewr dcp,dog dfsd")
+        chat_modal.style.display = "flex";
+
+      }
+      else{
+        console.log("else block is executing???",width)
+        chat_modal.style.display = "block";
+
+      }
+
       if (loggedInUser && loggedInUser.full_name) {
         console.log("Now we can just updae the title");
 
@@ -548,7 +564,10 @@ export function initialize(loggedInUser) {
     }
   }
 
-
+   function closeModal() {
+    console.log("you click on close btn");
+    chat_modal.style.display = 'none';
+   }
 
 
   chat_modal.innerHTML = `
@@ -568,6 +587,7 @@ export function initialize(loggedInUser) {
   </div>
 `;
 
+document.getElementById("close-btn").addEventListener("click", closeModal);
 
   console.log(
     "and if modal is open if logged into chat lets update the username on the chat header??"

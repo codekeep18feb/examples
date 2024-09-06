@@ -50,6 +50,7 @@ html {
   right: 20px;
   flex-direction: column;
   overflow: hidden;
+  /* display: flex; */
 }
 
 /* Hide scrollbar for WebKit browsers (Chrome, Safari) */
@@ -59,12 +60,10 @@ html {
 
 .chat_header {
   padding: 0px 10px;
-  /* height: 70px; */
   border-radius: 10px 10px 0px 0px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  /* background-color: rgb(163, 112, 206); */
   color: #fff;
   background-image: url(headerBg.png);
   background-repeat: no-repeat;
@@ -86,6 +85,7 @@ html {
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  flex: 1; 
 }
 
 .chat_body::-webkit-scrollbar {
@@ -262,3 +262,47 @@ html {
 #chat_modal_opener {
   animation: zoom 2s infinite ease-in-out;
 }
+
+
+
+
+@media (max-width: 768px) {
+  .header{
+    background: green;
+  }
+  .chat_modal{
+    /* border: 5px solid red; */
+    display: none;
+    width: 98vw;
+    height: 100vh;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    top: 0;
+    max-height: none;
+    border-radius: 0;
+    flex-direction: column; 
+  }
+  .chat_body {
+     overflow-y: auto;
+  }
+
+  .chat_footer {
+    position: relative; /* Ensure it stays at the bottom */
+    bottom: 0;
+    left: 0;
+    right: 0;
+    box-shadow: rgba(17, 17, 26, 0.25) 0px 1px 0px,
+      rgba(17, 17, 26, 0.25) 0px 0px 8px;
+  }
+}
+
+/* .chat_body {
+  padding: 10px;
+  height: 350px;
+  overflow-y: auto;
+  background: #fff;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+} */
