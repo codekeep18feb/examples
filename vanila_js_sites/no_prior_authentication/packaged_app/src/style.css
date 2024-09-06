@@ -267,9 +267,6 @@ html {
 
 
 @media (max-width: 768px) {
-  .header{
-    background: green;
-  }
   .chat_modal{
     /* border: 5px solid red; */
     display: none;
@@ -296,13 +293,3 @@ html {
       rgba(17, 17, 26, 0.25) 0px 0px 8px;
   }
 }
-
-/* .chat_body {
-  padding: 10px;
-  height: 350px;
-  overflow-y: auto;
-  background: #fff;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-} */
