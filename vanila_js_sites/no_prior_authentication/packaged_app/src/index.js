@@ -717,7 +717,7 @@ export function initialize(loggedInUser) {
         // Handling text content
         let textHtml = '';
         if (newMessage.result.sometext_data && newMessage.result.sometext_data.length > 0) {
-          textHtml = newMessage.result.sometext_data.map(text => {
+          textHtml = JSON.parse(newMessage.result.sometext_data).map(text => {
             return `<p>${text}</p>`;
           }).join("");
         }

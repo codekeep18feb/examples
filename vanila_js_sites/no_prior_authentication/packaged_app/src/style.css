@@ -6,6 +6,12 @@ html {
   font-family: Arial, sans-serif;
 }
 
+.file-preview{
+  height: 100px;
+  width: 100px;
+}
+
+
 /* Header styling */
 .header {
   display: flex;
