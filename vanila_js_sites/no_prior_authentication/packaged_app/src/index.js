@@ -226,6 +226,7 @@ export function initialize(loggedInUser) {
       console.log("are we getting data just fine!", p_data);
 
       socket.emit("ON_MESSAGE_STATUS_CHANGED", {
+        action: "MSG_STATUS_CHANGE_EVENT",
         msg_id: p_data.message.assigned_msg_id, // THIS WILL BE DYNAMIC IN NATURE upda
         room: "global_for__" + p_data.message.frm_id,
         message: "DELIVERED",
@@ -275,6 +276,10 @@ export function initialize(loggedInUser) {
         });
       }
     });
+
+    socket.on('ON_MESSAGE_ARRIVAL',function (data) {
+      console.log("Reply Recieved!",data)
+  })
 
     // socket.on("ON_MESSAGE_STATUS_CHANGED", function (data) {
     //   const p_data = JSON.parse(data);
