@@ -202,12 +202,53 @@ export function renderAuthHeader(token) {
     rightPart.appendChild(signupButton);
   }
 }
+
+
+
+// Define your breakpoints
+const MOBILE_WIDTH = 768;
+
+// Function to check the viewport size
+function checkViewportSize() {
+
+
+
+  // if (width < 800) {
+  //   console.log("areraewr dcp,dog dfsd")
+  //   chat_modal.style.display = "flex";
+
+  // }
+  // else {
+  //   console.log("else block is executing???", width)
+  //   chat_modal.style.display = "block";
+
+  // }
+
+    const chat_modal = document.getElementById("chatModal");
+
+    if (window.innerWidth < MOBILE_WIDTH) {
+        console.log('Mobile size',window.innerWidth);
+        chat_modal.style.display = "flex";
+
+
+        // Add your mobile-specific logic here
+    } else {
+        console.log('Desktop size',window.innerWidth);
+        // Add your desktop-specific logic here
+      chat_modal.style.display = "block";
+
+    }
+}
+
+
 // Function to add a full-width header with a fixed height and red background color
 export function initialize(loggedInUser) {
+  // Attach the function to the resize event
+  window.addEventListener('resize', checkViewportSize);
   // socket = socket;
 
   if (loggedInUser) {
-    socket = io("http://122.160.157.99:8022");
+    socket = io("http://122.160.157.99:8001");
     console.log("loggedInUser in initialze??");
     let global_bucket = { unread_msgs: [] };
 
@@ -252,7 +293,7 @@ export function initialize(loggedInUser) {
       );
 
       const chat_modal = document.getElementById("chatModal");
-      if (chat_modal.style.display === "block") {
+      if (chat_modal.style.display === "block" || chat_modal.style.display === "flex") {
         addNewElementToChatBody({ msg, timestamp });
         socket.emit("ON_MESSAGE_STATUS_CHANGED", {
           action: "MSG_STATUS_CHANGE_EVENT",
@@ -469,29 +510,29 @@ export function initialize(loggedInUser) {
 
     socket.on("ON_FILE_UPLOAD", function (data) {
       // const p_data = JSON.parse(data);
-      console.log("some file it seeems was uploaded?", data,typeof(data));
+      console.log("some file it seeems was uploaded?", data, typeof (data));
       delete data.result.message;
 
-      renderMessage(data,'FILE_MIXED');
-      
+      renderMessage(data, 'FILE_MIXED');
+
 
 
       //HERE WILL ADD A MSG BOX TO THE MAIN MSG WRAPPER
-    //   {
-    //     "result": {
-    //         "message": "Files and fields processed successfully",
-    //         "files": [
-    //             "https://muti-media-bckt.s3.amazonaws.com/p2p/1__to__2/pexels-daan-rink-7047366.jpg",
-    //             "https://muti-media-bckt.s3.amazonaws.com/p2p/1__to__2/pickme.png"
-    //         ],
-    //         "sometext_data": [
-    //             "Editable content here"
-    //         ]
-    //     },
-    //     "to_user": {
-    //         "id": "2"
-    //     }
-    // }
+      //   {
+      //     "result": {
+      //         "message": "Files and fields processed successfully",
+      //         "files": [
+      //             "https://muti-media-bckt.s3.amazonaws.com/p2p/1__to__2/pexels-daan-rink-7047366.jpg",
+      //             "https://muti-media-bckt.s3.amazonaws.com/p2p/1__to__2/pickme.png"
+      //         ],
+      //         "sometext_data": [
+      //             "Editable content here"
+      //         ]
+      //     },
+      //     "to_user": {
+      //         "id": "2"
+      //     }
+      // }
 
     });
 
@@ -530,11 +571,27 @@ export function initialize(loggedInUser) {
   // Function to toggle the modal visibility
   function toggleChatModal() {
     const chat_modal = document.getElementById("chatModal");
-    if (
-      chat_modal.style.display === "none" ||
-      chat_modal.style.display === ""
-    ) {
-      chat_modal.style.display = "block";
+
+    if (chat_modal.style.display === "none" || chat_modal.style.display === "") {
+
+      // Get the width and height of the window
+      const width = window.innerWidth;
+      // const height =  window.innerHeight;
+
+      // Log the dimensions to the console
+      // console.log(`Widtsdfsdh: ${width}px, Height: ${height}px`);
+      console.log("MOBILE_WIDTHfdsf",MOBILE_WIDTH)
+      if (width < MOBILE_WIDTH) {
+        console.log("areraewr dcp,dog dfsd")
+        chat_modal.style.display = "flex";
+
+      }
+      else {
+        console.log("else block is executing???", width)
+        chat_modal.style.display = "block";
+
+      }
+
       if (loggedInUser && loggedInUser.full_name) {
         console.log("Now we can just updae the title");
 
@@ -553,7 +610,10 @@ export function initialize(loggedInUser) {
     }
   }
 
-
+  function closeModal() {
+    console.log("you click on close btn");
+    chat_modal.style.display = 'none';
+  }
 
 
   chat_modal.innerHTML = `
@@ -573,6 +633,7 @@ export function initialize(loggedInUser) {
   </div>
 `;
 
+  document.getElementById("close-btn").addEventListener("click", closeModal);
 
   console.log(
     "and if modal is open if logged into chat lets update the username on the chat header??"
@@ -582,7 +643,24 @@ export function initialize(loggedInUser) {
   closebtn.addEventListener("clickwheredoyouseethis", function () {
     toggleChatModal();
     chat_modal_opener.style.display = "block";
-  });
+
+      // const width = window.innerWidth;
+      // const height = window.innerHeight;
+
+      // // Log the dimensions to the console
+      // console.log(`Widtsdfsdh: ${width}px, Height: ${height}px`);
+
+      // if (width < 800) {
+      //   console.log("areraewr dcp,dog dfsd")
+      //   chat_modal.style.display = "flex";
+
+      // }
+      // else {
+      //   console.log("else block is executing???", width)
+      //   chat_modal.style.display = "block";
+
+      // }
+    });
 
   // // Create an img element for the logo
   const chat_modal_container = document.createElement("div");
@@ -678,39 +756,39 @@ export function initialize(loggedInUser) {
     return `<div class="reaction">${reaction}</div>`;
   }
 
-  
+
   function renderMessage(newMessage, type = 'REGULAR') {
     if (newMessage) {
       if (type === 'REGULAR') {
         const messageWrapper = document.createElement("div");
         messageWrapper.classList.add("message-container");
-  
+
         const messageElement = document.createElement("div");
         messageElement.classList.add("message");
         messageElement.classList.add(newMessage.sender || "de");
-  
+
         const reactionHtml = renderReaction(newMessage.reaction);
-  
+
         messageElement.innerHTML = `
           <p>${newMessage.text}</p>
           <span class="time">${newMessage.time}</span>
           ${reactionHtml}
         `;
-  
+
         console.log("Rendering new message:", messageElement);
-  
+
         // Append the new message at the bottom of chatBody
         chatBody.appendChild(messageWrapper);
         messageWrapper.appendChild(messageElement);
-  
+
       } else if (type === 'FILE_MIXED') {
         const messageWrapper = document.createElement("div");
         messageWrapper.classList.add("message-container");
-  
+
         const messageElement = document.createElement("div");
         messageElement.classList.add("message");
         messageElement.classList.add(newMessage.to_user.id || "de");
-  
+
         // Handling files, showing them directly as images
         let filesHtml = '';
         if (newMessage.result.files && newMessage.result.files.length > 0) {
@@ -718,7 +796,7 @@ export function initialize(loggedInUser) {
             return `<img src="${fileUrl}" alt="file" class="file-preview" />`;
           }).join("");
         }
-  
+
         // Handling text content
         let textHtml = '';
         if (newMessage.result.sometext_data && newMessage.result.sometext_data.length > 0) {
@@ -726,7 +804,7 @@ export function initialize(loggedInUser) {
             return `<p>${text}</p>`;
           }).join("");
         }
-  
+
         // Construct the message inner HTML
         messageElement.innerHTML = `
           <div class="file-mixed-content">
@@ -735,19 +813,19 @@ export function initialize(loggedInUser) {
           </div>
           <span class="time">${new Date().toLocaleTimeString()}</span>
         `;
-  
+
         console.log("Rendering FILE_MIXED message:", messageElement);
-  
+
         // Append the new message at the bottom of chatBody
         chatBody.appendChild(messageWrapper);
         messageWrapper.appendChild(messageElement);
       }
     }
   }
-  
-  
-  
-  
+
+
+
+
   sendButton.addEventListener("click", () => {
     if (loggedInUser) {
 
@@ -778,7 +856,7 @@ export function initialize(loggedInUser) {
           }),
         };
 
-      
+
         console.log("w atis thsi", loggedInUser);
         socket.emit("ON_MESSAGE_ARRIVAL_BOT", new_rply_msg_obj);
 
@@ -871,6 +949,7 @@ function toggleNotificationModal() {
     modal.style.display = "none";
   }
 }
+
 
 // Function to toggle the signup form visibility
 function toggleSignup() {
