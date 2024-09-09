@@ -248,7 +248,7 @@ export function initialize(loggedInUser) {
   // socket = socket;
 
   if (loggedInUser) {
-    socket = io("http://122.160.157.99:8001");
+    socket = io("http://122.160.157.99:8022");
     console.log("loggedInUser in initialze??");
     let global_bucket = { unread_msgs: [] };
 

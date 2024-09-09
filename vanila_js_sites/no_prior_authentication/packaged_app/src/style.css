@@ -276,7 +276,7 @@ html {
   .chat_modal{
     /* border: 5px solid red; */
     display: none;
-    width: 98vw;
+    width: 100vw;
     height: 100vh;
     bottom: 0;
     right: 0;
