@@ -4,7 +4,6 @@
 import "./style.css";
 
 import myImage from "./tezkit_logo.jpg";
-import chatNowImage from "./chat-now.jpg";
 
 // Function to change the background color of the body
 export function changeBackgroundColor() {
