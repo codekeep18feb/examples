@@ -70,8 +70,37 @@ test('loggedin header should be seen if there is no token and initialize(loggedI
   // // Verify that login and signup buttons are rendered
   expect(logOutButton.textContent).toBe('Logout');
   // expect(signupButton.textContent).toBe('Signup');
+  
+  //IS CHAT OPNER IS THERE?
   const chat_opener = document.getElementById('chat_modal_opener')
   expect(chat_opener).not.toBeNull();
+
+
+  const chat_modal = document.getElementById('chatModal')
+  expect(chat_modal).not.toBeNull();
+  const displayStyle = chat_modal.style.display;
+  expect(displayStyle === 'none' || displayStyle === '').toBe(true);
+ 
+  // Ensure the modal is initially hidden
+  const initialDisplayStyle = chat_modal.style.display;
+  expect(initialDisplayStyle === 'none' || initialDisplayStyle === '').toBe(true);
+  
+  // Simulate interaction (e.g., clicking a button to open the modal)
+  // const openButton = document.getElementById('openChatButton'); // Adjust as needed
+  // expect(openButton).not.toBeNull();
+  const icon_inside = chat_opener.firstChild
+  icon_inside.click(); // Trigger click event
+  
+  // Act (you might need to trigger any additional code that handles the click event)
+  
+  // Re-fetch the chat_modal element
+  const updatedChatModal = document.getElementById('chatModal');
+  
+  // Assert that the display style is now 'block'
+  const updatedDisplayStyle = updatedChatModal.style.display;
+  expect(updatedDisplayStyle).toBe('block');
+  
+
 
   // if logged in then we should also see chat_opner
 });
