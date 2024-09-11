@@ -218,6 +218,98 @@ describe('Chat Modal Tests', () => {
     expect(sendButton.textContent).toBe('Send');
   });
 
+
+  test('should hide chat modal when close button is clicked', () => {
+    // Mock loggedInUser to simulate a logged-in state
+    const loggedInUser = {
+      tenant: 'tenant1',
+      password: 'passmenow',
+      role: 65536,
+      app_name: 'MYnewapp33',
+      timestamp: '2024-08-17 18:00:05',
+      full_name: 'user2user',
+      is_online: true,
+      email: 'u2@gmail.com',
+      id: '2',
+      phone: '919999999999',
+      gender: 'Male',
+      type: 'user_type',
+    };
+  
+    localStorage.setItem('tezkit_token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjb20uemFsYW5kby5jb25uZXhpb24iLCJpYXQiOjE3MjE4Mjk5MTAsImV4cCI6MTcyNzgyOTkxMCwidXNlcl9pZCI6IjMiLCJ1c2VyX3R5cGUiOiJvdGhlciIsImVtYWlsIjoidTJAZ21haWwuY29tIiwidGVuYW50X2FjY291bnRfbmFtZSI6InRlbmFudDEiLCJyb2xlX3BvbGljeSI6Ilt7XCJyb2xlXCI6IDY1NTM2LjAsIFwiYXBwX25hbWVcIjogXCJteW5ld2FwcDJcIn1dIn0.QmhuPBHKFO37BnVJDDtTYd013NoObA_ZI-ppio3NT8o');
+  
+    // Call initialize function which should render the chat opener and modal
+    initialize(loggedInUser);
+  
+    // Simulate interaction to open chat modal
+    const chatOpener = document.getElementById('chat_modal_opener');
+    const fa_icon = chatOpener.firstChild;
+    fa_icon.click(); // Trigger click event
+  
+    // Re-fetch the chat_modal element after interaction
+    const chatModal = document.getElementById('chatModal');
+    expect(chatModal).not.toBeNull();
+  
+    // Simulate clicking the close button to hide the modal
+    const closeButton = chatModal.querySelector('#close-btn');
+    closeButton.click(); // Trigger click event
+  
+    // Re-fetch the chat_modal element to check its display style
+    const updatedChatModal = document.getElementById('chatModal');
+    const updatedDisplayStyle = updatedChatModal.style.display;
+    expect(updatedDisplayStyle === 'none' || updatedDisplayStyle === '').toBe(true);
+  });
+  
+
+  test('should add message to chat body when send button is clicked', () => {
+    // Mock loggedInUser to simulate a logged-in state
+    const loggedInUser = {
+      tenant: 'tenant1',
+      password: 'passmenow',
+      role: 65536,
+      app_name: 'MYnewapp33',
+      timestamp: '2024-08-17 18:00:05',
+      full_name: 'user2user',
+      is_online: true,
+      email: 'u2@gmail.com',
+      id: '2',
+      phone: '919999999999',
+      gender: 'Male',
+      type: 'user_type',
+    };
+  
+    localStorage.setItem('tezkit_token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjb20uemFsYW5kby5jb25uZXhpb24iLCJpYXQiOjE3MjE4Mjk5MTAsImV4cCI6MTcyNzgyOTkxMCwidXNlcl9pZCI6IjMiLCJ1c2VyX3R5cGUiOiJvdGhlciIsImVtYWlsIjoidTJAZ21haWwuY29tIiwidGVuYW50X2FjY291bnRfbmFtZSI6InRlbmFudDEiLCJyb2xlX3BvbGljeSI6Ilt7XCJyb2xlXCI6IDY1NTM2LjAsIFwiYXBwX25hbWVcIjogXCJteW5ld2FwcDJcIn1dIn0.QmhuPBHKFO37BnVJDDtTYd013NoObA_ZI-ppio3NT8o');
+  
+    // Call initialize function which should render the chat opener and modal
+    initialize(loggedInUser);
+  
+    // Simulate interaction to open chat modal
+    const chatOpener = document.getElementById('chat_modal_opener');
+    const fa_icon = chatOpener.firstChild;
+    fa_icon.click(); // Trigger click event
+  
+    // Re-fetch the chat_modal element after interaction
+    const chatModal = document.getElementById('chatModal');
+    expect(chatModal).not.toBeNull();
+  
+    // Type a message into the input box
+    const chatInput = chatModal.querySelector('#chatInput');
+    const message = 'Hello, this is a test message!';
+    chatInput.value = message;
+  
+    // Click the send button
+    const sendButton = chatModal.querySelector('#sendButton');
+    sendButton.click(); // Trigger click event
+  
+    // Check that the message was added to the chat body
+    const chatBody = chatModal.querySelector('#chatBody');
+    const chatMessages = chatBody.querySelectorAll('div'); // Assuming each message is wrapped in a <div>
+  
+    // Verify that the latest message is present in the chat body
+    expect(chatBody.children).toHaveLength(1); // Assuming only one message is present
+    expect(chatMessages[0].textContent).toContain(message);
+  });
+  
   
 });
 
