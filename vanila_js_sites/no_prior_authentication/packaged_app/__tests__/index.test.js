@@ -54,7 +54,8 @@ test('loggedin header should be seen if there is no token and initialize(loggedI
     "type": "user_type"
   };
 
-  const token = localStorage.setItem("tezkit_token","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjb20uemFsYW5kby5jb25uZXhpb24iLCJpYXQiOjE3MjE4Mjk5MTAsImV4cCI6MTcyNzgyOTkxMCwidXNlcl9pZCI6IjMiLCJ1c2VyX3R5cGUiOiJvdGhlciIsImVtYWlsIjoidTJAZ21haWwuY29tIiwidGVuYW50X2FjY291bnRfbmFtZSI6InRlbmFudDEiLCJyb2xlX3BvbGljeSI6Ilt7XCJyb2xlXCI6IDY1NTM2LjAsIFwiYXBwX25hbWVcIjogXCJteW5ld2FwcDJcIn1dIn0.QmhuPBHKFO37BnVJDDtTYd013NoObA_ZI-ppio3NT8o");
+  localStorage.setItem("tezkit_token","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjb20uemFsYW5kby5jb25uZXhpb24iLCJpYXQiOjE3MjE4Mjk5MTAsImV4cCI6MTcyNzgyOTkxMCwidXNlcl9pZCI6IjMiLCJ1c2VyX3R5cGUiOiJvdGhlciIsImVtYWlsIjoidTJAZ21haWwuY29tIiwidGVuYW50X2FjY291bnRfbmFtZSI6InRlbmFudDEiLCJyb2xlX3BvbGljeSI6Ilt7XCJyb2xlXCI6IDY1NTM2LjAsIFwiYXBwX25hbWVcIjogXCJteW5ld2FwcDJcIn1dIn0.QmhuPBHKFO37BnVJDDtTYd013NoObA_ZI-ppio3NT8o");
+  
   // Call initialize function which should render the header
   initialize(loggedInUser);
 
@@ -69,6 +70,8 @@ test('loggedin header should be seen if there is no token and initialize(loggedI
   // // Verify that login and signup buttons are rendered
   expect(logOutButton.textContent).toBe('Logout');
   // expect(signupButton.textContent).toBe('Signup');
+  const chat_opener = document.getElementById('chat_modal_opener')
+  expect(chat_opener).not.toBeNull();
 
-  console.log("ewrjoqwerewqrweq",token)
+  // if logged in then we should also see chat_opner
 });
