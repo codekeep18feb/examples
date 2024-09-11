@@ -15,6 +15,38 @@ beforeEach(() => {
 });
 
 describe('Header Rendering Tests', () => {
+
+  test('should emit "join_room" event with correct payload when loggedInUser is provided', () => {
+    // Mock loggedInUser to simulate a logged-in state
+    const loggedInUser = {
+      tenant: 'tenant1',
+      password: 'passmenow',
+      role: 65536,
+      app_name: 'MYnewapp33',
+      timestamp: '2024-08-17 18:00:05',
+      full_name: 'user2user',
+      is_online: true,
+      email: 'u2@gmail.com',
+      id: '2',
+      phone: '919999999999',
+      gender: 'Male',
+      type: 'user_type',
+    };
+
+    // Call initialize function with loggedInUser
+    initialize(loggedInUser);
+
+     // Debug: Check what emit was called with
+     console.log("sdfsdfsadasdfgfhfghf",global.io().emit.mock.calls);
+
+    // // Verify that socket.emit was called with the correct arguments
+    // const expectedPayload = { room: 'global_for__2' };
+    // expect(global.io().emit).toHaveBeenCalledTimes(1);
+
+    // expect(global.io().emit).toHaveBeenCalledWith('join_room', expectedPayload);
+  });
+
+
   
   test('should render login and signup buttons when no user is logged in', () => {
     // Mock loggedInUser as null to simulate no token

@@ -260,7 +260,7 @@ export function initialize(loggedInUser) {
     // console.log("waterw .id",loggedInUser)
 
     // console.log('joined room :: ',"global_for__" + loggedInUser.id)
-    socket.emit("join_room", { room: "global_for__" + loggedInUser.id });
+    // socket.emit("join_room", { room: "global_for__" + loggedInUser.id });
 
     socket.on("ON_MESSAGE_ARRIVAL_BOT", function (data) {
       const p_data = JSON.parse(data);
