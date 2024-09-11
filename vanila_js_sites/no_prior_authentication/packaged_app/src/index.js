@@ -242,9 +242,7 @@ function checkViewportSize() {
 
 // Function to add a full-width header with a fixed height and red background color
 export function initialize(loggedInUser) {
-  socket = io("http://122.160.157.99:8022");
-
-  console.log("here iteste for tests",loggedInUser)
+  console.log("here iteste for tests???",loggedInUser)
   // Attach the function to the resize event
   window.addEventListener('resize', checkViewportSize);
   // socket = socket;
@@ -323,6 +321,88 @@ export function initialize(loggedInUser) {
     socket.on('ON_MESSAGE_ARRIVAL',function (data) {
       console.log("Reply Recieved!",data)
   })
+
+
+    // Main socket event handler
+    socket.on("ON_MESSAGE_STATUS_CHANGED", function (data) {
+      const p_data = JSON.parse(data);
+      console.log("Received status change:", p_data);
+
+      if (!p_data.message.action) {
+        console.error("No action provided!");
+        return;
+      }
+
+      if (p_data.message.action === "MSG_UPDATED_EVENT") {
+        handleMsgUpdatedEvent(p_data);
+      } else if (p_data.message.action === "MSG_REACTION_EVENT") {
+        handleMsgReactionEvent(p_data);
+      } else {
+        console.error("Action Not Yet Handled:", p_data.message.action);
+      }
+    });
+
+
+
+
+    // Usage in toggleChatModal or socket.on
+
+
+    socket.on("ON_USER_LIVE_STATUS", function (data) {
+      const p_data = JSON.parse(data);
+      console.log("is user going offline?", p_data);
+
+      if (!p_data.hasOwnProperty('status')) {
+        console.error("No status provided!");
+      } else {
+        const statusElement = document.getElementById("statusElement");
+
+        if (statusElement) {
+          if (p_data.status === true) {
+            console.log("Admin is Online");
+            statusElement.textContent = "";
+            statusElement.style.background = "#9acd32";
+          } else if (p_data.status === false) {
+            console.log("Admin is Offline");
+            statusElement.textContent = "";
+            statusElement.style.background = "#a99bbe";
+          }
+        }
+
+      }
+    });
+
+
+
+    socket.on("ON_FILE_UPLOAD", function (data) {
+      // const p_data = JSON.parse(data);
+      console.log("some file it seeems was uploaded?", data, typeof (data));
+      delete data.result.message;
+
+      renderMessage(data, 'FILE_MIXED');
+
+
+
+      //HERE WILL ADD A MSG BOX TO THE MAIN MSG WRAPPER
+      //   {
+      //     "result": {
+      //         "message": "Files and fields processed successfully",
+      //         "files": [
+      //             "https://muti-media-bckt.s3.amazonaws.com/p2p/1__to__2/pexels-daan-rink-7047366.jpg",
+      //             "https://muti-media-bckt.s3.amazonaws.com/p2p/1__to__2/pickme.png"
+      //         ],
+      //         "sometext_data": [
+      //             "Editable content here"
+      //         ]
+      //     },
+      //     "to_user": {
+      //         "id": "2"
+      //     }
+      // }
+
+    });
+
+
 
     // socket.on("ON_MESSAGE_STATUS_CHANGED", function (data) {
     //   const p_data = JSON.parse(data);
@@ -459,84 +539,7 @@ export function initialize(loggedInUser) {
       }
     }
 
-    // Main socket event handler
-    socket.on("ON_MESSAGE_STATUS_CHANGED", function (data) {
-      const p_data = JSON.parse(data);
-      console.log("Received status change:", p_data);
 
-      if (!p_data.message.action) {
-        console.error("No action provided!");
-        return;
-      }
-
-      if (p_data.message.action === "MSG_UPDATED_EVENT") {
-        handleMsgUpdatedEvent(p_data);
-      } else if (p_data.message.action === "MSG_REACTION_EVENT") {
-        handleMsgReactionEvent(p_data);
-      } else {
-        console.error("Action Not Yet Handled:", p_data.message.action);
-      }
-    });
-
-
-
-
-    // Usage in toggleChatModal or socket.on
-
-
-    socket.on("ON_USER_LIVE_STATUS", function (data) {
-      const p_data = JSON.parse(data);
-      console.log("is user going offline?", p_data);
-
-      if (!p_data.hasOwnProperty('status')) {
-        console.error("No status provided!");
-      } else {
-        const statusElement = document.getElementById("statusElement");
-
-        if (statusElement) {
-          if (p_data.status === true) {
-            console.log("Admin is Online");
-            statusElement.textContent = "";
-            statusElement.style.background = "#9acd32";
-          } else if (p_data.status === false) {
-            console.log("Admin is Offline");
-            statusElement.textContent = "";
-            statusElement.style.background = "#a99bbe";
-          }
-        }
-
-      }
-    });
-
-
-
-    socket.on("ON_FILE_UPLOAD", function (data) {
-      // const p_data = JSON.parse(data);
-      console.log("some file it seeems was uploaded?", data, typeof (data));
-      delete data.result.message;
-
-      renderMessage(data, 'FILE_MIXED');
-
-
-
-      //HERE WILL ADD A MSG BOX TO THE MAIN MSG WRAPPER
-      //   {
-      //     "result": {
-      //         "message": "Files and fields processed successfully",
-      //         "files": [
-      //             "https://muti-media-bckt.s3.amazonaws.com/p2p/1__to__2/pexels-daan-rink-7047366.jpg",
-      //             "https://muti-media-bckt.s3.amazonaws.com/p2p/1__to__2/pickme.png"
-      //         ],
-      //         "sometext_data": [
-      //             "Editable content here"
-      //         ]
-      //     },
-      //     "to_user": {
-      //         "id": "2"
-      //     }
-      // }
-
-    });
 
 
   }
@@ -544,8 +547,11 @@ export function initialize(loggedInUser) {
   const token = localStorage.getItem("tezkit_token");
 
   if (!token) {
+    console.log("dfgfghfghhjfrghfgsdfasdfasdfh")
+
     renderAuthHeader();
   } else {
+
     renderAuthHeader(token);
 
     // rightPart.appendChild(makeCompButton);
