@@ -1,8 +1,9 @@
 // console.log("can we see global variables",aaaa);
+// import io from 'socket.io'; // Add this line if missing
 
 // Import the CSS file
 import "./style.css";
-
+import io from 'socket.io-client';
 import myImage from "./tezkit_logo.jpg";
 
 // Function to change the background color of the body
@@ -248,6 +249,8 @@ export function initialize(loggedInUser) {
   // socket = socket;
 
   if (loggedInUser) {
+    // const io = await require('socket.io-client') // For client-side connection
+
     socket = io("http://122.160.157.99:8022");
     console.log("loggedInUser in initialze??");
     let global_bucket = { unread_msgs: [] };
