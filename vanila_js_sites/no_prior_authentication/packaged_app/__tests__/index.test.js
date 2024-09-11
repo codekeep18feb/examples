@@ -47,7 +47,6 @@ describe('Header Rendering Tests', () => {
   });
 
 
-  
   test('should render login and signup buttons when no user is logged in', () => {
     // Mock loggedInUser as null to simulate no token
     const loggedInUser = null;
