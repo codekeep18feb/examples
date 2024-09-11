@@ -489,7 +489,6 @@ export function initialize(loggedInUser) {
       }
     }
 
-
     function updateMessageText(messageElement, newText) {
       const messageText = messageElement.querySelector("p");
       if (messageText) {
