@@ -42,10 +42,13 @@
 
             const token = localStorage.getItem('tezkit_token')
             if (token){
+                // console.log("arewe doing thissdf?")
+
                 var loggedInUser = await makeMeAPICall(token);
                 window.chathead.initialize(loggedInUser);
             }
             else{
+                console.log("arewe doing this?",loggedInUser)
                 window.chathead.initialize();
             }
         });

@@ -242,6 +242,9 @@ function checkViewportSize() {
 
 // Function to add a full-width header with a fixed height and red background color
 export function initialize(loggedInUser) {
+  socket = io("http://122.160.157.99:8022");
+
+  console.log("here iteste for tests",loggedInUser)
   // Attach the function to the resize event
   window.addEventListener('resize', checkViewportSize);
   // socket = socket;
