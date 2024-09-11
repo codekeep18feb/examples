@@ -14,93 +14,148 @@ beforeEach(() => {
   jest.clearAllMocks(); // Clear all mocks before each test
 });
 
-test('logout header should be seen if there is no token and initialize()', () => {
-  // Mock loggedInUser as null or undefined to simulate no token
-  const loggedInUser = null;
+describe('Header Rendering Tests', () => {
+  
+  test('should render login and signup buttons when no user is logged in', () => {
+    // Mock loggedInUser as null to simulate no token
+    const loggedInUser = null;
 
-  // Call initialize function which should render the header
-  initialize(loggedInUser);
+    // Call initialize function which should render the header
+    initialize(loggedInUser);
 
-  // Assert that the header is added to the DOM
-  const header = document.querySelector('.header');
-  expect(header).not.toBeNull();
+    // Assert that the header is added to the DOM
+    const header = document.querySelector('.header');
+    expect(header).not.toBeNull();
 
-  // Further assertions (e.g., if the login/signup buttons are present)
-  const loginButton = header.querySelector('button:first-of-type');
-  const signupButton = header.querySelector('button:last-of-type');
+    // Verify that login and signup buttons are rendered
+    const loginButton = header.querySelector('button:first-of-type');
+    const signupButton = header.querySelector('button:last-of-type');
+    expect(loginButton.textContent).toBe('Login');
+    expect(signupButton.textContent).toBe('Signup');
+  });
 
-  // Verify that login and signup buttons are rendered
-  expect(loginButton.textContent).toBe('Login');
-  expect(signupButton.textContent).toBe('Signup');
+  test('should render logout and signup buttons when a user is logged in', () => {
+    // Mock loggedInUser to simulate a logged-in state
+    const loggedInUser = {
+      tenant: 'tenant1',
+      password: 'passmenow',
+      role: 65536,
+      app_name: 'MYnewapp33',
+      timestamp: '2024-08-17 18:00:05',
+      full_name: 'user2user',
+      is_online: true,
+      email: 'u2@gmail.com',
+      id: '2',
+      phone: '919999999999',
+      gender: 'Male',
+      type: 'user_type',
+    };
+
+    localStorage.setItem('tezkit_token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjb20uemFsYW5kby5jb25uZXhpb24iLCJpYXQiOjE3MjE4Mjk5MTAsImV4cCI6MTcyNzgyOTkxMCwidXNlcl9pZCI6IjMiLCJ1c2VyX3R5cGUiOiJvdGhlciIsImVtYWlsIjoidTJAZ21haWwuY29tIiwidGVuYW50X2FjY291bnRfbmFtZSI6InRlbmFudDEiLCJyb2xlX3BvbGljeSI6Ilt7XCJyb2xlXCI6IDY1NTM2LjAsIFwiYXBwX25hbWVcIjogXCJteW5ld2FwcDJcIn1dIn0.QmhuPBHKFO37BnVJDDtTYd013NoObA_ZI-ppio3NT8o');
+
+    // Call initialize function which should render the header
+    initialize(loggedInUser);
+
+    // Assert that the header is added to the DOM
+    const header = document.querySelector('.header');
+    expect(header).not.toBeNull();
+
+    // Verify that logout and signup buttons are rendered
+    const logOutButton = header.querySelector('button:first-of-type');
+    const signupButton = header.querySelector('button:last-of-type');
+    expect(logOutButton.textContent).toBe('Logout');
+    // expect(signupButton.textContent).toBe('Signup');
+  });
 });
 
+describe('Chat Modal Tests', () => {
 
+  test('should render chat opener when a user is logged in', () => {
+    // Mock loggedInUser to simulate a logged-in state
+    const loggedInUser = {
+      tenant: 'tenant1',
+      password: 'passmenow',
+      role: 65536,
+      app_name: 'MYnewapp33',
+      timestamp: '2024-08-17 18:00:05',
+      full_name: 'user2user',
+      is_online: true,
+      email: 'u2@gmail.com',
+      id: '2',
+      phone: '919999999999',
+      gender: 'Male',
+      type: 'user_type',
+    };
 
+    localStorage.setItem('tezkit_token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjb20uemFsYW5kby5jb25uZXhpb24iLCJpYXQiOjE3MjE4Mjk5MTAsImV4cCI6MTcyNzgyOTkxMCwidXNlcl9pZCI6IjMiLCJ1c2VyX3R5cGUiOiJvdGhlciIsImVtYWlsIjoidTJAZ21haWwuY29tIiwidGVuYW50X2FjY291bnRfbmFtZSI6InRlbmFudDEiLCJyb2xlX3BvbGljeSI6Ilt7XCJyb2xlXCI6IDY1NTM2LjAsIFwiYXBwX25hbWVcIjogXCJteW5ld2FwcDJcIn1dIn0.QmhuPBHKFO37BnVJDDtTYd013NoObA_ZI-ppio3NT8o');
 
-test('loggedin header should be seen if there is no token and initialize(loggedInUser)', () => {
-  // Mock loggedInUser as null or undefined to simulate no token
-  const loggedInUser = {
-    "tenant": "tenant1",
-    "password": "passmenow",
-    "role": 65536,
-    "app_name": "MYnewapp33",
-    "timestamp": "2024-08-17 18:00:05",
-    "full_name": "user2user",
-    "is_online": true,
-    "email": "u2@gmail.com",
-    "id": "2",
-    "phone": "919999999999",
-    "gender": "Male",
-    "type": "user_type"
-  };
+    // Call initialize function which should render the chat opener
+    initialize(loggedInUser);
 
-  localStorage.setItem("tezkit_token","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjb20uemFsYW5kby5jb25uZXhpb24iLCJpYXQiOjE3MjE4Mjk5MTAsImV4cCI6MTcyNzgyOTkxMCwidXNlcl9pZCI6IjMiLCJ1c2VyX3R5cGUiOiJvdGhlciIsImVtYWlsIjoidTJAZ21haWwuY29tIiwidGVuYW50X2FjY291bnRfbmFtZSI6InRlbmFudDEiLCJyb2xlX3BvbGljeSI6Ilt7XCJyb2xlXCI6IDY1NTM2LjAsIFwiYXBwX25hbWVcIjogXCJteW5ld2FwcDJcIn1dIn0.QmhuPBHKFO37BnVJDDtTYd013NoObA_ZI-ppio3NT8o");
-  
-  // Call initialize function which should render the header
-  initialize(loggedInUser);
+    // Assert that the chat opener is added to the DOM
+    const chatOpener = document.getElementById('chat_modal_opener');
+    expect(chatOpener).not.toBeNull();
+  });
 
-  // Assert that the header is added to the DOM
-  const header = document.querySelector('.header');
-  expect(header).not.toBeNull();
+  test('should initially hide the chat modal', () => {
+    // Mock loggedInUser to simulate a logged-in state
+    const loggedInUser = {
+      tenant: 'tenant1',
+      password: 'passmenow',
+      role: 65536,
+      app_name: 'MYnewapp33',
+      timestamp: '2024-08-17 18:00:05',
+      full_name: 'user2user',
+      is_online: true,
+      email: 'u2@gmail.com',
+      id: '2',
+      phone: '919999999999',
+      gender: 'Male',
+      type: 'user_type',
+    };
 
-  // // Further assertions (e.g., if the login/signup buttons are present)
-  const logOutButton = header.querySelector('button:first-of-type');
-  const signupButton = header.querySelector('button:last-of-type');
+    localStorage.setItem('tezkit_token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjb20uemFsYW5kby5jb25uZXhpb24iLCJpYXQiOjE3MjE4Mjk5MTAsImV4cCI6MTcyNzgyOTkxMCwidXNlcl9pZCI6IjMiLCJ1c2VyX3R5cGUiOiJvdGhlciIsImVtYWlsIjoidTJAZ21haWwuY29tIiwidGVuYW50X2FjY291bnRfbmFtZSI6InRlbmFudDEiLCJyb2xlX3BvbGljeSI6Ilt7XCJyb2xlXCI6IDY1NTM2LjAsIFwiYXBwX25hbWVcIjogXCJteW5ld2FwcDJcIn1dIn0.QmhuPBHKFO37BnVJDDtTYd013NoObA_ZI-ppio3NT8o');
 
-  // // Verify that login and signup buttons are rendered
-  expect(logOutButton.textContent).toBe('Logout');
-  // expect(signupButton.textContent).toBe('Signup');
-  
-  //IS CHAT OPNER IS THERE?
-  const chat_opener = document.getElementById('chat_modal_opener')
-  expect(chat_opener).not.toBeNull();
+    // Call initialize function which should render the chat modal
+    initialize(loggedInUser);
 
+    // Assert initial style of chat modal
+    const chatModal = document.getElementById('chatModal');
+    expect(chatModal).not.toBeNull();
+    const initialDisplayStyle = chatModal.style.display;
+    expect(initialDisplayStyle === 'none' || initialDisplayStyle === '').toBe(true);
+  });
 
-  const chat_modal = document.getElementById('chatModal')
-  expect(chat_modal).not.toBeNull();
-  const displayStyle = chat_modal.style.display;
-  expect(displayStyle === 'none' || displayStyle === '').toBe(true);
- 
-  // Ensure the modal is initially hidden
-  const initialDisplayStyle = chat_modal.style.display;
-  expect(initialDisplayStyle === 'none' || initialDisplayStyle === '').toBe(true);
-  
-  // Simulate interaction (e.g., clicking a button to open the modal)
-  // const openButton = document.getElementById('openChatButton'); // Adjust as needed
-  // expect(openButton).not.toBeNull();
-  const icon_inside = chat_opener.firstChild
-  icon_inside.click(); // Trigger click event
-  
-  // Act (you might need to trigger any additional code that handles the click event)
-  
-  // Re-fetch the chat_modal element
-  const updatedChatModal = document.getElementById('chatModal');
-  
-  // Assert that the display style is now 'block'
-  const updatedDisplayStyle = updatedChatModal.style.display;
-  expect(updatedDisplayStyle).toBe('block');
-  
+  test('should display chat modal when chat opener is clicked', () => {
+    // Mock loggedInUser to simulate a logged-in state
+    const loggedInUser = {
+      tenant: 'tenant1',
+      password: 'passmenow',
+      role: 65536,
+      app_name: 'MYnewapp33',
+      timestamp: '2024-08-17 18:00:05',
+      full_name: 'user2user',
+      is_online: true,
+      email: 'u2@gmail.com',
+      id: '2',
+      phone: '919999999999',
+      gender: 'Male',
+      type: 'user_type',
+    };
 
+    localStorage.setItem('tezkit_token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJjb20uemFsYW5kby5jb25uZXhpb24iLCJpYXQiOjE3MjE4Mjk5MTAsImV4cCI6MTcyNzgyOTkxMCwidXNlcl9pZCI6IjMiLCJ1c2VyX3R5cGUiOiJvdGhlciIsImVtYWlsIjoidTJAZ21haWwuY29tIiwidGVuYW50X2FjY291bnRfbmFtZSI6InRlbmFudDEiLCJyb2xlX3BvbGljeSI6Ilt7XCJyb2xlXCI6IDY1NTM2LjAsIFwiYXBwX25hbWVcIjogXCJteW5ld2FwcDJcIn1dIn0.QmhuPBHKFO37BnVJDDtTYd013NoObA_ZI-ppio3NT8o');
 
-  // if logged in then we should also see chat_opner
+    // Call initialize function which should render the chat opener and modal
+    initialize(loggedInUser);
+
+    // Simulate interaction to open chat modal
+    const chatOpener = document.getElementById('chat_modal_opener');
+    const fa_icon = chatOpener.firstChild
+    fa_icon.click(); // Trigger click event
+
+    // Re-fetch the chat_modal element after interaction
+    const updatedChatModal = document.getElementById('chatModal');
+    const updatedDisplayStyle = updatedChatModal.style.display;
+    expect(updatedDisplayStyle).toBe('block');
+  });
 });
