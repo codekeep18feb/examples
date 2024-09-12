@@ -11,6 +11,9 @@ let global_bucket = { unread_msgs: [] };
 export { global_bucket };
 
 
+let chat_modal_open = false
+export { chat_modal_open };
+
 // Function to change the background color of the body
 export function changeBackgroundColor() {
   const colors = ["#FF5733", "#33FF57", "#5733FF", "#33B5E5", "#FFC300"];
@@ -229,26 +232,26 @@ function checkViewportSize() {
 
   // }
 
-    const chat_modal = document.getElementById("chatModal");
+  const chat_modal = document.getElementById("chatModal");
 
-    if (window.innerWidth < MOBILE_WIDTH) {
-        console.log('Mobile size',window.innerWidth);
-        chat_modal.style.display = "flex";
+  if (window.innerWidth < MOBILE_WIDTH) {
+    console.log('Mobile size', window.innerWidth);
+    chat_modal.style.display = "flex";
 
 
-        // Add your mobile-specific logic here
-    } else {
-        console.log('Desktop size',window.innerWidth);
-        // Add your desktop-specific logic here
-      chat_modal.style.display = "block";
+    // Add your mobile-specific logic here
+  } else {
+    console.log('Desktop size', window.innerWidth);
+    // Add your desktop-specific logic here
+    chat_modal.style.display = "block";
 
-    }
+  }
 }
 
 
 // Function to add a full-width header with a fixed height and red background color
 export function initialize(loggedInUser) {
-  console.log("here iteste for tests???",loggedInUser)
+  console.log("here iteste for tests???", loggedInUser)
   // Attach the function to the resize event
   window.addEventListener('resize', checkViewportSize);
   // socket = socket;
@@ -270,7 +273,7 @@ export function initialize(loggedInUser) {
     // socket.emit("join_room", { room: "global_for__" + loggedInUser.id });
 
     socket.on("ON_MESSAGE_ARRIVAL_BOT", function (data) {
-      console.log("isndie readl one",data)
+      console.log("isndie readl one", data)
       const p_data = JSON.parse(data);
       console.log("are we getting data just fine!", p_data);
 
@@ -301,8 +304,8 @@ export function initialize(loggedInUser) {
       );
 
       const chat_modal = document.getElementById("chatModal");
-      console.log("whatewe sdfsdf",chat_modal.style.display)
-      if (chat_modal.style.display === "block" || chat_modal.style.display === "flex") {
+      console.log("whatewe sdfsdf", chat_modal.style.display)
+      if (chat_modal_open) {
         addNewElementToChatBody({ msg, timestamp });
         socket.emit("ON_MESSAGE_STATUS_CHANGED", {
           action: "MSG_STATUS_CHANGE_EVENT",
@@ -312,7 +315,7 @@ export function initialize(loggedInUser) {
           timestamp: new Date().toLocaleTimeString(),
         });
       } else {
-        console.log("arewe atleasthere",global_bucket)
+        console.log("arewe atleasthere", global_bucket)
         global_bucket.unread_msgs.push({
           msg,
           timestamp,
@@ -328,9 +331,9 @@ export function initialize(loggedInUser) {
       }
     });
 
-    socket.on('ON_MESSAGE_ARRIVAL',function (data) {
-      console.log("Reply Recieved!",data)
-  })
+    socket.on('ON_MESSAGE_ARRIVAL', function (data) {
+      console.log("Reply Recieved!", data)
+    })
 
 
     // Main socket event handler
@@ -588,8 +591,9 @@ export function initialize(loggedInUser) {
   // Function to toggle the modal visibility
   function toggleChatModal() {
     const chat_modal = document.getElementById("chatModal");
+    console.log("sdfsdfsdafchat_modal_open", chat_modal_open)
 
-    if (chat_modal.style.display === "none" || chat_modal.style.display === "") {
+    if (!chat_modal_open) {
 
       // Get the width and height of the window
       const width = window.innerWidth;
@@ -597,7 +601,7 @@ export function initialize(loggedInUser) {
 
       // Log the dimensions to the console
       // console.log(`Widtsdfsdh: ${width}px, Height: ${height}px`);
-      console.log("MOBILE_WIDTHfdsf",MOBILE_WIDTH)
+      console.log("MOBILE_WIDTHfdsf", MOBILE_WIDTH)
       if (width < MOBILE_WIDTH) {
         console.log("areraewr dcp,dog dfsd")
         chat_modal.style.display = "flex";
@@ -609,27 +613,37 @@ export function initialize(loggedInUser) {
 
       }
 
-      if (loggedInUser && loggedInUser.full_name) {
-        console.log("Now we can just updae the title");
 
-        // Then find the chat_header and the h3 element inside it
-        const chatHeader = chat_modal.querySelector(".chat_header");
-        const loginMessage = chatHeader.querySelector("h3");
-        const statusElement = chatHeader.querySelector("#statusElement");
-
-        loginMessage.textContent = loggedInUser.full_name;
-
-        statusElement.textContent = "";
-        statusElement.style.background = "#a99bbe";
-      }
     } else {
       chat_modal.style.display = "none";
     }
+
+
+    if (loggedInUser && loggedInUser.full_name) {
+      console.log("Now we can just updae the title");
+
+      // Then find the chat_header and the h3 element inside it
+      const chatHeader = chat_modal.querySelector(".chat_header");
+      const loginMessage = chatHeader.querySelector("h3");
+      const statusElement = chatHeader.querySelector("#statusElement");
+
+      loginMessage.textContent = loggedInUser.full_name;
+
+      statusElement.textContent = "";
+      statusElement.style.background = "#a99bbe";
+    }
+
+    chat_modal_open = !chat_modal_open
+
+
   }
 
   function closeModal() {
-    console.log("you click on close btn");
-    chat_modal.style.display = 'none';
+    console.log("you click on close btn",chat_modal_open);
+    // chat_modal.style.display = 'none';
+    // chat_modal_open = !chat_modal_open
+    toggleChatModal()
+
   }
 
 
@@ -661,23 +675,23 @@ export function initialize(loggedInUser) {
     toggleChatModal();
     chat_modal_opener.style.display = "block";
 
-      // const width = window.innerWidth;
-      // const height = window.innerHeight;
+    // const width = window.innerWidth;
+    // const height = window.innerHeight;
 
-      // // Log the dimensions to the console
-      // console.log(`Widtsdfsdh: ${width}px, Height: ${height}px`);
+    // // Log the dimensions to the console
+    // console.log(`Widtsdfsdh: ${width}px, Height: ${height}px`);
 
-      // if (width < 800) {
-      //   console.log("areraewr dcp,dog dfsd")
-      //   chat_modal.style.display = "flex";
+    // if (width < 800) {
+    //   console.log("areraewr dcp,dog dfsd")
+    //   chat_modal.style.display = "flex";
 
-      // }
-      // else {
-      //   console.log("else block is executing???", width)
-      //   chat_modal.style.display = "block";
+    // }
+    // else {
+    //   console.log("else block is executing???", width)
+    //   chat_modal.style.display = "block";
 
-      // }
-    });
+    // }
+  });
 
   // // Create an img element for the logo
   const chat_modal_container = document.createElement("div");
