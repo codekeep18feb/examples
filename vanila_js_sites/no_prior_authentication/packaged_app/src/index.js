@@ -266,6 +266,7 @@ export function initialize(loggedInUser) {
     // socket.emit("join_room", { room: "global_for__" + loggedInUser.id });
 
     socket.on("ON_MESSAGE_ARRIVAL_BOT", function (data) {
+      console.log("isndie readl one",data)
       const p_data = JSON.parse(data);
       console.log("are we getting data just fine!", p_data);
 

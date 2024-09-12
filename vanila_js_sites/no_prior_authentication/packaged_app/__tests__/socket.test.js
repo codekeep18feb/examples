@@ -3,9 +3,20 @@ import io from "socket.io-client";
 
 // Mock the socket object returned by io()
 jest.mock('socket.io-client', () => {
+  const actualSocket = jest.requireActual('socket.io-client')();
   const mSocket = {
+    ...actualSocket,
     emit: jest.fn(),
-    on: jest.fn(),
+    on: jest.fn((event, callback) => {
+      // Store the callback if it's not ON_MESSAGE_ARRIVAL_BOT
+      mSocket[event] = callback;
+      
+      if (event === 'ON_MESSAGE_ARRIVAL_BOT') {
+      actualSocket.on(event, callback);
+
+      } 
+      
+    }),
   };
   return jest.fn(() => mSocket); // io() returns the mocked socket object
 });
@@ -38,5 +49,11 @@ describe('Socket Tests', () => {
     const expectedPayload = { room: 'global_for__2' }; // Adjust as needed
     expect(mockSocket.emit).toHaveBeenCalledTimes(1);
     expect(mockSocket.emit).toHaveBeenCalledWith('join_room', expectedPayload);
+
+    // Example of manually triggering the 'ON_MESSAGE_ARRIVAL_BOT' event
+    // if (mockSocket['ON_MESSAGE_ARRIVAL_BOT']) {
+    //   mockSocket['ON_MESSAGE_ARRIVAL_BOT']({ some: 'data' });
+    //   // Add assertions here to verify the behavior
+    // }
   });
 });
