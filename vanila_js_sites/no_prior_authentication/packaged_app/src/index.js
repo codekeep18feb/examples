@@ -6,6 +6,11 @@ import "./style.css";
 import io from 'socket.io-client';
 import myImage from "./tezkit_logo.jpg";
 
+
+let global_bucket = { unread_msgs: [] };
+export { global_bucket };
+
+
 // Function to change the background color of the body
 export function changeBackgroundColor() {
   const colors = ["#FF5733", "#33FF57", "#5733FF", "#33B5E5", "#FFC300"];
@@ -253,7 +258,6 @@ export function initialize(loggedInUser) {
 
     socket = io("http://122.160.157.99:8022");
     console.log("loggedInUser in initialze??");
-    let global_bucket = { unread_msgs: [] };
 
     console.log("user on consumer joined", "global_for__" + loggedInUser.id);
 
@@ -297,6 +301,7 @@ export function initialize(loggedInUser) {
       );
 
       const chat_modal = document.getElementById("chatModal");
+      console.log("whatewe sdfsdf",chat_modal.style.display)
       if (chat_modal.style.display === "block" || chat_modal.style.display === "flex") {
         addNewElementToChatBody({ msg, timestamp });
         socket.emit("ON_MESSAGE_STATUS_CHANGED", {
@@ -307,6 +312,7 @@ export function initialize(loggedInUser) {
           timestamp: new Date().toLocaleTimeString(),
         });
       } else {
+        console.log("arewe atleasthere",global_bucket)
         global_bucket.unread_msgs.push({
           msg,
           timestamp,

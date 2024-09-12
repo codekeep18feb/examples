@@ -1,4 +1,4 @@
-import { initialize } from '../src/index'; // Adjust the import path
+import { initialize, global_bucket } from '../src/index'; // Adjust the import path
 import io from "socket.io-client";
 
 // Mock the socket object returned by io()
@@ -6,23 +6,27 @@ jest.mock('socket.io-client', () => {
   const actualSocket = jest.requireActual('socket.io-client')();
   const mSocket = {
     ...actualSocket,
-    emit: jest.fn(),
+    emit: jest.fn((event, ...args) => {
+      console.log(`emit called with event: ${event}, args:`, args);
+      // actualSocket.emit(event, ...args); // Optionally call the real implementation if needed
+    }),
     on: jest.fn((event, callback) => {
       // Store the callback if it's not ON_MESSAGE_ARRIVAL_BOT
       mSocket[event] = callback;
       
       if (event === 'ON_MESSAGE_ARRIVAL_BOT') {
-      actualSocket.on(event, callback);
-
-      } 
-      
+        actualSocket.on(event, callback);
+      } else {
+        // You can also add logging here if needed
+        console.log(`on called with event: ${event}`);
+      }
     }),
   };
   return jest.fn(() => mSocket); // io() returns the mocked socket object
 });
 
 describe('Socket Tests', () => {
-  test('should emit "join_room" event with correct payload when loggedInUser is provided', () => {
+  test('If chat_modal is closed :: if message is recieved it should store in the global_bucket', () => {
     // Mock loggedInUser to simulate a logged-in state
     const loggedInUser = {
       tenant: 'tenant1',
@@ -51,9 +55,24 @@ describe('Socket Tests', () => {
     expect(mockSocket.emit).toHaveBeenCalledWith('join_room', expectedPayload);
 
     // Example of manually triggering the 'ON_MESSAGE_ARRIVAL_BOT' event
-    // if (mockSocket['ON_MESSAGE_ARRIVAL_BOT']) {
-    //   mockSocket['ON_MESSAGE_ARRIVAL_BOT']({ some: 'data' });
-    //   // Add assertions here to verify the behavior
-    // }
+    if (mockSocket['ON_MESSAGE_ARRIVAL_BOT']) {
+      const payload = {
+        "message": {
+          "assigned_msg_id": "msg_id__1",
+          "message": "sdfsadf",
+          "status": "SENT",
+          "timestamp": "23:30:21",
+          "to_user": {
+            "user": "user2user"
+          },
+          "frm_id": "1"
+        }
+      };
+      mockSocket['ON_MESSAGE_ARRIVAL_BOT'](JSON.stringify(payload));
+      expect(mockSocket.emit).toHaveBeenCalledTimes(3);
+
+
+      expect(global_bucket.unread_msgs).toHaveLength(1);
+    }
   });
 });
