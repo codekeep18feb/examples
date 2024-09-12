@@ -1,9 +1,18 @@
 // console.log("can we see global variables",aaaa);
+// import io from 'socket.io'; // Add this line if missing
 
 // Import the CSS file
 import "./style.css";
-
+import io from 'socket.io-client';
 import myImage from "./tezkit_logo.jpg";
+
+
+let global_bucket = { unread_msgs: [] };
+export { global_bucket };
+
+
+let chat_modal_open = false
+export { chat_modal_open };
 
 // Function to change the background color of the body
 export function changeBackgroundColor() {
@@ -223,33 +232,35 @@ function checkViewportSize() {
 
   // }
 
-    const chat_modal = document.getElementById("chatModal");
+  const chat_modal = document.getElementById("chatModal");
 
-    if (window.innerWidth < MOBILE_WIDTH) {
-        console.log('Mobile size',window.innerWidth);
-        chat_modal.style.display = "flex";
+  if (window.innerWidth < MOBILE_WIDTH) {
+    console.log('Mobile size', window.innerWidth);
+    chat_modal.style.display = "flex";
 
 
-        // Add your mobile-specific logic here
-    } else {
-        console.log('Desktop size',window.innerWidth);
-        // Add your desktop-specific logic here
-      chat_modal.style.display = "block";
+    // Add your mobile-specific logic here
+  } else {
+    console.log('Desktop size', window.innerWidth);
+    // Add your desktop-specific logic here
+    chat_modal.style.display = "block";
 
-    }
+  }
 }
 
 
 // Function to add a full-width header with a fixed height and red background color
 export function initialize(loggedInUser) {
+  console.log("here iteste for tests???", loggedInUser)
   // Attach the function to the resize event
   window.addEventListener('resize', checkViewportSize);
   // socket = socket;
 
   if (loggedInUser) {
+    // const io = await require('socket.io-client') // For client-side connection
+
     socket = io("http://122.160.157.99:8022");
     console.log("loggedInUser in initialze??");
-    let global_bucket = { unread_msgs: [] };
 
     console.log("user on consumer joined", "global_for__" + loggedInUser.id);
 
@@ -259,9 +270,10 @@ export function initialize(loggedInUser) {
     // console.log("waterw .id",loggedInUser)
 
     // console.log('joined room :: ',"global_for__" + loggedInUser.id)
-    socket.emit("join_room", { room: "global_for__" + loggedInUser.id });
+    // socket.emit("join_room", { room: "global_for__" + loggedInUser.id });
 
     socket.on("ON_MESSAGE_ARRIVAL_BOT", function (data) {
+      console.log("isndie readl one", data)
       const p_data = JSON.parse(data);
       console.log("are we getting data just fine!", p_data);
 
@@ -292,7 +304,8 @@ export function initialize(loggedInUser) {
       );
 
       const chat_modal = document.getElementById("chatModal");
-      if (chat_modal.style.display === "block" || chat_modal.style.display === "flex") {
+      console.log("whatewe sdfsdf", chat_modal.style.display)
+      if (chat_modal_open) {
         addNewElementToChatBody({ msg, timestamp });
         socket.emit("ON_MESSAGE_STATUS_CHANGED", {
           action: "MSG_STATUS_CHANGE_EVENT",
@@ -302,6 +315,7 @@ export function initialize(loggedInUser) {
           timestamp: new Date().toLocaleTimeString(),
         });
       } else {
+        console.log("arewe atleasthere", global_bucket)
         global_bucket.unread_msgs.push({
           msg,
           timestamp,
@@ -317,9 +331,91 @@ export function initialize(loggedInUser) {
       }
     });
 
-    socket.on('ON_MESSAGE_ARRIVAL',function (data) {
-      console.log("Reply Recieved!",data)
-  })
+    socket.on('ON_MESSAGE_ARRIVAL', function (data) {
+      console.log("Reply Recieved!", data)
+    })
+
+
+    // Main socket event handler
+    socket.on("ON_MESSAGE_STATUS_CHANGED", function (data) {
+      const p_data = JSON.parse(data);
+      console.log("Received status change:", p_data);
+
+      if (!p_data.message.action) {
+        console.error("No action provided!");
+        return;
+      }
+
+      if (p_data.message.action === "MSG_UPDATED_EVENT") {
+        handleMsgUpdatedEvent(p_data);
+      } else if (p_data.message.action === "MSG_REACTION_EVENT") {
+        handleMsgReactionEvent(p_data);
+      } else {
+        console.error("Action Not Yet Handled:", p_data.message.action);
+      }
+    });
+
+
+
+
+    // Usage in toggleChatModal or socket.on
+
+
+    socket.on("ON_USER_LIVE_STATUS", function (data) {
+      const p_data = JSON.parse(data);
+      console.log("is user going offline?", p_data);
+
+      if (!p_data.hasOwnProperty('status')) {
+        console.error("No status provided!");
+      } else {
+        const statusElement = document.getElementById("statusElement");
+
+        if (statusElement) {
+          if (p_data.status === true) {
+            console.log("Admin is Online");
+            statusElement.textContent = "";
+            statusElement.style.background = "#9acd32";
+          } else if (p_data.status === false) {
+            console.log("Admin is Offline");
+            statusElement.textContent = "";
+            statusElement.style.background = "#a99bbe";
+          }
+        }
+
+      }
+    });
+
+
+
+    socket.on("ON_FILE_UPLOAD", function (data) {
+      // const p_data = JSON.parse(data);
+      console.log("some file it seeems was uploaded?", data, typeof (data));
+      delete data.result.message;
+
+      renderMessage(data, 'FILE_MIXED');
+
+
+
+      //HERE WILL ADD A MSG BOX TO THE MAIN MSG WRAPPER
+      //   {
+      //     "result": {
+      //         "message": "Files and fields processed successfully",
+      //         "files": [
+      //             "https://muti-media-bckt.s3.amazonaws.com/p2p/1__to__2/pexels-daan-rink-7047366.jpg",
+      //             "https://muti-media-bckt.s3.amazonaws.com/p2p/1__to__2/pickme.png"
+      //         ],
+      //         "sometext_data": [
+      //             "Editable content here"
+      //         ]
+      //     },
+      //     "to_user": {
+      //         "id": "2"
+      //     }
+      // }
+
+    });
+
+
 
     // socket.on("ON_MESSAGE_STATUS_CHANGED", function (data) {
     //   const p_data = JSON.parse(data);
@@ -406,7 +502,6 @@ export function initialize(loggedInUser) {
       }
     }
 
-
     function updateMessageText(messageElement, newText) {
       const messageText = messageElement.querySelector("p");
       if (messageText) {
@@ -456,84 +551,7 @@ export function initialize(loggedInUser) {
       }
     }
 
-    // Main socket event handler
-    socket.on("ON_MESSAGE_STATUS_CHANGED", function (data) {
-      const p_data = JSON.parse(data);
-      console.log("Received status change:", p_data);
 
-      if (!p_data.message.action) {
-        console.error("No action provided!");
-        return;
-      }
-
-      if (p_data.message.action === "MSG_UPDATED_EVENT") {
-        handleMsgUpdatedEvent(p_data);
-      } else if (p_data.message.action === "MSG_REACTION_EVENT") {
-        handleMsgReactionEvent(p_data);
-      } else {
-        console.error("Action Not Yet Handled:", p_data.message.action);
-      }
-    });
-
-
-
-
-    // Usage in toggleChatModal or socket.on
-
-
-    socket.on("ON_USER_LIVE_STATUS", function (data) {
-      const p_data = JSON.parse(data);
-      console.log("is user going offline?", p_data);
-
-      if (!p_data.hasOwnProperty('status')) {
-        console.error("No status provided!");
-      } else {
-        const statusElement = document.getElementById("statusElement");
-
-        if (statusElement) {
-          if (p_data.status === true) {
-            console.log("Admin is Online");
-            statusElement.textContent = "";
-            statusElement.style.background = "#9acd32";
-          } else if (p_data.status === false) {
-            console.log("Admin is Offline");
-            statusElement.textContent = "";
-            statusElement.style.background = "#a99bbe";
-          }
-        }
-
-      }
-    });
-
-
-
-    socket.on("ON_FILE_UPLOAD", function (data) {
-      // const p_data = JSON.parse(data);
-      console.log("some file it seeems was uploaded?", data, typeof (data));
-      delete data.result.message;
-
-      renderMessage(data, 'FILE_MIXED');
-
-
-
-      //HERE WILL ADD A MSG BOX TO THE MAIN MSG WRAPPER
-      //   {
-      //     "result": {
-      //         "message": "Files and fields processed successfully",
-      //         "files": [
-      //             "https://muti-media-bckt.s3.amazonaws.com/p2p/1__to__2/pexels-daan-rink-7047366.jpg",
-      //             "https://muti-media-bckt.s3.amazonaws.com/p2p/1__to__2/pickme.png"
-      //         ],
-      //         "sometext_data": [
-      //             "Editable content here"
-      //         ]
-      //     },
-      //     "to_user": {
-      //         "id": "2"
-      //     }
-      // }
-
-    });
 
 
   }
@@ -541,8 +559,11 @@ export function initialize(loggedInUser) {
   const token = localStorage.getItem("tezkit_token");
 
   if (!token) {
+    console.log("dfgfghfghhjfrghfgsdfasdfasdfh")
+
     renderAuthHeader();
   } else {
+
     renderAuthHeader(token);
 
     // rightPart.appendChild(makeCompButton);
@@ -570,8 +591,9 @@ export function initialize(loggedInUser) {
   // Function to toggle the modal visibility
   function toggleChatModal() {
     const chat_modal = document.getElementById("chatModal");
+    console.log("sdfsdfsdafchat_modal_open", chat_modal_open)
 
-    if (chat_modal.style.display === "none" || chat_modal.style.display === "") {
+    if (!chat_modal_open) {
 
       // Get the width and height of the window
       const width = window.innerWidth;
@@ -579,7 +601,7 @@ export function initialize(loggedInUser) {
 
       // Log the dimensions to the console
       // console.log(`Widtsdfsdh: ${width}px, Height: ${height}px`);
-      console.log("MOBILE_WIDTHfdsf",MOBILE_WIDTH)
+      console.log("MOBILE_WIDTHfdsf", MOBILE_WIDTH)
       if (width < MOBILE_WIDTH) {
         console.log("areraewr dcp,dog dfsd")
         chat_modal.style.display = "flex";
@@ -591,27 +613,37 @@ export function initialize(loggedInUser) {
 
       }
 
-      if (loggedInUser && loggedInUser.full_name) {
-        console.log("Now we can just updae the title");
 
-        // Then find the chat_header and the h3 element inside it
-        const chatHeader = chat_modal.querySelector(".chat_header");
-        const loginMessage = chatHeader.querySelector("h3");
-        const statusElement = chatHeader.querySelector("#statusElement");
-
-        loginMessage.textContent = loggedInUser.full_name;
-
-        statusElement.textContent = "";
-        statusElement.style.background = "#a99bbe";
-      }
     } else {
       chat_modal.style.display = "none";
     }
+
+
+    if (loggedInUser && loggedInUser.full_name) {
+      console.log("Now we can just updae the title");
+
+      // Then find the chat_header and the h3 element inside it
+      const chatHeader = chat_modal.querySelector(".chat_header");
+      const loginMessage = chatHeader.querySelector("h3");
+      const statusElement = chatHeader.querySelector("#statusElement");
+
+      loginMessage.textContent = loggedInUser.full_name;
+
+      statusElement.textContent = "";
+      statusElement.style.background = "#a99bbe";
+    }
+
+    chat_modal_open = !chat_modal_open
+
+
   }
 
   function closeModal() {
-    console.log("you click on close btn");
-    chat_modal.style.display = 'none';
+    console.log("you click on close btn",chat_modal_open);
+    // chat_modal.style.display = 'none';
+    // chat_modal_open = !chat_modal_open
+    toggleChatModal()
+
   }
 
 
@@ -643,23 +675,23 @@ export function initialize(loggedInUser) {
     toggleChatModal();
     chat_modal_opener.style.display = "block";
 
-      // const width = window.innerWidth;
-      // const height = window.innerHeight;
+    // const width = window.innerWidth;
+    // const height = window.innerHeight;
 
-      // // Log the dimensions to the console
-      // console.log(`Widtsdfsdh: ${width}px, Height: ${height}px`);
+    // // Log the dimensions to the console
+    // console.log(`Widtsdfsdh: ${width}px, Height: ${height}px`);
 
-      // if (width < 800) {
-      //   console.log("areraewr dcp,dog dfsd")
-      //   chat_modal.style.display = "flex";
+    // if (width < 800) {
+    //   console.log("areraewr dcp,dog dfsd")
+    //   chat_modal.style.display = "flex";
 
-      // }
-      // else {
-      //   console.log("else block is executing???", width)
-      //   chat_modal.style.display = "block";
+    // }
+    // else {
+    //   console.log("else block is executing???", width)
+    //   chat_modal.style.display = "block";
 
-      // }
-    });
+    // }
+  });
 
   // // Create an img element for the logo
   const chat_modal_container = document.createElement("div");
