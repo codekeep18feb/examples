@@ -7,8 +7,11 @@ import io from 'socket.io-client';
 import myImage from "./tezkit_logo.jpg";
 
 
+const APP_NAME = "app1_t2" // this should technically be fetched by credentials??
+
 let global_bucket = { unread_msgs: [] };
 export { global_bucket };
+
 
 
 let chat_modal_open = false
@@ -1184,7 +1187,7 @@ async function handleLogin(event) {
     type: "user_type",
     email: formData.get("email"),
     password: formData.get("password"),
-    app_name: "MYnewapp33",
+    app_name: APP_NAME,
   };
 
   const headersList = {
