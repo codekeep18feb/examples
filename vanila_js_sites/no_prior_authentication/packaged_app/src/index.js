@@ -7,8 +7,11 @@ import io from 'socket.io-client';
 import myImage from "./tezkit_logo.jpg";
 
 
+const APP_NAME = "app1_t2" // this should technically be fetched by credentials??
+
 let global_bucket = { unread_msgs: [] };
 export { global_bucket };
+
 
 
 let chat_modal_open = false
@@ -246,6 +249,10 @@ function checkViewportSize() {
     chat_modal.style.display = "block";
 
   }
+}
+
+export function setUp(app_name){
+  localStorage.setItem("tezkit_app_name",app_name)
 }
 
 
@@ -1072,6 +1079,8 @@ function createSignupForm() {
   submitButton.style.borderRadius = "3px";
   form.appendChild(submitButton);
 
+
+  const app_name_ls = localStorage.getItem('tezkit_app_name')
   // Form submission handling
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -1084,7 +1093,7 @@ function createSignupForm() {
       gender: formData.get("gender"),
       type: "user",
       tenant: "tenant1",
-      app_name: "mynewapp32sdfsd",
+      app_name: app_name_ls,
     };
 
     try {
@@ -1180,11 +1189,14 @@ async function handleLogin(event) {
   event.preventDefault();
   const form = event.target;
   const formData = new FormData(form);
+
+  const app_name_ls = localStorage.getItem('tezkit_app_name')
+
   const data = {
     type: "user_type",
     email: formData.get("email"),
     password: formData.get("password"),
-    app_name: "MYnewapp33",
+    app_name: app_name_ls,
   };
 
   const headersList = {
