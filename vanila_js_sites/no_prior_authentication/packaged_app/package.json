@@ -1,6 +1,6 @@
 {
     "name": "chathead-consumer-client",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "A sample package using Webpack and Babel",
     "main": "dist/bundle.js",
     "scripts": {
