@@ -251,6 +251,10 @@ function checkViewportSize() {
   }
 }
 
+export function setUp(app_name){
+  localStorage.setItem("tezkit_app_name",app_name)
+}
+
 
 // Function to add a full-width header with a fixed height and red background color
 export function initialize(loggedInUser) {
@@ -1075,6 +1079,8 @@ function createSignupForm() {
   submitButton.style.borderRadius = "3px";
   form.appendChild(submitButton);
 
+
+  const app_name_ls = localStorage.getItem('tezkit_app_name')
   // Form submission handling
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -1087,7 +1093,7 @@ function createSignupForm() {
       gender: formData.get("gender"),
       type: "user",
       tenant: "tenant1",
-      app_name: "mynewapp32sdfsd",
+      app_name: app_name_ls,
     };
 
     try {
@@ -1183,11 +1189,14 @@ async function handleLogin(event) {
   event.preventDefault();
   const form = event.target;
   const formData = new FormData(form);
+
+  const app_name_ls = localStorage.getItem('tezkit_app_name')
+
   const data = {
     type: "user_type",
     email: formData.get("email"),
     password: formData.get("password"),
-    app_name: APP_NAME,
+    app_name: app_name_ls,
   };
 
   const headersList = {
