@@ -41,7 +41,7 @@
         
         // Wait for the document to be fully loaded
         document.addEventListener("DOMContentLoaded", async function() {
-
+            console.log("whatis going on")
             const token = localStorage.getItem('tezkit_token')
             if (token){
                 // console.log("arewe doing thissdf?")
@@ -50,6 +50,7 @@
             }
             else{
                 console.log("arewe doing this?",loggedInUser)
+                console.log("window.chatheadedrdsf",window.chathead)
                 window.chathead.setUp(app_name="app1_t2");
                 window.chathead.initialize();
             }
