@@ -8,7 +8,7 @@ alias deactivate 'test $?_OLD_VIRTUAL_PATH != 0 && setenv PATH "$_OLD_VIRTUAL_PA
 # Unset irrelevant variables.
 deactivate nondestructive
 
-setenv VIRTUAL_ENV "/Users/djangoboy/Desktop/workspace/p__prject/qchat_consuming_examples/examples/simple_info_site1/tezkit_based_info_site/prior_jwt_auth/.venv"
+setenv VIRTUAL_ENV "/home/djangoboy/Desktop/workspace/examples/vanila_js_sites/prior_jwt_auth/consumer-site/.venv"
 
 set _OLD_VIRTUAL_PATH="$PATH"
 setenv PATH "$VIRTUAL_ENV/bin:$PATH"

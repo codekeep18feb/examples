@@ -33,7 +33,7 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/Users/djangoboy/Desktop/workspace/p__prject/qchat_consuming_examples/examples/simple_info_site1/tezkit_based_info_site/prior_jwt_auth/.venv"
+set -gx VIRTUAL_ENV "/home/djangoboy/Desktop/workspace/examples/vanila_js_sites/prior_jwt_auth/consumer-site/.venv"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH

@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
     <title>Profile</title>
 
 
 
-    <script src="{{ url_for('static', filename='js/bundle.js') }}"></script>
+    <script src="{{ url_for('static', filename='new_js/node_modules/chathead-consumer-client/dist/bundle.js') }}"></script>
 
     <script>
 
@@ -101,7 +102,7 @@
 
             var aaaa ='do you ve access to me??'
             // Execute your function once the document is loaded
-            let socket = io('http://122.160.157.99:8001');
+            let socket = io('http://122.160.157.99:8022');
 
             // const token = localStorage.getItem('tezkit_token')
 
@@ -125,7 +126,20 @@
 
 
 
-            window.randomColorPackage.initialize(socket, loggedInUser);
+            // window.randomColorPackage.initialize(socket, loggedInUser);
+
+            if (loggedInUser){
+                // console.log("arewe doing thissdf?")
+                // var loggedInUser = await makeMeAPICall(token);
+                window.chathead.initialize(loggedInUser);
+            }
+            else{
+                console.log("arewe doing this?",loggedInUser)
+                console.log("window.chatheadedrdsf",window.chathead)
+                window.chathead.setUp(app_name="app1_t1");
+                window.chathead.initialize();
+            }
+    
 
 
         
