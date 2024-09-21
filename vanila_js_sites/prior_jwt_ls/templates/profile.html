@@ -5,10 +5,19 @@
 {% block content %}
 <h1>Profile</h1>
 <div id="profileDetails"></div>
+<!-- <script src="js/node_modules/chathead-consumer-client/dist/bundle.js"></script> -->
+
+<script src="{{ url_for('static', filename='js/node_modules/chathead-consumer-client/dist/bundle.js') }}"></script>
 
 <script>
+    // Declare the `profileData` variable in the global scope
+    let profileData;
+
     async function loadProfile() {
         const token = localStorage.getItem('access_token');
+
+
+        
         if (!token) {
             alert('You are not logged in!');
             window.location.href = '/login';
@@ -20,11 +29,21 @@
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             if (response.ok) {
-                const data = await response.json();
+                profileData = await response.json();  // Assign profile data to the global variable
+
                 document.getElementById('profileDetails').innerHTML = `
-                    <p>Username: ${data.username}</p>
-                    <p>Email: ${data.email}</p>
+                    <p>Username: ${profileData.username}</p>
+                    <p>Email: ${profileData.email}</p>
                 `;
+
+                // Log the username here if needed
+                console.log('Username:', profileData);
+
+                // Call a function after the data is loaded
+                handleProfileData();
+                console.log("window.chatheadhere",window.chathead)
+                window.chathead.initialize(profileData);
+
             } else {
                 alert('Failed to load profile. Please login again.');
                 window.location.href = '/login';
@@ -33,6 +52,24 @@
             console.error('Error:', error);
         }
     }
-    loadProfile();
+
+    function handleProfileData() {
+        // Access profileData safely after it has been loaded
+        console.log('Accessing profileData:', profileData.username);
+
+        // Additional operations can go here
+    }
+
+    // Ensure the DOM is fully loaded before executing
+    document.addEventListener("DOMContentLoaded", async function() {
+        // const token = localStorage.getItem('access_token')
+        
+        loadProfile();  // Fetch the profile data after DOM is ready
+        // console.log("do we have the tocket",profileData)
+
+        
+    });
 </script>
+
+<!-- <script src="https://cdn.socket.io/4.1.2/socket.io.min.js"></script> -->
 {% endblock %}

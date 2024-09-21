@@ -165,7 +165,8 @@ def api_profile():
     
     user_data = {
         'username': user.username,
-        'email': user.email
+        'email': user.email,
+        'id': user.username
     }
     
     return jsonify(user_data)
