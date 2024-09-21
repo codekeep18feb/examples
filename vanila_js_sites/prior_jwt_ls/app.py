@@ -25,6 +25,13 @@ class User(db.Model):
 def signup_page():
     return render_template('signup.html')
 
+
+# Route for home page
+@app.route('/')
+def home_page():
+    return render_template('home.html')
+
+
 # Route for signup API
 @app.route('/api/signup', methods=['POST'])
 def api_signup():
