@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<h1>Profile</h1>
+<div id="profileDetails"></div>
+
+<script>
+    async function loadProfile() {
+        const token = localStorage.getItem('access_token');
+        if (!token) {
+            alert('You are not logged in!');
+            window.location.href = '/login';
+            return;
+        }
+        try {
+            const response = await fetch('/api/profile', {
+                method: 'GET',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (response.ok) {
+                const data = await response.json();
+                document.getElementById('profileDetails').innerHTML = `
+                    <p>Username: ${data.username}</p>
+                    <p>Email: ${data.email}</p>
+                `;
+            } else {
+                alert('Failed to load profile. Please login again.');
+                window.location.href = '/login';
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+    loadProfile();
+</script>
+{% endblock %}

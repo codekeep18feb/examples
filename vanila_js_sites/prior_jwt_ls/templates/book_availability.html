@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Book Availability{% endblock %}
+
+{% block content %}
+<h1>{{ book.title }} Availability</h1>
+{% if next_available_date %}
+    <p>The next available date for this book is {{ next_available_date.strftime('%Y-%m-%d %H:%M:%S') }}.</p>
+{% else %}
+    <p>This book is currently available.</p>
+{% endif %}
+{% endblock %}

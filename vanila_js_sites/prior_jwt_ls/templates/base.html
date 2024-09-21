@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Flask App{% endblock %}</title>
+    <script>
+        // Function to check if user is logged in based on localStorage
+        function updateNav() {
+            const token = localStorage.getItem('access_token');
+            const loggedInLinks = document.getElementById('loggedInLinks');
+            const loggedOutLinks = document.getElementById('loggedOutLinks');
+
+            if (token) {
+                loggedInLinks.style.display = 'block';
+                loggedOutLinks.style.display = 'none';
+            } else {
+                loggedInLinks.style.display = 'none';
+                loggedOutLinks.style.display = 'block';
+            }
+        }
+
+        // Update navigation on page load
+        window.onload = updateNav;
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <div id="loggedInLinks" style="display: none;">
+                <!-- Links for logged-in users -->
+                <a href="/">Home</a>
+                <a href="/books">Books</a>
+                <a href="/profile">Profile</a>
+                <a href="/logout">Logout</a>
+            </div>
+            <div id="loggedOutLinks" style="display: none;">
+                <!-- Links for logged-out users -->
+                <a href="/">Home</a>
+                <a href="/books">Books</a>
+                <a href="/login">Login</a>
+                <a href="/signup">Signup</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}
+        <!-- Content will be injected here -->
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2024 My Flask App</p>
+    </footer>
+</body>
+</html>
