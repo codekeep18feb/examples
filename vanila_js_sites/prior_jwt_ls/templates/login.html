@@ -5,8 +5,8 @@
 {% block content %}
 <h1>Login</h1>
 <form id="loginForm">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" required><br>
+    <label for="uid">Username:</label>
+    <input type="text" id="uid" name="uid" required><br>
 
     <label for="password">Password:</label>
     <input type="password" id="password" name="password" required><br>
@@ -18,17 +18,17 @@
 <script>
     document.getElementById('loginForm').addEventListener('submit', async function(event) {
         event.preventDefault();
-        const username = document.getElementById('username').value;
+        const uid = document.getElementById('uid').value;
         const password = document.getElementById('password').value;
         try {
             const response = await fetch('/api/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password })
+                body: JSON.stringify({ uid, password })
             });
             if (response.ok) {
                 const data = await response.json();
-                localStorage.setItem('access_token', data.access_token);
+                localStorage.setItem('tezkit_token', data.tezkit_token);
                 window.location.href = '/profile';
             } else {
                 alert('Invalid credentials. Please try again.');

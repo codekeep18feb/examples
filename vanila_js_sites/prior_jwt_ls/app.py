@@ -17,7 +17,7 @@ jwt = JWTManager(app)
 # User Model
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(150), unique=True, nullable=False)
+    uid = db.Column(db.String(150), unique=True, nullable=False)
     email = db.Column(db.String(150), unique=True, nullable=False)
     password = db.Column(db.String(150), nullable=False)
 
@@ -73,7 +73,7 @@ def list_books():
 @jwt_required()
 def book_book(book_id):
     current_user = get_jwt_identity()
-    user = User.query.filter_by(username=current_user).first()
+    user = User.query.filter_by(uid=current_user).first()
     book = Book.query.get_or_404(book_id)
 
     if not book.available:
@@ -112,12 +112,12 @@ def contact_page():
 @app.route('/api/signup', methods=['POST'])
 def api_signup():
     data = request.get_json()
-    username = data.get('username')
+    uid = data.get('uid')
     email = data.get('email')
     password = data.get('password')
     hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
 
-    new_user = User(username=username, email=email, password=hashed_password)
+    new_user = User(uid=uid, email=email, password=hashed_password)
     db.session.add(new_user)
     db.session.commit()
     return jsonify({"msg": "User created successfully"}), 201
@@ -131,13 +131,13 @@ def login_page():
 @app.route('/api/login', methods=['POST'])
 def api_login():
     data = request.get_json()
-    username = data.get('username')
+    uid = data.get('uid')
     password = data.get('password')
 
-    user = User.query.filter_by(username=username).first()
+    user = User.query.filter_by(uid=uid).first()
     if user and bcrypt.check_password_hash(user.password, password):
-        access_token = create_access_token(identity=user.username)
-        return jsonify(access_token=access_token)
+        tezkit_token = create_access_token(identity=user.uid)
+        return jsonify(tezkit_token=tezkit_token)
     else:
         return jsonify({'msg': 'Invalid credentials'}), 401
 
@@ -151,7 +151,7 @@ def profile_page():
 @app.route('/logout')
 def logout():
     response = redirect(url_for('login_page'))
-    response.delete_cookie('access_token')
+    response.delete_cookie('tezkit_token')
     return response
 
 
@@ -161,12 +161,12 @@ def logout():
 @jwt_required()
 def api_profile():
     current_user = get_jwt_identity()
-    user = User.query.filter_by(username=current_user).first()
+    user = User.query.filter_by(uid=current_user).first()
     
     user_data = {
-        'username': user.username,
+        'uid': user.uid,
         'email': user.email,
-        'id': user.username
+        # 'id': user.uid
     }
     
     return jsonify(user_data)

@@ -14,7 +14,7 @@
     let profileData;
 
     async function loadProfile() {
-        const token = localStorage.getItem('access_token');
+        const token = localStorage.getItem('tezkit_token');
 
 
         
@@ -32,11 +32,11 @@
                 profileData = await response.json();  // Assign profile data to the global variable
 
                 document.getElementById('profileDetails').innerHTML = `
-                    <p>Username: ${profileData.username}</p>
+                    <p>Username: ${profileData.uid}</p>
                     <p>Email: ${profileData.email}</p>
                 `;
 
-                // Log the username here if needed
+                // Log the uid here if needed
                 console.log('Username:', profileData);
 
                 // Call a function after the data is loaded
@@ -55,14 +55,14 @@
 
     function handleProfileData() {
         // Access profileData safely after it has been loaded
-        console.log('Accessing profileData:', profileData.username);
+        console.log('Accessing profileData:', profileData.uid);
 
         // Additional operations can go here
     }
 
     // Ensure the DOM is fully loaded before executing
     document.addEventListener("DOMContentLoaded", async function() {
-        // const token = localStorage.getItem('access_token')
+        // const token = localStorage.getItem('tezkit_token')
         
         loadProfile();  // Fetch the profile data after DOM is ready
         // console.log("do we have the tocket",profileData)
