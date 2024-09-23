@@ -27,6 +27,21 @@
     </script>
 
     
+<script src="{{ url_for('static', filename='js/node_modules/chathead-consumer-client/dist/bundle.js') }}"></script>
+<script>
+
+const token = localStorage.getItem('tezkit_token');
+
+
+        
+if (!token) {
+    alert('You are not logged in!');
+    // window.location.href = '/login';
+    window.chathead.setUp(app_name="app1_t1");
+    window.chathead.initialize();
+    
+    }
+</script>
 </head>
 <body>
     <header>

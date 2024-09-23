@@ -7,8 +7,6 @@
 <div id="profileDetails"></div>
 <!-- <script src="js/node_modules/chathead-consumer-client/dist/bundle.js"></script> -->
 
-<script src="{{ url_for('static', filename='js/node_modules/chathead-consumer-client/dist/bundle.js') }}"></script>
-
 <script>
     // Declare the `profileData` variable in the global scope
     let profileData;
@@ -21,6 +19,10 @@
         if (!token) {
             alert('You are not logged in!');
             window.location.href = '/login';
+            // window.chathead.setUp(app_name="app1_t1");
+            // window.chathead.initialize();
+
+
             return;
         }
         try {
@@ -30,7 +32,7 @@
             });
             if (response.ok) {
                 profileData = await response.json();  // Assign profile data to the global variable
-
+                console.log("areweherenower?")
                 document.getElementById('profileDetails').innerHTML = `
                     <p>Username: ${profileData.uid}</p>
                     <p>Email: ${profileData.email}</p>
