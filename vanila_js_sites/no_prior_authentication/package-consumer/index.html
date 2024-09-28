@@ -13,7 +13,7 @@
     <script>
 
         async function makeMeAPICall(token) {
-                const apiUrl = 'https://js0spkks6a.execute-api.ap-south-1.amazonaws.com/prod/me';
+                const apiUrl = 'https://n6s60l8h2a.execute-api.ap-south-1.amazonaws.com/prod/me';
 
                 try {
                     const response = await fetch(apiUrl, {
@@ -51,8 +51,8 @@
             else{
                 console.log("arewe doing this?",loggedInUser)
                 console.log("window.chatheadedrdsf",window.chathead)
-                window.chathead.setUp(app_name="app1_t2");
-                window.chathead.initialize();
+                window.chathead.setUp(app_name="app1_acm_true_tenant2");
+                window.chathead.initialize(null);
             }
         });
     
