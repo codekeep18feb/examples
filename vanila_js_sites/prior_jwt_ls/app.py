@@ -1,3 +1,6 @@
+import requests
+import json
+
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
@@ -120,6 +123,33 @@ def api_signup():
     new_user = User(uid=uid, email=email, password=hashed_password)
     db.session.add(new_user)
     db.session.commit()
+    credentials = {"APP_API_KEY":"dGVuYW50Ml9fU0VQUkFUT1JfX2FwcDFfYWNtX3RydWVfdGVuYW50Mg==",
+                   "app_name": "app2_acm_false_tenant2","tenant": "tenant2"}#This all should go in Credentials setup probably!
+    
+    
+    # let's make the call for onbaording api here
+    reqUrl = "https://n6s60l8h2a.execute-api.ap-south-1.amazonaws.com/prod/onboarding"
+
+    headersList = {
+    "Accept": "*/*",
+    "User-Agent": "Thunder Client (https://www.thunderclient.com)",
+    "X-API-Key": credentials['APP_API_KEY'],
+    "Content-Type": "application/json" 
+    }
+
+    payload = json.dumps({
+
+        "tenant": credentials['tenant'],
+        "uid": uid,
+        "app_name": credentials['app_name']
+    }
+    )
+
+    response = requests.request("POST", reqUrl, data=payload,  headers=headersList)
+
+    print("response.textsdfds",response.text)
+
+
     return jsonify({"msg": "User created successfully"}), 201
 
 # Route for login page
