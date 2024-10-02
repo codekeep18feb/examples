@@ -29,6 +29,7 @@
             if (response.ok) {
                 const data = await response.json();
                 localStorage.setItem('tezkit_token', data.tezkit_token);
+                // tezkit_app_name why setup is noever run
                 window.location.href = '/profile';
             } else {
                 alert('Invalid credentials. Please try again.');
