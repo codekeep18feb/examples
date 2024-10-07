@@ -9,8 +9,22 @@
 
 
     <!-- <script src="https://cdn.socket.io/4.1.2/socket.io.min.js"></script> -->
-    <script src="node_modules/chathead-consumer-client/dist/bundle.js"></script>
-    <script>
+    <!-- <script src="node_modules/chathead-admin-core-client/dist/bundle.js"> -->
+        <!-- init();
+
+    </script> -->
+    <!-- <script>
+        console.log("arewe even here?")
+        import {init} from "node_modules/chathead-admin-core-client/dist/bundle.js"
+        init()
+    </script> -->
+
+
+<script type="module">
+    import { test_init } from "/node_modules/chathead-admin-core-client/dist/bundle.js";
+    test_init();
+</script>
+    <!-- <script>
 
         async function makeMeAPICall(token) {
                 const apiUrl = 'https://8dk6ofm0db.execute-api.ap-south-1.amazonaws.com/prod/me';
@@ -57,7 +71,7 @@
         });
     
     
-    </script>
+    </script> -->
 
 </head>
 <body>
