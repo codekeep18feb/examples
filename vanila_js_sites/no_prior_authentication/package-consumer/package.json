@@ -1,0 +1,15 @@
+{
+  "name": "package-consumer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.test.js",
+  "dependencies": {
+    "chathead-admin-core-client": "^1.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
