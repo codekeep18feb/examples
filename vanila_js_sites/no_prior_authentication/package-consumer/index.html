@@ -1,42 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Library Book Management</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lawyer</title>
+    <link rel="stylesheet" href="lawyerPageStyle.css" />
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
 
     <!-- <script src="https://cdn.socket.io/4.1.2/socket.io.min.js"></script> -->
     <script src="node_modules/chathead-consumer-client/dist/bundle.js"></script>
     <script>
+      async function makeMeAPICall(token) {
+        const apiUrl =
+          "https://8dk6ofm0db.execute-api.ap-south-1.amazonaws.com/prod/me";
 
-        async function makeMeAPICall(token) {
-                const apiUrl = 'https://8dk6ofm0db.execute-api.ap-south-1.amazonaws.com/prod/me';
+        try {
+          const response = await fetch(apiUrl, {
+            method: "GET",
+            headers: {
+              Authorization: token,
+              Accept: "*/*",
+            },
+          });
 
-                try {
-                    const response = await fetch(apiUrl, {
-                        method: 'GET',
-                        headers: {
-                            'Authorization': token,
-                            'Accept': '*/*'
-                        }
-                    });
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
 
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
+          const data = await response.json();
+          console.log("User me api data:", data.id);
+          return data;
+        } catch (error) {
+          console.error("There was a problem with the fetch operation:", error);
+          throw error;
+        }
+      }
 
-                    const data = await response.json();
-                    console.log('User me api data:', data.id);
-                    return data;
-                } catch (error) {
-                    console.error('There was a problem with the fetch operation:', error);
-                    throw error;
-                }
-            }
-            
+      // Wait for the document to be fully loaded
+      document.addEventListener("DOMContentLoaded", async function () {
+        console.log("whatis going on");
+        const token = localStorage.getItem("tezkit_token");
+        if (token) {
+          // console.log("arewe doing thissdf?")
+          var loggedInUser = await makeMeAPICall(token);
+          window.chathead.initialize(loggedInUser);
+        } else {
+          console.log("arewe doing this?", loggedInUser);
+          console.log("window.chatheadedrdsf", window.chathead);
+          window.chathead.setUp(
+            (app_name = "app1_acm_true_tenant2"),
+            (api_key =
+              "dGVuYW50Ml9fU0VQUkFUT1JfX2FwcDFfYWNtX3RydWVfdGVuYW50Mg==")
+          );
+          window.chathead.initialize(null);
+        }
+      });
+              
         
         
         // Wait for the document to be fully loaded
@@ -58,40 +81,83 @@
     
     
     </script>
-
-</head>
-<body>
-    <header>
-        <h1>Welcome to Our Library</h1>
-       
+  </head>
+  <body>
+    <header class="headers">
+      <nav class="navbar">
+        <div class="logo">
+            <img src="lawyerLogo-removebg-preview.png" alt="logo">
+        </div>
+        <div class="right_nav_data">
+          <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+          <div class="icon">
+            <a href="https://facebook.com" target="_blank"
+              ><i class="fab fa-facebook"></i
+            ></a>
+          </div>
+          <button class="contact-btn">Contact Us</button>
+        </div>
+      </nav>
     </header>
 
     <main>
-        <section id="intro">
-            <img src="https://images.pexels.com/photos/5095897/pexels-photo-5095897.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Library Image" class="hero-image">
-            <h2>Explore the World of Books</h2>
-            <p>Welcome to our library where you can find a wide range of books on various subjects. Dive into our collection and discover something new every day.</p>
-        </section>
+      <section id="intro" class="banner_section">
+        <div class="banner">
+          <img
+            src="https://images.squarespace-cdn.com/content/v1/641488ccb875e54bebf2b0c1/ff98d6de-5043-4734-95d7-f5b6fbe4d743/Malloy+Law+Office+-+Banner.jpg?format=2500w"
+            alt="Library Image"
+            class="hero-image"
+          />
+        </div>
+        <div class="text-overlay">
+          <div class="contant">
+            <h2>WE WILL DEFEND & PROTECT YOUR RIGHTS.</h2>
+            <!-- <h4>Get the legal counsel you deserve.</h4> -->
 
-        <section id="featured-books">
-            <h3>Featured Books</h3>
-            <div class="featured-books-grid">
-                <div class="book">
-                    <img src="https://images.pexels.com/photos/3747399/pexels-photo-3747399.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Featured Book">
-                    <h4>Book Title 1</h4>
-                    <p>A brief description of Book Title 1. Learn more about this captivating book in our collection.</p>
-                </div>
-                <div class="book">
-                    <img src="https://images.pexels.com/photos/3747399/pexels-photo-3747399.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Featured Book">
-                    <h4>Book Title 2</h4>
-                    <p>A brief description of Book Title 2. Learn more about this captivating book in our collection.</p>
-                </div>
-            </div>
-        </section>
+            <p>
+              Most (97%) legal cases filed in U.S. courts never go to trial.
+              Yet, countless amounts of time, energy, and money are spent filing
+              complaints, serving the complaints, conducting discovery, and
+              including costly depositions before many cases are resolved
+              through settlement. Many of these cases are resolved through
+              court-ordered mediation.
+            </p>
+            <button class="btn">READ MORE</button>
+          </div>
+        </div>
+      </section>
     </main>
 
-    <footer>
-        <p>&copy; 2024 Library Book Management. All rights reserved.</p>
+    <footer class="footer_section">
+      <div class="footer_contant">
+        <p class="address">
+          <strong>Malloy Law Office</strong> | 12 Veterans Square Media, PA
+          19063 | (610) 565 - 9145
+        </p>
+
+        <p class="timing">
+          <strong>Business Hours: </strong> Monday - Friday: 09:00 am – 05:00
+          pm; Saturday & Sunday: Closed
+        </p>
+
+        <p class="text">
+          Legal Disclaimer: The materials contained on this website have been
+          prepared by The Law Office of Michael J. Malloy & Associates DBA
+          Malloy Law Office and are intended for informational purposes only and
+          are not legal advice. Transmission of the information is not intended
+          to create, and receipt does not constitute, an attorney-client
+          relationship. Read our <a>full legal disclaimer here.</a>
+        </p>
+        <p class="copyright">
+          Copyright &copy; 2024 Malloy Law Office - All Rights Reserved |
+          Website by <a>Avi Loren Fox.</a>
+        </p>
+      </div>
     </footer>
-</body>
+  </body>
 </html>
