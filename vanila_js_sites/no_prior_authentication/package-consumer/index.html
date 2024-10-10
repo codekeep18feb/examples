@@ -40,26 +40,6 @@
         }
       }
 
-      // Wait for the document to be fully loaded
-      document.addEventListener("DOMContentLoaded", async function () {
-        console.log("whatis going on");
-        const token = localStorage.getItem("tezkit_token");
-        if (token) {
-          // console.log("arewe doing thissdf?")
-          var loggedInUser = await makeMeAPICall(token);
-          window.chathead.initialize(loggedInUser);
-        } else {
-          console.log("arewe doing this?", loggedInUser);
-          console.log("window.chatheadedrdsf", window.chathead);
-          window.chathead.setUp(
-            (app_name = "app1_acm_true_tenant2"),
-            (api_key =
-              "dGVuYW50Ml9fU0VQUkFUT1JfX2FwcDFfYWNtX3RydWVfdGVuYW50Mg==")
-          );
-          window.chathead.initialize(null);
-        }
-      });
-              
         
         
         // Wait for the document to be fully loaded
