@@ -123,8 +123,8 @@ def api_signup():
     new_user = User(uid=uid, email=email, password=hashed_password)
     db.session.add(new_user)
     db.session.commit()
-    credentials = {"APP_API_KEY":"dGVuYW50Ml9fU0VQUkFUT1JfX2FwcDJfYWNtX2ZhbHNlX3RlbmFudDI=",
-                   "app_name": "app2_acm_false_tenant2","tenant": "tenant2"}#This all should go in Credentials setup probably!
+    credentials = {"APP_API_KEY":"dGVuYW50NV9fU0VQUkFUT1JfX2FwcDJfYWNtX2ZhbHNlX3RlbmFudDU=",
+                   "app_name": "app2_acm_false_tenant5","tenant": "tenant5"}#This all should go in Credentials setup probably!
     
     
     # let's make the call for onbaording api here
