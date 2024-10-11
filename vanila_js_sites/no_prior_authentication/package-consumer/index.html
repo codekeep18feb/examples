@@ -40,33 +40,32 @@
         }
       }
 
-        
-        
-        // Wait for the document to be fully loaded
-        document.addEventListener("DOMContentLoaded", async function() {
-            console.log("whatis going on")
-            const token = localStorage.getItem('tezkit_token')
-            if (token){
-                // console.log("arewe doing thissdf?")
-                var loggedInUser = await makeMeAPICall(token);
-                window.chathead.initialize(loggedInUser);
-            }
-            else{
-                console.log("arewe doing this?",loggedInUser)
-                console.log("window.chatheadedrdsf",window.chathead)
-                window.chathead.setUp(app_name="app1_acm_true_tenant5",api_key="dGVuYW50NV9fU0VQUkFUT1JfX2FwcDFfYWNtX3RydWVfdGVuYW50NQ==");
-                window.chathead.initialize(null);
-            }
-        });
-    
-    
+      // Wait for the document to be fully loaded
+      document.addEventListener("DOMContentLoaded", async function () {
+        console.log("whatis going on");
+        const token = localStorage.getItem("tezkit_token");
+        if (token) {
+          // console.log("arewe doing thissdf?")
+          var loggedInUser = await makeMeAPICall(token);
+          window.chathead.initialize(loggedInUser);
+        } else {
+          console.log("arewe doing this?", loggedInUser);
+          console.log("window.chatheadedrdsf", window.chathead);
+          window.chathead.setUp(
+            (app_name = "app1_acm_true_tenant5"),
+            (api_key =
+              "dGVuYW50NV9fU0VQUkFUT1JfX2FwcDFfYWNtX3RydWVfdGVuYW50NQ==")
+          );
+          window.chathead.initialize(null);
+        }
+      });
     </script>
   </head>
   <body>
     <header class="headers">
       <nav class="navbar">
         <div class="logo">
-            <img src="lawyerLogo-removebg-preview.png" alt="logo">
+          <img src="lawyerLogo-removebg-preview.png" alt="logo" />
         </div>
         <div class="right_nav_data">
           <ul>
@@ -75,13 +74,17 @@
             <li><a href="#services">Services</a></li>
             <li><a href="#contact">Contact</a></li>
           </ul>
-          <div class="icon">
-            <a href="https://facebook.com" target="_blank"
-              ><i class="fab fa-facebook"></i
-            ></a>
+          <div class="ic_btn">
+            <div class="icon">
+              <a href="https://facebook.com" target="_blank"
+                ><i class="fab fa-facebook"></i
+              ></a>
+              <p class="fb_text">Facebook</p>
+            </div>
+            <button class="contact-btn">Contact Us</button>
           </div>
-          <button class="contact-btn">Contact Us</button>
         </div>
+        <div class="burger-icon">&#9776;</div>
       </nav>
     </header>
 
@@ -139,5 +142,25 @@
         </p>
       </div>
     </footer>
+
+    <script>
+      const burgerIcon = document.querySelector(".burger-icon");
+      const rightNav = document.querySelector(".right_nav_data");
+
+      burgerIcon.addEventListener("click", (e) => {
+        rightNav.style.display =
+          rightNav.style.display === "block" ? "none" : "block";
+
+        e.stopPropagation();
+      });
+
+      document.addEventListener("click", (e) => {
+        const clickOutSideNav =
+          rightNav.contains(e.target) || burgerIcon.contains(e.target);
+        if (!clickOutSideNav) {
+          rightNav.style.display = "none";
+        }
+      });
+    </script>
   </body>
 </html>
