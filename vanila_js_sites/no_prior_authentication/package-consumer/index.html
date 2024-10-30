@@ -30,10 +30,14 @@
             (api_key =
               "dGVuYW50NV9fU0VQUkFUT1JfX2FwcDFfYWNtX3RydWVfdGVuYW50NQ=="),
             (theme=JSON.stringify({"header_theme":{"backgroundColor":"rgb(30, 136, 125)"},"chat_opener_theme":{"backgroundColor":"rgb(41 48 78)"}}))
+            ,false
           );
         }
       });
     </script>
+
+   
+   
   </head>
   <body>
     <header class="headers">
@@ -43,6 +47,11 @@
         </div>
         <div class="right_nav_data">
           <ul>
+            
+
+
+    <!-- const signupButton = createSignUpBtn("Signup"); -->
+
             <li><a href="#home">Home</a></li>
             <li><a href="#about">About</a></li>
             <li><a href="#services">Services</a></li>
@@ -56,6 +65,13 @@
               <p class="fb_text">Facebook</p>
             </div>
             <button class="contact-btn">Contact Us</button>
+            <div id="signup_tezkit" class="contact-btn" style="display: none;"></div>
+            <div id="login_tezkit" class="contact-btn" style="display: none;"></div>
+            <div id="logout_tezkit" class="contact-btn" style="display: none;"></div>
+
+
+            
+
           </div>
         </div>
         <div class="burger-icon">&#9776;</div>
