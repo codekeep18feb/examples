@@ -38,7 +38,11 @@ if (!token) {
     alert('You are not logged in!');
     // window.location.href = '/login';
     window.chathead.setUp("app2_acm_false_tenant5","dGVuYW50NV9fU0VQUkFUT1JfX2FwcDJfYWNtX2ZhbHNlX3RlbmFudDU=");
-    window.chathead.initialize();
+    window.chathead.initialize({
+    "email": "kaun@gmail.com",
+    "uid": "kaun",
+    "app_name":"app2_acm_false_tenant5"
+});
     
     }
 </script>

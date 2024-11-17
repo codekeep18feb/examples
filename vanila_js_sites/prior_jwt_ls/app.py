@@ -128,7 +128,7 @@ def api_signup():
     
     
     # let's make the call for onbaording api here
-    reqUrl = "https://8dk6ofm0db.execute-api.ap-south-1.amazonaws.com/prod/onboarding"
+    reqUrl = "https://v1u9b7mohg.execute-api.ap-south-1.amazonaws.com/prod/onboarding"
 
     headersList = {
     "Accept": "*/*",
