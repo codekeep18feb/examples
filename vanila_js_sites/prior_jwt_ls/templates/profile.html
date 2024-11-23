@@ -18,13 +18,28 @@
         
         if (!token) {
             alert('You are not logged in!');
-            window.location.href = '/login';
             // window.chathead.setUp(app_name="app1_t1");
             // window.chathead.initialize();
+            window.chathead.setUp(
+                (app_name = "app2_acm_false_tenant5"),
+                (api_key =
+                "dGVuYW50NV9fU0VQUkFUT1JfX2FwcDJfYWNtX2ZhbHNlX3RlbmFudDU="),
+                (theme=JSON.stringify({"header_theme":{"backgroundColor":"rgb(30, 136, 125)"},"chat_opener_theme":{"backgroundColor":"rgb(41 48 78)"}}))
+                ,false
+            );
+            window.location.href = '/login';
 
 
-            return;
         }
+        else{
+            window.chathead.initialize({
+                "email": "kaun@gmail.com",
+                "uid": "kaun",
+                "app_name":"app2_acm_false_tenant5",
+                "tenant":"tenant5",
+            },"P2A","V2.1");
+        }
+        
         try {
             const response = await fetch('/api/profile', {
                 method: 'GET',
@@ -45,9 +60,8 @@
                 console.log('Username:', profileData);
 
                 // Call a function after the data is loaded
-                handleProfileData();
-                console.log("window.chatheadhere",window.chathead)
-                window.chathead.initialize(profileData);
+                // handleProfileData();
+
 
             } else {
                 alert('Failed to load profile. Please login again.');
