@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<h1>Profile</h1>
+<div id="profileDetails"></div>
+<!-- <script src="js/node_modules/chathead-consumer-client/dist/bundle.js"></script> -->
+
+<script>
+    // Declare the `profileData` variable in the global scope
+    let profileData;
+
+    async function loadProfile() {
+        const token = localStorage.getItem('tezkit_token');
+
+
+        
+        if (!token) {
+            alert('You are not logged in!');
+            // window.chathead.setUp(app_name="app1_t1");
+            // window.chathead.initialize();
+            window.chathead.setUp(
+                (app_name = "testapp"),
+                (api_key =
+                "dGVuYW50NV9fU0VQUkFUT1JfX3Rlc3RhcHA="),
+                (theme=JSON.stringify({"header_theme":{"backgroundColor":"rgb(30, 136, 125)"},"chat_opener_theme":{"backgroundColor":"rgb(41 48 78)"}}))
+                ,false
+            );
+            window.location.href = '/login';
+
+
+        }
+        else{
+            window.chathead.initialize({
+                // "email": "maihu@gmail.com",
+                "uid": "v2.2_singh",
+                // "app_name":"app2_acm_false_tenant5",
+                // "tenant":"tenant5",
+            });
+        }
+        
+        try {
+            const response = await fetch('/api/profile', {
+                method: 'GET',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (response.ok) {
+                profileData = await response.json();  // Assign profile data to the global variable
+
+
+                console.log("profileDatadsfsdfs",profileData)
+                console.log("areweherenower?")
+                document.getElementById('profileDetails').innerHTML = `
+                    <p>Username: ${profileData.uid}</p>
+                    <p>Email: ${profileData.email}</p>
+                `;
+
+                // Log the uid here if needed
+                console.log('Username:', profileData);
+
+                // Call a function after the data is loaded
+                // handleProfileData();
+
+
+            } else {
+                alert('Failed to load profile. Please login again.');
+                window.location.href = '/login';
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    function handleProfileData() {
+        // Access profileData safely after it has been loaded
+        console.log('Accessing profileData:', profileData.uid);
+
+        // Additional operations can go here
+    }
+
+    // Ensure the DOM is fully loaded before executing
+    document.addEventListener("DOMContentLoaded", async function() {
+        // const token = localStorage.getItem('tezkit_token')
+        
+        loadProfile();  // Fetch the profile data after DOM is ready
+        // console.log("do we have the tocket",profileData)
+
+        
+    });
+</script>
+
+<!-- <script src="https://cdn.socket.io/4.1.2/socket.io.min.js"></script> -->
+{% endblock %}
