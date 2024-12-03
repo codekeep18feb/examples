@@ -1,0 +1,1 @@
+/Users/djangoboy/Desktop/workspace/p__prject/qchat_consuming_examples/examples/simple_info_site1/tezkit_based_info_site/prior_jwt_auth/consumer-site/node_modules/my-js-package/dist/bundle.js
