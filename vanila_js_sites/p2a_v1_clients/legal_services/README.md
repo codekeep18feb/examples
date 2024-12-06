@@ -1,0 +1,3 @@
+This is an example of a simple, no-authentication website designed primarily as an informational platform to generate interest and engagement. 
+	In this case, it serves as a showcase for a team of legal professionals, highlighting their services and expertise.
+	Example code https://github.com/codekeep18feb/examples/tree/legal_services_example_before_addchat/vanila_js_sites/p2a_v1_clients/legal_services
