@@ -4,7 +4,7 @@
 
 {% block content %}
 <h1>Login</h1>
-<form id="loginForm">
+<form id="loginForm1">
     <label for="uid">Username:</label>
     <input type="text" id="uid" name="uid" required><br>
 
@@ -16,7 +16,7 @@
 <p>Don't have an account? <a href="/signup">Signup here</a>.</p>
 
 <script>
-    document.getElementById('loginForm').addEventListener('submit', async function(event) {
+    document.getElementById('loginForm1').addEventListener('submit', async function(event) {
         event.preventDefault();
         const uid = document.getElementById('uid').value;
         const password = document.getElementById('password').value;

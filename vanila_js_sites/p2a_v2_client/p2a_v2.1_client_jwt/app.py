@@ -165,6 +165,7 @@ def api_login():
     password = data.get('password')
 
     user = User.query.filter_by(uid=uid).first()
+    print("what ishssdfting",uid)
     if user and bcrypt.check_password_hash(user.password, password):
         tezkit_token = create_access_token(identity=user.uid)
         return jsonify(tezkit_token=tezkit_token)

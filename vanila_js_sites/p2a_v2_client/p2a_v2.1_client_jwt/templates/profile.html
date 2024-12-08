@@ -12,29 +12,18 @@
     let profileData;
 
     async function loadProfile() {
-        const token = localStorage.getItem('tezkit_token');
+        const token = localStorage.getItem('tezkit_token',null);
 
 
         
-        if (!token) {
-            alert('You are not logged in!');
-            // window.chathead.setUp(app_name="app1_t1");
-            // window.chathead.initialize();
-            window.chathead.setUp(
-                (app_name = "v2.1_first_app"),
-                (api_key =
-                "amV3ZWxlcnlraW5nX19TRVBSQVRPUl9fdjIuMV9maXJzdF9hcHA="),
-                (theme=JSON.stringify({"header_theme":{"backgroundColor":"rgb(30, 136, 125)"},"chat_opener_theme":{"backgroundColor":"rgb(41 48 78)"}}))
-            );
-            window.location.href = '/login';
-
-
-        }
-        else{
+        if (token) {
             console.log("arew we seerhewrewr ing")
             window.chathead.initialize({
                 "uid": "v2.1_user1",
             });
+
+
+     
         }
         
         try {
