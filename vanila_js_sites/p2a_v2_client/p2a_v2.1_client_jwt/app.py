@@ -123,11 +123,11 @@ def api_signup():
     new_user = User(uid=uid, email=email, password=hashed_password)
     db.session.add(new_user)
     db.session.commit()
-    credentials = {"APP_API_KEY":"dGVuYW50NV9fU0VQUkFUT1JfX2FwcDJfYWNtX2ZhbHNlX3RlbmFudDU=",
-                   "app_name": "app2_acm_false_tenant5","tenant": "jeweleryking"}#This all should go in Credentials setup probably!
+    credentials = {"APP_API_KEY":"amV3ZWxlcnlraW5nX19TRVBSQVRPUl9fdjIuMV9maXJzdF9hcHA=",
+                   "app_name": "v2.1_first_app","tenant": "jeweleryking"}#This all should go in Credentials setup probably!
     
     
-    # SINCE IT'S V2.2 SO NO PRE SIGNUP REQUIRED
+    # let's make the call for onbaording api here
     reqUrl = "https://gfxb0jf19k.execute-api.ap-south-1.amazonaws.com/prod/onboarding"
 
     headersList = {
@@ -167,10 +167,6 @@ def api_login():
     user = User.query.filter_by(uid=uid).first()
     if user and bcrypt.check_password_hash(user.password, password):
         tezkit_token = create_access_token(identity=user.uid)
-        # credentials = {"APP_API_KEY":"amV3ZWxlcnlraW5nX19TRVBSQVRPUl9fdjIuMl9maXJzdF9hcHA=",
-        #            "app_name": "v2.2_first_app","tenant": "jeweleryking"}#This all should go in Credentials setup probably!
-    
-
         return jsonify(tezkit_token=tezkit_token)
     else:
         return jsonify({'msg': 'Invalid credentials'}), 401
