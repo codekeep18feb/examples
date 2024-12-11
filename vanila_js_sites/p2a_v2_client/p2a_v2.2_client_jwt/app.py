@@ -123,33 +123,7 @@ def api_signup():
     new_user = User(uid=uid, email=email, password=hashed_password)
     db.session.add(new_user)
     db.session.commit()
-    credentials = {"APP_API_KEY":"dGVuYW50NV9fU0VQUkFUT1JfX2FwcDJfYWNtX2ZhbHNlX3RlbmFudDU=",
-                   "app_name": "app2_acm_false_tenant5","tenant": "jeweleryking"}#This all should go in Credentials setup probably!
     
-    
-    # SINCE IT'S V2.2 SO NO PRE SIGNUP REQUIRED
-    reqUrl = "https://gfxb0jf19k.execute-api.ap-south-1.amazonaws.com/prod/onboarding"
-
-    headersList = {
-    "Accept": "*/*",
-    "User-Agent": "Thunder Client (https://www.thunderclient.com)",
-    "X-API-Key": credentials['APP_API_KEY'],
-    "Content-Type": "application/json" 
-    }
-
-    payload = json.dumps({
-
-        "tenant": credentials['tenant'],
-        "uid": uid,
-        "app_name": credentials['app_name']
-    }
-    )
-
-    response = requests.request("POST", reqUrl, data=payload,  headers=headersList)
-
-    print("response.textsdfds",response.text)
-
-
     return jsonify({"msg": "User created successfully"}), 201
 
 # Route for login page

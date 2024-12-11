@@ -12,20 +12,7 @@ content %}
     const token = localStorage.getItem("tezkit_token");
 
     try {
-      if (!token) {
-        alert("You are not logged in!");
-        // window.chathead.setUp(app_name="app1_t1");
-        // window.chathead.initialize();
-        window.chathead.setUp(
-          (app_name = "v2.2_first_app"),
-          (api_key = "amV3ZWxlcnlraW5nX19TRVBSQVRPUl9fdjIuMl9maXJzdF9hcHA="),
-          (theme = JSON.stringify({
-            header_theme: { backgroundColor: "rgb(30, 136, 125)" },
-            chat_opener_theme: { backgroundColor: "rgb(41 48 78)" },
-          }))
-        );
-        window.location.href = "/login";
-      } else {
+      if (token) {
         const response = await fetch("/api/profile", {
           method: "GET",
           headers: { Authorization: `Bearer ${token}` },
@@ -54,6 +41,9 @@ content %}
           alert("Failed to load profile. Please login again.");
           window.location.href = "/login";
         }
+      } else {
+        alert("Failed to load profile. Please login again.");
+        window.location.href = "/login";
       }
     } catch (error) {
       console.error("Error:", error);

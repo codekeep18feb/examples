@@ -29,18 +29,10 @@
     
 <script src="{{ url_for('static', filename='js/node_modules/chathead-consumer-client/dist/bundle.js') }}"></script>
 <script>
-    // Declare the `profileData` variable in the global scope
-    // let profileData;
-
-    // async function loadProfile() {
         const token = localStorage.getItem('tezkit_token',null);
-
-
-        
         if (!token) {
-            // alert('You are not logged in!');
-            // window.chathead.setUp(app_name="app1_t1");
-            // window.chathead.initialize();
+            // at initial load when user detected loggedout
+            // if it get's not called not more than twice between a session (loggedout -> login -> browse -> logout) both times only after logout.
             window.chathead.setUp(
                 (app_name = "v2.1_first_app"),
                 (api_key =
@@ -53,7 +45,7 @@
      
     
     
-    </script>
+</script>
 </head>
 <body>
     <header>
