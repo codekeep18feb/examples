@@ -10,71 +10,64 @@
 <script>
     // Declare the `profileData` variable in the global scope
     let profileData;
-
+  
     async function loadProfile() {
-        const token = localStorage.getItem('tezkit_token',null);
-
-
-        
+      const token = localStorage.getItem("tezkit_token");
+  
+      try {
         if (token) {
-            console.log("arew we seerhewrewr ing")
+          const response = await fetch("/api/profile", {
+            method: "GET",
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          if (response.ok) {
+            profileData = await response.json(); // Assign profile data to the global variable
+  
+            console.log("profileDatadsfsdfs", profileData);
+  
             window.chathead.initialize({
-                "uid": "v2.1_user1",
+              uid: profileData.uid,
             });
-
-
-     
+  
+            console.log("areweherenower?");
+            document.getElementById("profileDetails").innerHTML = `
+                      <p>Username: ${profileData.uid}</p>
+                      <p>Email: ${profileData.email}</p>
+                  `;
+  
+            // Log the uid here if needed
+            console.log("Username:", profileData);
+  
+            // Call a function after the data is loaded
+            // handleProfileData();
+          } else {
+            alert("Failed to load profile. Please login again.");
+            window.location.href = "/login";
+          }
+        } else {
+          alert("Failed to load profile. Please login again.");
+          window.location.href = "/login";
         }
-        
-        try {
-            const response = await fetch('/api/profile', {
-                method: 'GET',
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-            if (response.ok) {
-                profileData = await response.json();  // Assign profile data to the global variable
-
-
-                console.log("profileDatadsfsdfs",profileData)
-                console.log("areweherenower?")
-                document.getElementById('profileDetails').innerHTML = `
-                    <p>Username: ${profileData.uid}</p>
-                    <p>Email: ${profileData.email}</p>
-                `;
-
-                // Log the uid here if needed
-                console.log('Username:', profileData);
-
-                // Call a function after the data is loaded
-                // handleProfileData();
-
-
-            } else {
-                alert('Failed to load profile. Please login again.');
-                window.location.href = '/login';
-            }
-        } catch (error) {
-            console.error('Error:', error);
-        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
     }
-
+  
     function handleProfileData() {
-        // Access profileData safely after it has been loaded
-        console.log('Accessing profileData:', profileData.uid);
-
-        // Additional operations can go here
+      // Access profileData safely after it has been loaded
+      console.log("Accessing profileData:", profileData.uid);
+  
+      // Additional operations can go here
     }
-
+  
     // Ensure the DOM is fully loaded before executing
-    document.addEventListener("DOMContentLoaded", async function() {
-        // const token = localStorage.getItem('tezkit_token')
-        
-        loadProfile();  // Fetch the profile data after DOM is ready
-        // console.log("do we have the tocket",profileData)
-
-        
+    document.addEventListener("DOMContentLoaded", async function () {
+      // const token = localStorage.getItem('tezkit_token')
+  
+      loadProfile(); // Fetch the profile data after DOM is ready
+      // console.log("do we have the tocket",profileData)
     });
-</script>
+  </script>
 
 <!-- <script src="https://cdn.socket.io/4.1.2/socket.io.min.js"></script> -->
 {% endblock %}

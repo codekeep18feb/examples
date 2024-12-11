@@ -29,23 +29,29 @@
     
 <script src="{{ url_for('static', filename='js/node_modules/chathead-consumer-client/dist/bundle.js') }}"></script>
 <script>
-        const token = localStorage.getItem('tezkit_token',null);
-        if (!token) {
-            // at initial load when user detected loggedout
-            // if it get's not called not more than twice between a session (loggedout -> login -> browse -> logout) both times only after logout.
-            window.chathead.setUp(
-                (app_name = "v2.1_first_app"),
-                (api_key =
-                "amV3ZWxlcnlraW5nX19TRVBSQVRPUl9fdjIuMV9maXJzdF9hcHA="),
-                (theme=JSON.stringify({"header_theme":{"backgroundColor":"rgb(30, 136, 125)"},"chat_opener_theme":{"backgroundColor":"rgb(41 48 78)"}}))
-            );
+    document.addEventListener("DOMContentLoaded", () => {
+        try {
+            const token = localStorage.getItem("tezkit_token");
+            if (!token) {
+                // alert("You are not logged in!");
+    
+                // Properly set up the `chathead` object with parameters
+                console.log("dowesee this running?",window.chathead)
+                window.chathead.setUp(
+                    (app_name = "v2.1_first_app"),
+                    (api_key =
+                    "amV3ZWxlcnlraW5nX19TRVBSQVRPUl9fdjIuMV9maXJzdF9hcHA="),
+                    (theme=JSON.stringify({"header_theme":{"backgroundColor":"rgb(30, 136, 125)"}, "chat_opener_theme":{"backgroundColor":"rgb(41 48 78)"}}))
+                );
+    
 
-
+            }
+        } catch (error) {
+            console.error("An error occurred while setting up the chat or redirecting:", error);
         }
-     
-    
-    
+    });
 </script>
+    
 </head>
 <body>
     <header>
