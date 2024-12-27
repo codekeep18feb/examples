@@ -171,6 +171,7 @@ def api_profile():
     current_user = get_jwt_identity()
     user = User.query.filter_by(uid=current_user).first()
     
+    print("wahweortwer",user.id,  user.uid)
     user_data = {
         'uid': user.uid,
         'email': user.email,
