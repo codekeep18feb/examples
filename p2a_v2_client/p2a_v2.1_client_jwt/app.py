@@ -1,77 +1,144 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from flask_bcrypt import Bcrypt
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///products.db'
 app.config['SECRET_KEY'] = 'mysecretkey'
-db = SQLAlchemy(app)
+app.config['JWT_SECRET_KEY'] = 'myjwtsecretkey'
 
-# Product Model
+db = SQLAlchemy(app)
+bcrypt = Bcrypt(app)
+jwt = JWTManager(app)
+
+
+# Models
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String(500), nullable=False)
     price = db.Column(db.Float, nullable=False)
 
-# Dummy User Model (for demonstration)
-class User:
-    def __init__(self, uid, email):
-        self.uid = uid
-        self.email = email
 
-    def to_dict(self):
-        return {'uid': self.uid, 'email': self.email}
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(150), unique=True, nullable=False)
+    password = db.Column(db.String(200), nullable=False)
 
-# Dummy logged-in user
-current_user = User(uid="john_doe", email="john@example.com")
 
+# Routes
 @app.route('/')
 def home():
     return render_template('home.html')
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        # Handle login logic here
-        email = request.form['email']
-        password = request.form['password']
-        # For simplicity, we assume login is successful
-        return redirect(url_for('profile'))
-    return render_template('login.html')
+
+@app.route('/api/login', methods=['POST'])
+def api_login():
+    data = request.get_json()
+    email = data.get('email')
+    password = data.get('password')
+
+    if not email or not password:
+        return jsonify({'error': 'Email and password are required'}), 400
+
+    user = User.query.filter_by(email=email).first()
+    if user and bcrypt.check_password_hash(user.password, password):
+        access_token = create_access_token(identity=user.email)
+        return jsonify({'token': access_token}), 200  # Return token on successful login
+    return jsonify({'error': 'Invalid credentials'}), 401
+
+
+@app.route('/api/signup', methods=['POST'])
+def api_signup():
+    data = request.get_json()
+    email = data.get('email')
+    password = data.get('password')
+
+    if User.query.filter_by(email=email).first():
+        return jsonify({'error': 'Email already exists'}), 400
+
+    hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+    new_user = User(email=email, password=hashed_password)
+    db.session.add(new_user)
+    db.session.commit()
+    return jsonify({'message': 'User registered successfully'}), 201
+
+
+
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
-        # In a real app, save user data here
+        if User.query.filter_by(email=email).first():
+            return jsonify({'error': 'Email already exists'}), 400
+        hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+        new_user = User(email=email, password=hashed_password)
+        db.session.add(new_user)
+        db.session.commit()
         return redirect(url_for('login'))
     return render_template('signup.html')
 
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form.get('email')  # Extract email from form data
+        password = request.form.get('password')  # Extract password from form data
+
+        if not email or not password:
+            return jsonify({'error': 'Email and password are required'}), 400
+
+        user = User.query.filter_by(email=email).first()
+        if user and bcrypt.check_password_hash(user.password, password):
+            access_token = create_access_token(identity=user.email)
+            return jsonify({'token': access_token}), 200  # Returning token to the frontend
+        return jsonify({'error': 'Invalid credentials'}), 401
+
+    # Handle GET request: render login form
+    return render_template('login.html')
+
+
+@app.route('/api/profile')
+@jwt_required()
+def api_profile():
+    current_user = get_jwt_identity()
+    print("current user",current_user)
+    user = User.query.filter_by(email=current_user).first()
+    
+    user_data = {
+        # 'uid': user.uid,
+        'email': user.email,
+        # 'id': user.uid
+    }
+    
+    return jsonify(user_data)
+
 @app.route('/profile')
-def profile():
-    return render_template('profile.html', user=current_user)
+def profile_page():
+    # Just return the profile page without passing data to it
+    return render_template('profile.html')
+
+
 
 @app.route('/products')
 def products():
     products_list = Product.query.all()
     return render_template('products.html', products=products_list)
 
+
 @app.route('/product/<int:product_id>')
 def product_detail(product_id):
     product = Product.query.get_or_404(product_id)
     return render_template('product_detail.html', product=product)
 
-# API Routes for authentication and signup (simplified)
-@app.route('/api/login', methods=['POST'])
-def api_login():
-    # Just a dummy check, not secure
-    return jsonify({'token': 'dummy_token'})
 
-@app.route('/api/signup', methods=['POST'])
-def api_signup():
-    # In real case, save user data here
-    return jsonify({'message': 'Signup successful'})
+@app.before_first_request
+def create_tables():
+    db.create_all()
+
 
 if __name__ == '__main__':
     app.run(debug=True)
