@@ -118,7 +118,10 @@
         const clickOutsideNav =
           rightNav.contains(e.target) || burgerIcon.contains(e.target);
         if (!clickOutsideNav) {
-          rightNav.style.display = "none";
+          if (rightNav.style.display){
+            rightNav.style.display = "none";
+
+          } 
         }
       });
     </script>
