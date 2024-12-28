@@ -1,4 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
+
+
   const burgerIcon = document.querySelector(".burger-icon");
   const rightNav = document.querySelector(".right-nav");
 

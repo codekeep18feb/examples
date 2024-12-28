@@ -1,4 +1,9 @@
 /* Navbar improvements */
+
+html {
+  scroll-behavior: smooth;
+}
+
 .header {
   background-color: #333;
   color: white;
@@ -52,6 +57,70 @@
   cursor: pointer;
   color: white;
 }
+
+.about-section {
+  padding: 40px 20px;
+  background-color: #f4f4f4;
+}
+
+.about-content {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.about-content img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+.about-content .text {
+  max-width: 600px;
+}
+
+.contact-section {
+  padding: 40px 20px;
+  background-color: #f9f9f9;
+}
+
+.contact-content {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.contact-info {
+  max-width: 600px;
+}
+
+.contact-info h4,
+.contact-form h4 {
+  margin-bottom: 15px;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.contact-form button {
+  padding: 10px 20px;
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.contact-form button:hover {
+  background-color: #00aaff;
+}
+
 
 /* Responsive navbar */
 @media (max-width: 768px) {
