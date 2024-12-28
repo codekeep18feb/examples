@@ -3,120 +3,123 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Lawyer</title>
-    <link rel="stylesheet" href="lawyerPageStyle.css" />
+    <title>Generic Product Website</title>
     <link rel="stylesheet" href="styles.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
     />
-
-
-   
-   
+    <script src="./index.js"></script>
   </head>
   <body>
-    <header class="headers">
+    <header class="header">
       <nav class="navbar">
         <div class="logo">
-          <img src="lawyerLogo-removebg-preview.png" alt="logo" />
+          <img src="https://via.placeholder.com/150" alt="logo" />
         </div>
-        <div class="right_nav_data">
-          <ul>
-            
-
-
-
+        <div class="burger-icon">
+          <i class="fas fa-bars"></i>
+        </div>
+        <div class="right-nav">
+          <ul class="nav-links">
             <li><a href="#home">Home</a></li>
             <li><a href="#about">About</a></li>
-            <li><a href="#services">Services</a></li>
+            <li><a href="#products">Products</a></li>
             <li><a href="#contact">Contact</a></li>
           </ul>
-          <div class="ic_btn">
-            <div class="icon">
-              <a href="https://facebook.com" target="_blank"
-                ><i class="fab fa-facebook"></i
-              ></a>
-              <p class="fb_text">Facebook</p>
-            </div>
-            <button class="contact-btn">Contact Us</button>
-     
-
-
-            
-
-          </div>
+          <button class="contact-btn">Contact Us</button>
         </div>
-        <div class="burger-icon">&#9776;</div>
       </nav>
     </header>
+    
 
     <main>
-      <section id="intro" class="banner_section">
+      <section id="intro" class="banner-section">
         <div class="banner">
           <img
-            src="https://images.squarespace-cdn.com/content/v1/641488ccb875e54bebf2b0c1/ff98d6de-5043-4734-95d7-f5b6fbe4d743/Malloy+Law+Office+-+Banner.jpg?format=2500w"
-            alt="Library Image"
+            src="https://archive.org/download/placeholder-image/placeholder-image.jpg"
+            alt="Placeholder Banner"
             class="hero-image"
           />
         </div>
         <div class="text-overlay">
-          <div class="contant">
-            <h2>WE WILL DEFEND & PROTECT YOUR RIGHTS.</h2>
-            <!-- <h4>Get the legal counsel you deserve.</h4> -->
-
+          <div class="content">
+            <h2>Discover Our Amazing Products</h2>
             <p>
-              Most (97%) legal cases filed in U.S. courts never go to trial.
-              Yet, countless amounts of time, energy, and money are spent filing
-              complaints, serving the complaints, conducting discovery, and
-              including costly depositions before many cases are resolved
-              through settlement. Many of these cases are resolved through
-              court-ordered mediation.
+              Explore our wide range of innovative and high-quality products designed to meet your needs. Experience excellence and reliability with every purchase.
             </p>
-            <button class="btn">READ MORE</button>
+            <button class="btn">Learn More</button>
           </div>
         </div>
       </section>
+
+      <section id="products" class="product-section">
+        <h3>Our Products</h3>
+        <div class="product-grid">
+          <div class="product-box" style="background-image: url('https://via.placeholder.com/300x250');">
+            <div class="info">
+              <h4>Product 1</h4>
+              <p>Amazing features and benefits</p>
+            </div>
+          </div>
+          <div class="product-box" style="background-image: url('https://via.placeholder.com/300x250');">
+            <div class="info">
+              <h4>Product 2</h4>
+              <p>Top-notch quality guaranteed</p>
+            </div>
+          </div>
+          <div class="product-box" style="background-image: url('https://via.placeholder.com/300x250');">
+            <div class="info">
+              <h4>Product 3</h4>
+              <p>Innovation at its best</p>
+            </div>
+          </div>
+          <div class="product-box" style="background-image: url('https://via.placeholder.com/300x250');">
+            <div class="info">
+              <h4>Product 4</h4>
+              <p>Reliable and efficient</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      
     </main>
 
-    <footer class="footer_section">
-      <div class="footer_contant">
+    <footer class="footer">
+      <div class="footer-content">
         <p class="address">
-          <strong>Malloy Law Office</strong> | 12 Veterans Square Media, PA
-          19063 | (610) 565 - 9145
+          <strong>Generic Company</strong> | 123 Main Street, Anytown, USA | (123) 456-7890
         </p>
-
-        <p class="timing">
-          <strong>Business Hours: </strong> Monday - Friday: 09:00 am – 05:00
-          pm; Saturday & Sunday: Closed
+        <p class="business-hours">
+          <strong>Business Hours:</strong> Monday - Friday: 9:00 AM - 5:00 PM
         </p>
-
-        <p class="text">
-          Legal Disclaimer: The materials contained on this website have been
-          prepared by The Law Office of Michael J. Malloy & Associates DBA
-          Malloy Law Office and are intended for informational purposes only and
-          are not legal advice. Transmission of the information is not intended
-          to create, and receipt does not constitute, an attorney-client
-          relationship. Read our <a>full legal disclaimer here.</a>
+        <p class="disclaimer">
+          Disclaimer: The content on this website is for informational purposes only and does not constitute a guarantee of product performance. Please contact us for more details.
         </p>
         <p class="copyright">
-          Copyright &copy; 2024 Malloy Law Office - All Rights Reserved |
-          Website by <a>Avi Loren Fox.</a>
+          &copy; 2024 Generic Company - All Rights Reserved | Designed by <a href="#">YourName</a>
         </p>
       </div>
     </footer>
 
     <script>
       const burgerIcon = document.querySelector(".burger-icon");
-      const rightNav = document.querySelector(".right_nav_data");
+      const rightNav = document.querySelector(".right-nav");
 
       burgerIcon.addEventListener("click", (e) => {
         rightNav.style.display =
           rightNav.style.display === "block" ? "none" : "block";
-
         e.stopPropagation();
       });
 
+      document.addEventListener("click", (e) => {
+        const clickOutsideNav =
+          rightNav.contains(e.target) || burgerIcon.contains(e.target);
+        if (!clickOutsideNav) {
+          rightNav.style.display = "none";
+        }
+      });
     </script>
   </body>
 </html>
