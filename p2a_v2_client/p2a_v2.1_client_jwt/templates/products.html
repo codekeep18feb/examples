@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Products - My Website{% endblock %}
+
+{% block content %}
+    <h1>Our Products</h1>
+    <div class="product-section">
+        <div class="product-grid">
+            {% for product in products %}
+                <a href="{{ url_for('product_detail', product_id=product.id) }}" class="product-box" style="background-image: url('{{ product.image_url }}');">
+                    <div class="info">
+                        <h4>{{ product.title }}</h4>
+                        <p>{{ product.description }}</p>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

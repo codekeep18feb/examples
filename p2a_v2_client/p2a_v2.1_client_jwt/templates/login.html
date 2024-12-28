@@ -1,42 +1,16 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
-{% block title %}Login{% endblock %}
+{% block title %}Login - My Website{% endblock %}
 
 {% block content %}
-<h1>Login</h1>
-<form id="loginForm1">
-    <label for="uid">Username:</label>
-    <input type="text" id="uid" name="uid" required><br>
+    <h1>Login</h1>
+    <form method="POST">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br><br>
 
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br><br>
 
-    <button type="submit">Login</button>
-</form>
-<p>Don't have an account? <a href="/signup">Signup here</a>.</p>
-
-<script>
-    document.getElementById('loginForm1').addEventListener('submit', async function(event) {
-        event.preventDefault();
-        const uid = document.getElementById('uid').value;
-        const password = document.getElementById('password').value;
-        try {
-            const response = await fetch('/api/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ uid, password })
-            });
-            if (response.ok) {
-                const data = await response.json();
-                localStorage.setItem('tezkit_token', data.tezkit_token);
-                // tezkit_app_name why setup is noever run
-                window.location.href = '/profile';
-            } else {
-                alert('Invalid credentials. Please try again.');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    });
-</script>
+        <button type="submit">Login</button>
+    </form>
 {% endblock %}
