@@ -9,6 +9,11 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+.logo > img{
+  height: 100px;
+  width: 100px;
+}
+
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -38,18 +43,8 @@
   color: #00aaff;
 }
 
-.contact-btn {
-  padding: 10px 15px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
 
-.contact-btn:hover {
-  background-color: #0056b3;
-}
+
 
 .burger-icon {
   display: none;
@@ -97,11 +92,8 @@
     margin: 10px 0;
   }
 
-  .contact-btn {
-    margin-top: 10px;
-    width: 100%;
-  }
 
+  
   .burger-icon {
     display: block;
   }
