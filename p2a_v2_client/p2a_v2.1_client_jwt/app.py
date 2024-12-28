@@ -24,6 +24,7 @@ class Product(db.Model):
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(150), unique=True, nullable=False)
+    username = db.Column(db.String(150), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)
 
 
@@ -53,13 +54,14 @@ def api_login():
 def api_signup():
     data = request.get_json()
     email = data.get('email')
+    username = data.get('username')
     password = data.get('password')
 
     if User.query.filter_by(email=email).first():
         return jsonify({'error': 'Email already exists'}), 400
 
     hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
-    new_user = User(email=email, password=hashed_password)
+    new_user = User(email=email, password=hashed_password,username=username)
     db.session.add(new_user)
     db.session.commit()
     return jsonify({'message': 'User registered successfully'}), 201
@@ -109,9 +111,8 @@ def api_profile():
     user = User.query.filter_by(email=current_user).first()
     
     user_data = {
-        # 'uid': user.uid,
+        'username': user.username,
         'email': user.email,
-        # 'id': user.uid
     }
     
     return jsonify(user_data)

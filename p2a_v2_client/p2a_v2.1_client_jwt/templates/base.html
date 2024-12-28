@@ -16,8 +16,9 @@
             <nav>
                 <ul class="nav-links">
                     <li><a href="{{ url_for('home') }}">Home</a></li>
-                    <li><a href="{{ url_for('login') }}">Login</a></li>
-                    <li><a href="{{ url_for('signup') }}">Signup</a></li>
+                    <li id="login-signup-link"><a href="{{ url_for('login') }}">Login</a></li>
+                    <li id="signup-link"><a href="{{ url_for('signup') }}">Signup</a></li>
+                    <li id="logout-link" style="display:none;"><a href="#" onclick="logout()">Logout</a></li>
                     <li><a href="{{ url_for('products') }}">Products</a></li>
                     <li><a href="{{ url_for('profile_page') }}">Profile</a></li>
                 </ul>
@@ -60,6 +61,57 @@
     </footer>
 
     <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+    <script>
+        // Check if the user is logged in by checking for the tezkit_token in local storage
+        window.onload = function() {
+            var token = localStorage.getItem('tezkit_token');
+            if (token) {
+                // Show Logout and hide Login/Signup if the token is present
+                document.getElementById('login-signup-link').style.display = 'none';
+                document.getElementById('signup-link').style.display = 'none';
+                document.getElementById('logout-link').style.display = 'inline-block';
+            } else {
+                // Show Login/Signup and hide Logout if the token is not present
+                document.getElementById('login-signup-link').style.display = 'inline-block';
+                document.getElementById('signup-link').style.display = 'inline-block';
+                document.getElementById('logout-link').style.display = 'none';
+            }
+        };
+
+        // Handle Logout
+        function logout() {
+            // Remove the token from local storage
+            localStorage.removeItem('tezkit_token');
+            // Redirect to homepage or login page after logout
+            window.location.href = "{{ url_for('home') }}"; // Or use another page if needed
+        }
+    </script>
+
+<script src="{{ url_for('static', filename='js/node_modules/chathead-consumer-client/dist/bundle.js') }}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        try {
+            const token = localStorage.getItem("tezkit_token");
+            if (!token) {
+                // alert("You are not logged in!");
+    
+                // Properly set up the `chathead` object with parameters
+                console.log("dowesee this running?",window.chathead)
+                window.chathead.setUp(
+                    (app_name = "myapp2"),
+                    (api_key =
+                    "bGVnYWwyNDdfX1NFUFJBVE9SX19teWFwcDI="),
+                    (theme=JSON.stringify({"header_theme":{"backgroundColor":"rgb(30, 136, 125)"}, "chat_opener_theme":{"backgroundColor":"rgb(41 48 78)"}}))
+                );
+    
+
+            }
+        } catch (error) {
+            console.error("An error occurred while setting up the chat or redirecting:", error);
+        }
+    });
+</script>
+
 
 </body>
 </html>
