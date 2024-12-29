@@ -35,6 +35,9 @@
             // Log the uid here if needed
             console.log("Username:", profileData);
   
+            window.chathead.initialize({
+              uid: profileData.username,
+            });
             // Call a function after the data is loaded
             // handleProfileData();
           } else {
@@ -59,7 +62,7 @@
   
     // Ensure the DOM is fully loaded before executing
     document.addEventListener("DOMContentLoaded", async function () {
-      // const token = localStorage.getItem('tezkit_token')
+      // const token = localStorage.getItem('token')
   
       loadProfile(); // Fetch the profile data after DOM is ready
       // console.log("do we have the tocket",profileData)

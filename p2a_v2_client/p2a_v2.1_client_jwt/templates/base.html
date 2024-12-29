@@ -64,9 +64,9 @@
 
     <script src="{{ url_for('static', filename='js/index.js') }}"></script>
     <script>
-        // Check if the user is logged in by checking for the tezkit_token in local storage
+        // Check if the user is logged in by checking for the token in local storage
         window.onload = function() {
-            var token = localStorage.getItem('tezkit_token');
+            var token = localStorage.getItem('token');
             if (token) {
                 // Show Logout and hide Login/Signup if the token is present
                 document.getElementById('login-signup-link').style.display = 'none';
@@ -83,7 +83,7 @@
         // Handle Logout
         function logout() {
             // Remove the token from local storage
-            localStorage.removeItem('tezkit_token');
+            localStorage.removeItem('token');
             // Redirect to homepage or login page after logout
             window.location.href = "{{ url_for('home') }}"; // Or use another page if needed
         }
@@ -93,7 +93,7 @@
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         try {
-            const token = localStorage.getItem("tezkit_token");
+            const token = localStorage.getItem("token");
             if (!token) {
                 // alert("You are not logged in!");
     
