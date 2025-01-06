@@ -36,7 +36,7 @@
             const responseData = await response.json();
     
             if (response.status === 200) {
-                localStorage.setItem('token', responseData.token); // Save token to localStorage
+                localStorage.setItem("token", responseData.token); // Save token to localStorage
                 window.location.href = '/profile'; // Redirect to profile
             } else {
                 alert(responseData.error); // Show error message

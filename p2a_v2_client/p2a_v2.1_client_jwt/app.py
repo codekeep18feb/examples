@@ -1,3 +1,7 @@
+
+import requests
+import json
+
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
@@ -46,7 +50,7 @@ def api_login():
     user = User.query.filter_by(email=email).first()
     if user and bcrypt.check_password_hash(user.password, password):
         access_token = create_access_token(identity=user.email)
-        return jsonify({'token': access_token}), 200  # Return token on successful login
+        return jsonify({"token": access_token}), 200  # Return token on successful login
     return jsonify({'error': 'Invalid credentials'}), 401
 
 
@@ -63,7 +67,44 @@ def api_signup():
     hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
     new_user = User(email=email, password=hashed_password,username=username)
     db.session.add(new_user)
+
+
+    # Replace with your actual data
+    tezkit_app_p_data = {
+        "auth_key": "bGVnYWwyNDdfX1NFUFJBVE9SX192MmFwcDE=",
+        "tenant_id": "legal247",
+        "app_name": "v2app1",
+    }
+    user_data = {
+        "uid": new_user.username,
+    }
+
+    req_url = "https://gfxb0jf19k.execute-api.ap-south-1.amazonaws.com/prod/onboarding"
+
+    headers = {
+        "Accept": "*/*",
+        "User-Agent": "Python Requests",  # Optional, can be customized
+        "X-API-Key": tezkit_app_p_data["auth_key"],
+        "Content-Type": "application/json",
+    }
+
+    payload = {
+        "tenant": tezkit_app_p_data["tenant_id"],
+        "uid": user_data["uid"],
+        "app_name": tezkit_app_p_data["app_name"],
+    }
+
+    # try:
+    response = requests.post(req_url, headers=headers, json=payload)
+    response.raise_for_status()  # Raises HTTPError if the response status code is 4xx, 5xx
+    data = response.json()  # Parse JSON response
+    print("Response data:", data)
+    print("new_userdsfsdf",new_user.username)
+
+
+
     db.session.commit()
+
     return jsonify({'message': 'User registered successfully'}), 201
 
 
@@ -96,7 +137,7 @@ def login():
         user = User.query.filter_by(email=email).first()
         if user and bcrypt.check_password_hash(user.password, password):
             access_token = create_access_token(identity=user.email)
-            return jsonify({'token': access_token}), 200  # Returning token to the frontend
+            return jsonify({"token": access_token}), 200  # Returning token to the frontend
         return jsonify({'error': 'Invalid credentials'}), 401
 
     # Handle GET request: render login form
