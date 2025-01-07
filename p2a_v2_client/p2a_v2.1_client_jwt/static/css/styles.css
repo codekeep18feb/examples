@@ -13,11 +13,11 @@ html {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   }
   
-  .logo > img {
+  /* .logo > img {
     height: 100px;
     width: 100px;
   }
-  
+   */
   .navbar {
     display: flex;
     justify-content: space-between;

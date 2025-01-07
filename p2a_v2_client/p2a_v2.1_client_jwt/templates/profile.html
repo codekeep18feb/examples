@@ -10,6 +10,7 @@
 <script>
     // Declare the `profileData` variable in the global scope
     let profileData;
+    
   
     async function loadProfile() {
       const token = localStorage.getItem("token");
@@ -24,13 +25,13 @@
             profileData = await response.json(); // Assign profile data to the global variable
   
             console.log("profileDatadsfsdfs", profileData);
-  
-          
-            console.log("areweherenower?");
             document.getElementById("profileDetails").innerHTML = `
                       <p>Username: ${profileData.username}</p>
                       <p>Email: ${profileData.email}</p>
                   `;
+          
+            console.log("areweherenower?");
+
   
             // Log the uid here if needed
             console.log("Username:", profileData);
@@ -67,7 +68,7 @@
       loadProfile(); // Fetch the profile data after DOM is ready
       // console.log("do we have the tocket",profileData)
     });
-  </script>
+</script>
 
 <!-- <script src="https://cdn.socket.io/4.1.2/socket.io.min.js"></script> -->
 {% endblock %}
