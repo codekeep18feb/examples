@@ -18,15 +18,21 @@
           window.chathead.initialize(token);
         } else {
           window.chathead.setUp(
-            "legalsite", 
-            "bGVnYWwyNDdfX1NFUFJBVE9SX19sZWdhbHNpdGU=", 
+            "v1app1", 
+            "bGVnYWwxMjNfX1NFUFJBVE9SX192MWFwcDE=", 
             JSON.stringify({
-              "header_theme": {
-                "backgroundColor": "rgb(30, 136, 125)" //to override the header background Color
-              },
-              "chat_opener_theme": {
-                "backgroundColor": "rgb(41, 48, 78)" //to override the chatBox background Color
-              }
+                "header_theme": {
+                    "backgroundColor": "rgb(163, 112, 206)",
+                    "textColor": "white"
+                },
+                "chat_opener_theme": {
+                    "backgroundColor": "rgb(163, 112, 206)",
+                    "textColor": "white"
+                },
+                "chat_box_theme": {
+                    "backgroundColor": "red",
+                    "textColor": "black"
+                }
             }),
             false, // for HEADLESS MODE
             "/index.html"
