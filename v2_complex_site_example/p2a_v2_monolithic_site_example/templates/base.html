@@ -98,16 +98,19 @@
 
       // Handle Logout
       function logout() {
-        // Remove the token from local storage
+        
+        window.chathead.logout() // to singal clean up correct way
         localStorage.removeItem("token");
+
         // Redirect to homepage or login page after logout
         window.location.href = "{{ url_for('home') }}"; // Or use another page if needed
       }
     </script>
 
     <script src="{{ url_for('static', filename='js/node_modules/chathead-consumer-client/dist/bundle.js') }}"></script>
+
     <script>
-      document.addEventListener("DOMContentLoaded", () => {
+      document.addEventListener("DOMContentLoaded", async () => {
         try {
           const token = localStorage.getItem("token");
           if (!token) {
@@ -119,17 +122,25 @@
               (app_name = "v2app1"),
               (api_key = "bGVnYWwxMjNfX1NFUFJBVE9SX192MmFwcDE="),
               (theme = JSON.stringify({
-                header_theme: { backgroundColor: "rgb(163, 112, 206)",textColor: "white" },
-                chat_opener_theme: { backgroundColor: "rgb(163, 112, 206)",textColor: "white" },
-                chat_box_theme: { backgroundColor: "rgba(0, 0, 0, 0.7)",textColor:"white" },
+                header_theme: {
+                  backgroundColor: "rgb(163, 112, 206)",
+                  textColor: "white",
+                },
+                chat_opener_theme: {
+                  backgroundColor: "rgb(163, 112, 206)",
+                  textColor: "white",
+                },
+                chat_box_theme: {
+                  backgroundColor: "rgba(0, 0, 0, 0.7)",
+                  textColor: "white",
+                },
               })),
               (header_req = undefined),
-              (redirect_uri = undefined),
-         
-              
-              
+              (redirect_uri = undefined)
             );
           }
+          
+         
         } catch (error) {
           console.error(
             "An error occurred while setting up the chat or redirecting:",
