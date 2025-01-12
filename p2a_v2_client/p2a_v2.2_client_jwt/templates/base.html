@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <title>{% block title %}My Flask App{% endblock %}</title>
+    <script>
+        // Function to check if user is logged in based on localStorage
+        function updateNav() {
+            const token = localStorage.getItem('tezkit_token');
+            const loggedInLinks = document.getElementById('loggedInLinks');
+            const loggedOutLinks = document.getElementById('loggedOutLinks');
+
+            if (token) {
+                loggedInLinks.style.display = 'block';
+                loggedOutLinks.style.display = 'none';
+            } else {
+                loggedInLinks.style.display = 'none';
+                loggedOutLinks.style.display = 'block';
+            }
+        }
+
+        // Update navigation on page load
+        window.onload = updateNav;
+    </script>
+
+    
+<script src="{{ url_for('static', filename='js/node_modules/chathead-consumer-client/dist/bundle.js') }}"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        try {
+            const token = localStorage.getItem("tezkit_token");
+            if (!token) {
+                // alert("You are not logged in!");
+    
+                // Properly set up the `chathead` object with parameters
+                console.log("dowesee this running?",window.chathead)
+                window.chathead.setUp(
+                    (app_name = "v2.2_first_app"),
+                    (api_key =
+                    "amV3ZWxlcnlraW5nX19TRVBSQVRPUl9fdjIuMl9maXJzdF9hcHA="),
+                    (theme=JSON.stringify({"header_theme":{"backgroundColor":"rgb(30, 136, 125)"}, "chat_opener_theme":{"backgroundColor":"rgb(41 48 78)"}}))
+                );
+    
+                // Redirect to the login page
+                // window.location.href = "/login";
+            }
+        } catch (error) {
+            console.error("An error occurred while setting up the chat or redirecting:", error);
+        }
+    });
+</script>
+    
+
+
+</head>
+<body>
+    <header>
+        <nav>
+            <div id="loggedInLinks" style="display: none;">
+                <!-- Links for logged-in users -->
+                <a href="/">Home</a>
+                <a href="/books">Books</a>
+                <a href="/profile">Profile</a>
+                <a href="/logout">Logout</a>
+            </div>
+            <div id="loggedOutLinks" style="display: none;">
+                <!-- Links for logged-out users -->
+                <a href="/">Home</a>
+                <a href="/books">Books</a>
+                <a href="/login">Login</a>
+                <a href="/signup">Signup</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}
+        <!-- Content will be injected here -->
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2024 My Flask App</p>
+    </footer>
+</body>
+</html>
