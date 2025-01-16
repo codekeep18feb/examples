@@ -71,8 +71,9 @@ def api_signup():
 
     # Replace with your actual data
     tezkit_app_p_data = {
-        "auth_key": "bGVnYWwxMjNfX1NFUFJBVE9SX192MmFwcDE=",
-        "tenant_id": "legal123",
+        "auth_key": "amV3ZWxlcnlraW5nX19TRVBSQVRPUl9fdjJhcHAx",
+        "tenant": "jeweleryking",
+        "tenant_id": "1",
         "app_name": "v2app1",
     }
     user_data = {
@@ -89,7 +90,8 @@ def api_signup():
     }
 
     payload = {
-        "tenant": tezkit_app_p_data["tenant_id"],
+        "tenant": tezkit_app_p_data["tenant"],
+        "tenant_id": tezkit_app_p_data["tenant_id"],
         "uid": user_data["uid"],
         "app_name": tezkit_app_p_data["app_name"],
     }
@@ -183,4 +185,4 @@ def create_tables():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=5001)
