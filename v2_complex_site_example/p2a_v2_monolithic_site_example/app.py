@@ -98,10 +98,15 @@ def api_signup():
 
     # try:
     response = requests.post(req_url, headers=headers, json=payload)
+
+
     response.raise_for_status()  # Raises HTTPError if the response status code is 4xx, 5xx
+
     data = response.json()  # Parse JSON response
     print("Response data:", data)
-    print("new_userdsfsdf",new_user.username)
+
+    
+    print("new_user.username",new_user.username)
 
 
 

@@ -39,8 +39,18 @@
             });
     
             const responseData = await response.json();
+
     
             if (response.status === 201) {
+
+                console.log("data.username:",data.username)
+
+                // await window.chathead.onboarding({"uid":data.username,},{
+                //     "auth_key": "bGVnYWwxMjNfX1NFUFJBVE9SX192MmFwcDE=",
+                //     "tenant_id": "legal123",
+                //     "app_name": "v2app1",
+                // })
+
                 window.location.href = '/login'; // Redirect to login page on successful signup
             } else {
                 alert(responseData.error); // Show error message
