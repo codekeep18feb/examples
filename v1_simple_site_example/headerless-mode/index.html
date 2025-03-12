@@ -10,18 +10,19 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
     />
     <script src="https://cdn.socket.io/4.1.2/socket.io.min.js"></script>
-    <script src="node_modules/chathead-consumer-client-p2p/dist/bundle.js"></script>
+    <script src="node_modules/chathead-consumer-client/dist/bundle.js"></script>
+
     <script>
       document.addEventListener("DOMContentLoaded", async function () {
         const token = localStorage.getItem("tezkit_token");
         if (token) {
-          window.chathead_p2p.initialize(token);
+          window.chathead.initialize(token);
         } else {
-          window.chathead_p2p.setUp(
-            "chatappv1", 
-            "amV3ZWxlcnlraW5nX19TRVBSQVRPUl9fY2hhdGFwcHYx", 
+          window.chathead.setUp(
+            "myp2aapp1", 
+            "amV3ZWxlcnlraW5nX19TRVBSQVRPUl9fbXlwMmFhcHAx", 
             JSON.stringify({
-                "header_theme": {
+              "header_theme": {
                     "backgroundColor": "rgb(163, 112, 206)",
                     "textColor": "white"
                 },
